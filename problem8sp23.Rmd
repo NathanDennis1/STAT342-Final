@@ -38,7 +38,6 @@ c. Suppose testing 247 more subjects yields 5 positives. Using the interim poste
 
 
 d. Calculate the 95\% Highest Posterior Density intervals for the final analysis in part c. Compare your Bayesian analysis with the results from a large sample Wald confidence interval for a binomial proportion.
-
 e. Let's now quickly cause a merge conflict in this controlled environment.
 <<<<<<< HEAD
 ```{r maxwell}
