@@ -23,7 +23,7 @@ Suppose that Streptococcus heftans (fictitious) is an uncommon oral bacteria tha
 Maya Cardiya, Ph.D. plans to test $n=500$ patients to determine if they carry S. heftans. Her protocol's statistical plan calls for the use of a beta-binomial model. The true prevalence $\pi$ is unknown, so it will be modeled with a beta prior.  Tailoring to this particular study, a subjective prior sets the prior median at 0.01 and the 0.99 quantile at 0.05. 
 
 a. Find the beta prior. (Use `beta.select` from `LearnBayes` to find the shape parameters)
-
+adad
 
 b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. Of the first 241 subjects, 7 tested positive for S. heftans. 
 
@@ -32,8 +32,9 @@ b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. O
    ii. Contrast the prior median with the posterior median. Also contrast the middle 95\% of the beta prior with the middle 95\% of the interim posterior distribution. 
 
 
-   iii. Contrast the prior probability that less than 1 percentage of the population have S. heftans with the posterior probability. 
 
+   iii. Contrast the prior probability that less than 1 percentage of the population have S. heftans with the posterior probability. 
+tytyyty
 c. Suppose testing 247 more subjects yields 5 positives. Using the interim posterior distribution as your prior, repeat i,ii,iii for the final posterior distribution. Make a table showing the prior/posterior median, 95\% percentile interval and spread of the interval.
 
 
