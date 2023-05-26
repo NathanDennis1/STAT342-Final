@@ -16,9 +16,18 @@ header-includes:
 fontsize: 11pt
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+
 \begin{table}[ht]
 \centering
-\caption{Sample Table}
+\caption{Vaccine Efficacy against Covid-19}
 \begin{tabular}{|c|c|c|}
 \hline
 Groups & Cases & No. of Subjects \\
@@ -34,6 +43,15 @@ Total & 170 & 34,922 \\
 \end{table}
 
 
+
+
+
+
+
+
+## Title
+
+
 ## Abstract
 
 
@@ -44,19 +62,16 @@ Total & 170 & 34,922 \\
 
 
 ## Statistical Methods
-
-We will use parameters $\pi_p$ to represent the likelihood of being infected with Covid-19 after taking the placebo, and $\pi_v$ to represent the likelihood of getting Covid-19 after receiving the vaccine.
-
-We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
-
-We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
-
-```{r label ="bayesian", include = FALSE, cache = TRUE}
-
-
-```
-
-
+Let $\pi_1=\mbox{probability of covid 19 in vaccine}$\
+Let $\pi_2=\mbox{probability of covid 19 in placebo}$\
+From the data table, we see that:\
+$\hat \pi_1=\frac{8}{17411}$\
+$\hat \pi_2=\frac{162}{17511}$\
+$\hat\psi=\frac{\hat \pi_2-\hat \pi_1}{\hat \pi_2}$\
+$\hat\psi=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$\
+$\hat\psi=\frac{446749}{470097}$\
+$\hat\psi=0.950334$\
+We see that vaccine reduces the size of the Covid 19 by 95\% compared to placebo.\
 ## Results
 
 
@@ -67,6 +82,3 @@ We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ repre
 
 
 ## Appendix
-
-```{r ref.label="bayesian", echo=TRUE, eval=F}
-```
