@@ -33,7 +33,9 @@ b. Dr. Cardiya's protocol calls for one interim analysis near 50\% of testing. O
 
 
    iii. Contrast the prior probability that less than 1 percentage of the population have S. heftans with the posterior probability. 
+   
 tytyyty
+
 c. Suppose testing 247 more subjects yields 5 positives. Using the interim posterior distribution as your prior, repeat i,ii,iii for the final posterior distribution. Make a table showing the prior/posterior median, 95\% percentile interval and spread of the interval.
 
 awhidihuwda
@@ -43,14 +45,14 @@ d. Calculate the 95\% Highest Posterior Density intervals for the final analysis
 e. Let's now quickly cause a merge conflict in this controlled environment.
 <<<<<<< HEAD
 ```{r maxwell}
-MAXWELL
+#MAXWELL
 ```
   
 =======
 ```{r}
-nathan
+#nathan
 ```
->>>>>>> 62dcd5d56a7732805b8093dab78a0aae467d75b8
+
   
   i. All group members create a code chunk so that all members of the group have any particular line inside of the chunk. For example, everyone create a code chunk so that line, lets say 43, is inside of that code chunk. 
   
