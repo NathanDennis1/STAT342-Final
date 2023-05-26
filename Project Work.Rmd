@@ -8,6 +8,35 @@ date: "2023-05-26"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+
+
+
+
+\begin{table}[ht]
+\centering
+\caption{Sample Table}
+\begin{tabular}{|c|c|c|}
+\hline
+Groups & Cases & No. of Subjects \\
+\hline
+BNT162b2 & 8 & 17,411 \\
+\hline
+Placebo & 162 & 17,511 \\
+\hline
+Total & 170 & 34,922 \\
+
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
 ## Title
 
 
