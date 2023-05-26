@@ -27,7 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \begin{table}[ht]
 \centering
-\caption{Sample Table}
+\caption{Vaccine Efficacy against Covid-19}
 \begin{tabular}{|c|c|c|}
 \hline
 Groups & Cases & No. of Subjects \\
