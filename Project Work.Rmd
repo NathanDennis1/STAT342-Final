@@ -42,6 +42,11 @@ Total & 170 & 34,922 \\
 
 ## Introducton
 
+## Something else
+
+We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
+
+We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
 
 ## Statistical Methods
 
@@ -49,7 +54,7 @@ We will use parameters $\pi_p$ to represent the likelihood of being infected wit
 
 We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
 
-We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.\
+We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
 
 Let X denote the total number of covid cases among $n_1$(17411) subjects randomly assigned to the BNT162b2 group and let Y denote the total number of covid cases among $n_2$(17511) subjects randomly assigned to the placebo group.\
 
