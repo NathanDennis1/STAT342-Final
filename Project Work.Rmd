@@ -55,6 +55,8 @@ Let X denote the total number of covid cases among $n_1$(17411) subjects randoml
 
 $X \sim Binom(n_1,\pi_v)$\
 $Y \sim Binom(n_2,\pi_p)$\
+The parameter of interest is the BNT162b2 efficacy:\
+$\psi=\frac{\pi_p- \pi_v}{\pi_p}$\
 
 Let $\pi_v=\mbox{probability of covid 19 in vaccine}$\
 Let $\pi_p=\mbox{probability of covid 19 in placebo}$\
