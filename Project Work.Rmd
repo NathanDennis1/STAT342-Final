@@ -116,7 +116,7 @@ $=\frac{\frac{n_1\pi_v}{n_1+n_2}}{\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}}$\
 $=\frac{n_1\pi_v}{n_1+n_2}$\
 $\pi=\frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}$\
 When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further:\
-$\pi=\frac{\pi_v}{\pi_v+\pi_p}$\
+$\pi=\frac{\pi_v}{\pi_v+\pi_p}$\ 
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
 
 
