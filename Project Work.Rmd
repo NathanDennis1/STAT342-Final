@@ -34,15 +34,6 @@ Total & 170 & 34,922 \\
 \end{table}
 
 
-
-
-
-
-
-
-## Title
-
-
 ## Abstract
 
 
@@ -53,6 +44,11 @@ Total & 170 & 34,922 \\
 
 
 ## Statistical Methods
+
+```{r label ="bayesian", include = FALSE, cache = TRUE}
+
+
+```
 
 
 ## Results
@@ -65,3 +61,6 @@ Total & 170 & 34,922 \\
 
 
 ## Appendix
+
+```{r ref.label="bayesian", echo=TRUE, eval=F}
+```
