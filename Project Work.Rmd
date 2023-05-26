@@ -1,17 +1,20 @@
 ---
-title: "Project Work"
+title: "Efficacy of the BNT162b2 mRNA Covid-19 Vaccine"
+subtitle: "Frequentist and Bayesian Analysis of Polack et. al."
+graphics: yes
 author: "Nathan Dennis, Maxwell Wang, Aarav Dewangan"
-header-includes:
-    - \usepackage{setspace}\doublespacing
-output: pdf_document
 date: "2023-05-26"
+output: 
+        pdf_document:
+         toc: false
+         number_sections: true
+urlcolor: blue
+header-includes:
+- \usepackage{amsmath,amsfonts,amssymb}
+- \usepackage{multicol,graphicx,hyperref,xcolor}
+- \usepackage{setspace} \doublespacing
+fontsize: 11pt
 ---
-
-<style type="text/css">
-  body{
-  font-size: 11pt;
-}
-</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
