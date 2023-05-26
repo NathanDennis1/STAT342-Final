@@ -1,8 +1,8 @@
 ---
-title: "Efficacy of the BNT162b2 mRNA Covid-19 Vaccine"
+title: "Unmasking the Numbers: An Analysis of the BNT162b2 mRNA Covid-19 Vaccine Efficacy Rate"
 subtitle: "Frequentist and Bayesian Analysis of Polack et. al."
 graphics: yes
-author: "Nathan Dennis, Maxwell Wang, Aarav Dewangan"
+author: "Nathan Dennis, Aarav Dewangan, Maxwell Wang"
 date: "2023-05-26"
 output: 
         pdf_document:
