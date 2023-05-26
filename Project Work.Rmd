@@ -1,5 +1,8 @@
 ---
 title: "Project Work"
+author: "Nathan Dennis, Maxwell Wang, Aarav Dewangan"
+header-includes:
+    - \usepackage{setspace}\doublespacing
 output: pdf_document
 date: "2023-05-26"
 ---
