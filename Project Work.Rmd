@@ -45,6 +45,12 @@ Total & 170 & 34,922 \\
 
 ## Statistical Methods
 
+We will use parameters $\pi_p$ to represent the likelihood of being infected with Covid-19 after taking the placebo, and $\pi_v$ to represent the likelihood of getting Covid-19 after receiving the vaccine.
+
+We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
+
+We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
+
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
 
 
