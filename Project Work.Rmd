@@ -70,15 +70,15 @@ We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vacc
 
 We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
 
-Let X denote the total number of covid cases among $n_1$(17411) subjects randomly assigned to the BNT162b2 group and let Y denote the total number of covid cases among $n_2$(17511) subjects randomly assigned to the placebo group.\
+Let X denote the total number of laboratory confirmed Covid-19 cases among $n_1$(17411) subjects randomly assigned to the BNT162b2 group and let Y denote the total number of laboratory confirmed Covid-19 cases among $n_2$(17511) subjects randomly assigned to the placebo group.\
 
 $X \sim Binom(n_1,\pi_v)$\
 $Y \sim Binom(n_2,\pi_p)$\
 The parameter of interest is the BNT162b2 efficacy:\
 $\psi=\frac{\pi_p- \pi_v}{\pi_p}$\
 
-Let $\pi_v=\mbox{probability of covid 19 in vaccine}$\
-Let $\pi_p=\mbox{probability of covid 19 in placebo}$\
+Let $\pi_v=\mbox{probability of laboratory confirmed Covid-19 cases in vaccine}$\
+Let $\pi_p=\mbox{probability of laboratory confirmed Covid-19 cases in placebo}$\
 From the data table, we see that:\
 $\hat \pi_v=\frac{8}{17411}$\
 $\hat \pi_p=\frac{162}{17511}$\
@@ -88,8 +88,35 @@ $\hat\psi=\frac{446749}{470097}$\
 $\hat\psi=0.950334$\
 
 We see that vaccine reduces the size of the Covid 19 by 95\% compared to placebo.\
+Specifically, assuming the trial will run until X+Y=s Covid cases observed, we consider the distribution of :\
+$T:\mbox{number of covid cases in BNT162b2 group from these s cases}$\
+The distribution of T well approximated by binomial for the BNT162b2 group study. Therefore:\
+$T \sim Binom(s,\pi)$, where $\pi=P(\mbox{BNT162b2 group}|\mbox{laboratory confirmed Covid-19 cases})$\
 
 
+$\pi=P(\mbox{BNT162b2 group}|\mbox{laboratory confirmed Covid-19 cases})$\
+ Using Bayes Theorem to simplify:\
+$\pi=\frac{P(\mbox{laboratory confirmed Covid-19 cases}|\mbox{BNT162b2 group})P(\mbox{BNT162b2 group})}{P(\mbox{laboratory confirmed Covid-19 cases})}$\
+
+Finding $P(\mbox{laboratory confirmed Covid-19 cases})$:\
+$P(\mbox{laboratory confirmed Covid-19 cases})=\pi_v$\
+
+Finding $P(\mbox{BNT162b2 group})$:\
+$P(\mbox{BNT162b2 group})=\frac{n_1}{n_1+n_2}$\
+
+Finding $P(\mbox{laboratory confirmed Covid-19 cases})$:\
+$P(\mbox{laboratory confirmed Covid-19 cases})$\
+$=\frac{\mbox{Total no. of confirmed Covid-19 cases in vaccine + Total no. of confirmed Covid-19 cases in placebo} }{\mbox{Total number of subjects in vaccine + Total number of subjects in plcebo }}$\
+$=\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}$\
+$P(\mbox{laboratory confirmed Covid-19 cases})=\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}$\
+
+Therefore:\
+$\pi=\frac{\pi_v\cdot \frac{n_1}{n_1+n_2}}{\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}}$\
+$=\frac{\frac{n_1\pi_v}{n_1+n_2}}{\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}}$\
+$=\frac{n_1\pi_v}{n_1+n_2}$\
+$\pi=\frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}$\
+When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further:\
+$\pi=\frac{\pi_v}{\pi_v+\pi_p}$\
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
 
 
