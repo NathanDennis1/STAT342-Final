@@ -116,7 +116,24 @@ $=\frac{\frac{n_1\pi_v}{n_1+n_2}}{\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}}$\
 $=\frac{n_1\pi_v}{n_1+n_2}$\
 $\pi=\frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}$\
 When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further:\
-$\pi=\frac{\pi_v}{\pi_v+\pi_p}$\ 
+$\pi=\frac{\pi_v}{\pi_v+\pi_p}$\
+
+Thus $T \sim Binom(s,\pi=\frac{\pi_v}{\pi_v+\pi_p})$\
+Our parameter of interest is:\
+$\psi=\frac{\pi_p- \pi_v}{\pi_p}=1-\frac{\pi_v}{\pi_p}$\
+We know $\pi=\frac{\pi_v}{\pi_v+\pi_p}$\
+$\implies \pi(\pi_v+\pi_p)=\pi_v$\
+$\implies \pi\pi_v+\pi\pi_p=\pi_v$\
+$\implies \pi\pi_p=\pi_v(1-\pi)$\
+$\implies \pi_v=\frac{\pi\pi_p}{1-\pi}$\
+
+$\psi=1-\frac{\pi_v}{\pi_p}$\
+$\implies 1-\frac{\pi\pi_p}{(1-\pi)\pi_p}$\
+$\implies 1-\frac{\pi}{1-\pi}$\
+$\implies \frac{1-2\pi}{1-\pi}$\
+$\psi=\frac{1-2\pi}{1-\pi}$\
+
+
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
 
 
