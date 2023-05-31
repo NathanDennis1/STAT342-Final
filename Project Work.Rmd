@@ -157,6 +157,13 @@ $\psi=\frac{1-2\pi}{1-\pi}$\
 
 ## Max-Likelihood
 
+We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function.
+
+\begin{align*}
+L(\psi) &= L(\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p})\\
+&= f(\hat \pi_p, \hat \pi_v | \psi) \\
+&= ??
+\end{align*}
 
 
 ## Results
