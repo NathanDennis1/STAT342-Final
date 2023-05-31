@@ -7,7 +7,7 @@ date: "2023-05-26"
 output: 
         pdf_document:
          toc: false
-         number_sections: true
+         number_sections: false
 urlcolor: blue
 header-includes:
 - \usepackage{amsmath,amsfonts,amssymb}
@@ -42,7 +42,8 @@ Total & 170 & 34,922 \\
 
 ## Introducton
 
-## Something else
+
+## Large Sample T-Test
 
 We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
 
@@ -61,6 +62,8 @@ xbar Sim Norm (mu1, sigma1 / sqrt(n))
 We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
 
 We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
+
+
 
 ## Statistical Methods
 
