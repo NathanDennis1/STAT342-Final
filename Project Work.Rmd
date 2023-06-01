@@ -165,6 +165,71 @@ L(\psi) &= L(\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p})\\
 &= ??
 \end{align*}
 
+We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
+
+\begin{align*}
+\psi &= \frac{1-2\pi}{1-\pi} \\
+(1-\pi)\psi &= 1-2\pi \\
+\psi - \pi \psi &= 1-2\pi \\
+2\pi - \pi \psi &= 1 - \psi \\
+\pi &= \frac{1 -\psi}{2-\psi} \\
+\end{align*}
+
+
+\begin{align*}
+L(\psi) &= f(t | \psi) \\
+&= {170\choose t} \pi^t \cdot (1 - \pi)^{170-t} \\
+&= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t} \\
+&= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \\
+\end{align*}
+
+Log
+
+\begin{align*}
+ln(L(\psi)) &= ln(f(t | \psi)) \\
+&= ln \left({170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \right) \\
+&= ln{170\choose t} + ln\left((\frac{1 -\psi}{2-\psi})^t \right) + ln \left((\frac{1}{2-\psi})^{170-t} \right) \\
+&= ln{170\choose t} + tln(\frac{1 -\psi}{2-\psi}) + (170-t)ln(\frac{1}{2-\psi}) \\
+\end{align*}
+
+Derivative and set to 0
+
+\begin{align*}
+\frac{d}{d\psi} ln(L(\psi)) &= \frac{d}{d\psi} ln(f(t | \psi)) \\
+&= \frac{d}{d\psi} ln{170\choose t} + tln(\frac{1 -\psi}{2-\psi}) + (170-t)ln(\frac{1}{2-\psi}) \\
+&= t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot (\frac{1}{(2 -\psi)^2})\\
+0 &= -\frac{t}{(1-\psi)(2 -\psi)} + (170-t) \cdot \frac{1}{(2 -\psi)}\\
+\frac{t}{(1-\psi)(2 -\psi)} &= (170-t)\frac{1}{(2 -\psi)}\\
+\frac{8}{(1-\psi)(2 -\psi)} &= (170-8)\frac{1}{(2 -\psi)}\\
+\frac{8}{162} &= \frac{(1-\psi)(2 -\psi)}{(2 -\psi)}\\
+\frac{8}{162} &= 1-\psi\\
+\psi &= 1 - \frac{8}{162}
+\end{align*}
+
+```{r}
+1-8/162
+77/81
+```
+
+
+\begin{align*}
+\frac{d}{d\psi} ln(L(\psi)) &= \frac{d}{d\psi} ln(f(t | \psi)) \\
+&= \frac{d}{d\psi} ln{170\choose t} + tln(\pi) + (170-t)ln(1 - \pi) \\
+0 &= \frac{t}{\pi} - \frac{170-t}{1-\pi} \\
+0 &= \frac{8}{\pi} - \frac{170-8}{1-\pi} \ \ \text{Plug in t obs} \\
+\frac{162}{1-\pi} &= \frac{8}{\pi} \\
+\frac{162}{8} &= \frac{1-\pi}{\pi} \\
+\frac{162}{8} &= \frac{1}{\pi} - 1 \\
+\frac{162}{8} + 1 &= \frac{1}{\pi} \\
+\pi &= \frac{1}{\frac{162}{8} + 1} \\
+\end{align*}
+
+```{r}
+1/(162/8+1)
+```
+
+
+
 
 ## Results
 
