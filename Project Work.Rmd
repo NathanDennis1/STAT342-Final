@@ -156,12 +156,15 @@ $h(\pi_0|t)=Beta(0.700102+8,170-8+1)$\
 $h(\pi_0|t)=Beta(8.700102,163)$\
 
 
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> a6b614733e036c306b3cf0acc8a0410a12b6fda7
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
 
 
@@ -192,7 +195,8 @@ L(\psi) &= f(t | \psi) \\;
 Next, we compute the log-likelihood function:
 
 \begin{align*}
-\ln(L(\psi)) &= \ln(f(t | \psi)) \\
+\ell(\psi) &= \ln(L(\psi))\\
+&= \ln(f(t | \psi)) \\
 &= \ln \left({170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \right) \\
 &= \ln{170\choose t} + \ln\left((\frac{1 -\psi}{2-\psi})^t \right) + \ln \left((\frac{1}{2-\psi})^{170-t} \right) \\
 &= \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \\
@@ -201,7 +205,7 @@ Next, we compute the log-likelihood function:
 To find the maximum of the likelihood function, take the derivative and set it to zero and solve:
 
 \begin{align*}
-\frac{d}{d\psi} \ln(L(\psi)) &= \frac{d}{d\psi} \ln(f(t | \psi)) \\
+\ell^\prime (\psi) &= \frac{d}{d\psi} \ell(\psi) \\
 &= \frac{d}{d\psi} \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \\
 &= t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot (\frac{1}{(2 -\psi)^2})\\
 0 &= -\frac{t}{(1-\psi)(2 -\psi)} + (170-t) \cdot \frac{1}{(2 -\psi)}\\
@@ -212,20 +216,53 @@ To find the maximum of the likelihood function, take the derivative and set it t
 \psi &= 1 - \frac{8}{162}
 \end{align*}
 
-```{r}
-1-8/162
-77/81
-```
-
 To check whether our value of $\psi = 77/81$ is a global maximum, we will take the second derivative of our log-likelihood function.
 
-
 \begin{align*}
-\frac{d^2}{d\psi^2} \ln(L(\psi)) &= \frac{d}{d\psi} [t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot (\frac{1}{(2 -\psi)^2})] \\
+\ell^{\prime \prime}(\psi) &= \frac{d}{d\psi} \ell^\prime(\psi)\\
+&= \frac{d}{d\psi} [t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot (\frac{1}{(2 -\psi)^2})] \\
 &= \frac{d}{d\psi} [\frac{-t}{(1-\psi)(2 - \psi)} + \frac{(170-t)}{(2-\psi)}]\\
 &= \frac{d}{d\psi} [-t (2 - 3\psi + \psi^2)^{-1} + (170 - t)(2-\psi)^{-1}] \\
+&= -t\cdot-1\cdot(2-3\psi+\psi^2)^{-2}(-3 + 2\psi) + (170 - t) \cdot -1 \cdot (2-\psi)^{-2} \cdot -1 \\
+&= \frac{t(-3 + 2\psi)}{(2-3\psi+\psi^2)^2} + \frac{(170 - t)}{(2-\psi)^2}\\
 \end{align*}
 
+```{r label="mle 2nd derivative"}
+t <- 8
+psi <- 77/81
+second_deriv <- ((t * (-3 + 2 * psi))/((2 - 3 * psi + psi ** 2) ** 2)) + ((170 - t) / ((2 - psi) ** 2))
+```
+
+From our data, $t = 8$ because $8$ out of $170$ total COVID cases came from the vaccinated group. So the second derivative at $\psi = 77/81$ is $\frac{t(-3 + 2\psi)}{(2-3\psi+\psi^2)^2} + \frac{(170 - t)}{(2-\psi)^2}$
+`r second_deriv`
+
+Since the second derivative is negative, that means we have a local maximum at $\psi = 77/81$. Because we only found one point where the first derivative is 0, we only need to check the likelihood at the other two critical points, which are the boundaries. Specifically, that would be $\psi = 0$ and $\psi = 1$. 
+
+```{r label="mle critical points"}
+t = 8
+likelihood_fn <- function(p) {
+  log(choose(170, t)) + t * log((1 - p)/(2 - p)) + (170 - t) * log(1/(2 - p))
+}
+likelihood_fn(77/81)
+likelihood_fn(0)
+likelihood_fn(1)
+```
+
+Since the likelihood function is the greatest at $\psi_0 = 77/81$, this confirms that $\widehat{\psi_0^{mle}} = 77/81$ is indeed the global maximizer for the likelihood function. Thus it is our maximum likelihood estimator for vaccine efficacy.
+
+We can also construct a Wald confidence interval for $\psi_0$ at $\alpha = 0.05$. The formula is $\widehat{\psi_0^{mle}} \pm z_{\alpha / 2} \sqrt{\frac{1}{-\ell^{\prime \prime} (\widehat{\psi_0}^{mle})}}$. 
+
+```{r label="wald"}
+t <- 8
+psi <- 77/81
+second_deriv <- ((t * (-3 + 2 * psi))/((2 - 3 * psi + psi ** 2) ** 2)) + ((170 - t) / ((2 - psi) ** 2))
+lo <- psi + qnorm(0.05/2) * sqrt(1 / (-second_deriv))
+hi <- psi - qnorm(0.05/2) * sqrt(1 / (-second_deriv))
+lo
+hi
+```
+
+We conclude that $\widehat{\psi_0^{mle}} = 77/81$. Furthermore, our 95\% Wald confidence interval for $\psi_0$ is [`r lo`, `r hi`]. In other words, we are 95\% confident that the true vaccine efficacy rate lies between `r lo` and `r hi`. Since the entire confidence interval is well above the FDA's requirement of 30\%, we conclude that the vaccine is sufficiently effective.
 
 ## Results
 
