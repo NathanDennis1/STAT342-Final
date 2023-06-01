@@ -218,16 +218,12 @@ To find the maximum of the likelihood function, take the derivative and set it t
 
 To check whether our value of $\psi = 77/81$ is a global maximum, we will take the second derivative of our log-likelihood function.
 
-<<<<<<< HEAD
 
-
-=======
 \begin{align*}
 \frac{d^2}{d\psi^2} \ln(L(\psi)) &= \frac{d}{d\psi} [t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot (\frac{1}{(2 -\psi)^2})] \\
 &= \frac{d}{d\psi} [\frac{-t}{(1-\psi)(2 - \psi)} + \frac{(170-t)}{(2-\psi)}]\\
 &= \frac{d}{d\psi} [-t (2 - 3\psi + \psi^2)^{-1} + (170 - t)(2-\psi)^{-1}] \\
 \end{align*}
->>>>>>> 69fa481d4ab83e155771ea72e97899c26a3b0d66
 
 
 ## Results
