@@ -136,6 +136,15 @@ $\implies 1-\frac{\pi}{1-\pi}$\
 $\implies \frac{1-2\pi}{1-\pi}$\
 $\psi=\frac{1-2\pi}{1-\pi}$\
 
+We know that $T\sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$ and\
+$g(\pi) = Beta(0.700102,1)$\
+We know beta is a conjugate prior in the binomial model. In the other words, posterior distribution of $\pi$ is also a beta distribution.\
+
+$h(\pi_0|t)=Beta(0.700102+8,170-8+1)$\
+$h(\pi_0|t)=Beta(8.700102,163)$\
+
+
+
 
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
 
