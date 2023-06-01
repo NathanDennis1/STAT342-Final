@@ -158,6 +158,10 @@ $h(\pi_0|t)=Beta(8.700102,163)$\
 
 
 
+
+
+
+
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
 
 
@@ -166,9 +170,7 @@ $h(\pi_0|t)=Beta(8.700102,163)$\
 
 ## Max-Likelihood
 
-We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function.
-
-We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
+We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have proved previously that $T\sim Binom(170,\pi)$, where the distribution would bd defined as: $f(t) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo one. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
 
 $\textbf{Lemma 1.}$
 \begin{align*}
@@ -179,11 +181,10 @@ $\textbf{Lemma 1.}$
 \pi &= \frac{1 -\psi}{2-\psi} \\
 \end{align*}
 
-For our observed data, we will use $t$ as defined by $T\sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo one. So the likelihood function is as follows: 
+We now have that $f(t) = {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t}$. So the likelihood function is as follows: 
 
 \begin{align*}
-L(\psi) &= f(t | \psi) \\
-&= {170\choose t} \pi^t \cdot (1 - \pi)^{170-t} \\
+L(\psi) &= f(t | \psi) \\;
 &= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t} & \text{Lemma 1} \\
 &= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t}\\
 \end{align*}
