@@ -212,23 +212,6 @@ Derivative and set to 0
 ```
 
 
-\begin{align*}
-\frac{d}{d\psi} ln(L(\psi)) &= \frac{d}{d\psi} ln(f(t | \psi)) \\
-&= \frac{d}{d\psi} ln{170\choose t} + tln(\pi) + (170-t)ln(1 - \pi) \\
-0 &= \frac{t}{\pi} - \frac{170-t}{1-\pi} \\
-0 &= \frac{8}{\pi} - \frac{170-8}{1-\pi} \ \ \text{Plug in t obs} \\
-\frac{162}{1-\pi} &= \frac{8}{\pi} \\
-\frac{162}{8} &= \frac{1-\pi}{\pi} \\
-\frac{162}{8} &= \frac{1}{\pi} - 1 \\
-\frac{162}{8} + 1 &= \frac{1}{\pi} \\
-\pi &= \frac{1}{\frac{162}{8} + 1} \\
-\end{align*}
-
-```{r}
-1/(162/8+1)
-```
-
-
 
 
 ## Results
