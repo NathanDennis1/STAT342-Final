@@ -287,6 +287,7 @@ hi
 
 We conclude that $\widehat{\psi_0^{mle}} = 77/81$. Furthermore, our 95\% Wald confidence interval for $\psi_0$ is [`r lo`, `r hi`]. In other words, we are 95\% confident that the true vaccine efficacy rate lies between `r lo` and `r hi`. Since the entire confidence interval is well above the FDA's requirement of 30\%, we conclude that the vaccine is sufficiently effective.
 
+\pagebreak
 ## Results
 
 
@@ -295,7 +296,7 @@ We conclude that $\widehat{\psi_0^{mle}} = 77/81$. Furthermore, our 95\% Wald co
 
 ## References
 
-
+\pagebreak
 ## Appendix
 
 ```{r ref.label="bayesian", echo=TRUE, eval=F}
