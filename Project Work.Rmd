@@ -16,6 +16,13 @@ header-includes:
 fontsize: 11pt
 ---
 
+```{r setup, include=F}
+library(ggplot2)
+library(dplyr)
+library(gridExtra)
+```
+
+
 \begin{table}[ht]
 \centering
 \caption{Sample Table}
@@ -324,9 +331,6 @@ Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our bi
 
 ```{r label ="bootstrap", include = FALSE, cache = TRUE}
 # Requirements
-library(ggplot2)
-library(dplyr)
-library(gridExtra)
 set.seed(342)
 
 # Data from study
