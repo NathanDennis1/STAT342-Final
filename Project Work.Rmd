@@ -182,6 +182,9 @@ We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%].
 Try $\pi = 0.5$. 
 
 
+```{r}
+(1-2*0.005)/(1-0.005)
+```
 
 
 
