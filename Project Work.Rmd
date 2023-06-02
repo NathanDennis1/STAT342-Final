@@ -172,16 +172,13 @@ upper_ci_prior1 <- (1-2*pi_ci[1])/(1-pi_ci[1])
 lower_ci_prior1 <- (1-2*pi_ci[2])/(1-pi_ci[2])
 ```
 
-```{r}
-upper_ci_prior1
-lower_ci_prior1
-```
-
 We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%].
 
 
 
 ### Alternative Beta Prior
+
+Try $\pi = 0.5$. 
 
 
 
