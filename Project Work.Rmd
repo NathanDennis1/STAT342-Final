@@ -46,6 +46,7 @@ COVID-19, Vaccine, Efficacy, Immunization, Analysis
 
 <include> BNT162b2 mRNA Covid-19 Vaccine, which we will refer to subsequently as simply "vaccine"
 
+\pagebreak
 ## Large Sample T-Test
 
 We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
@@ -76,8 +77,8 @@ We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vacc
 We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
 
 
-
-## Statistical Methods
+\pagebreak
+## Bayesian Inference
 
 We will use parameters $\pi_p$ to represent the likelihood of being infected with Covid-19 after taking the placebo, and $\pi_v$ to represent the likelihood of getting Covid-19 after receiving the vaccine.
 
@@ -192,6 +193,7 @@ p_x_less_than_0.3
 ```
 
 
+\pagebreak
 ## Max-Likelihood
 
 We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have proved previously that $T\sim Binom(170,\pi)$, where the distribution would bd defined as: $f(t) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo one. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
