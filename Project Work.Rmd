@@ -44,7 +44,8 @@ COVID-19, Vaccine, Efficacy, Immunization, Analysis
 
 ## Introducton
 
-<include> BNT162b2 mRNA Covid-19 Vaccine, which we will refer to subsequently as simply "vaccine"
+<include> BNT162b2 mRNA covid-19 Vaccine, which we will refer to subsequently as simply
+"vaccine". In recent years, we have seen an upsurge in number of Covid cases which has led to many deaths. Thus coming with a suitable vaccine is the need of the hour. Therefore our aim in this paper is to test the efficacy of the BNT162b2 mRNA covid-19  vaccine. Checking the efficacy of the vaccine is essential for assessing its effectiveness, optimizing its formulation, maintaining public confidence and guiding policy decissions. We check the eficacy of the given vaccine using the dataset given in the problem statement and 
 
 \pagebreak
 ## Large Sample T-Test
