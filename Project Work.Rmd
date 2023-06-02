@@ -155,35 +155,7 @@ We know beta is a conjugate prior in the binomial model. In the other words, pos
 $h(\pi_0|t)=Beta(0.700102+8,170-8+1)$\
 $h(\pi_0|t)=Beta(8.700102,163)$\
 
-```{r}
-#pi <- 8/(162+8)
-#t <- 8
 
-#dbeta(pi, 8.700102, 163)*dbinom(8, 170, pi)/dbeta(pi, 0.700102, 1)
-
-posterior_median_pi <- qbeta(0.5, 8.700102, 163)
-posterior_median_pi
-qbeta(p=c(0.025,0.975), 8.700102, 163)
-
-(1-0.04893234*2)/(1-0.04893234)
-
-```
-
-$P \left(\frac{1-\psi}{2-\psi} < 0.04893234|t \right) = 0.5$ which simplifies too $P(\psi>0.9485501|t)=0.5$
-
-Posterior median of $\psi$ is 0.9485501. We want to test the null hypothesis for $H_0:\psi_0 = 30\%$ and the alternative  $H_1:\psi_0 > 30\%$. We calculate the posterior probability that $P(\psi_0 \leq 0.3|t)$
-
-```{r}
-pi_0 <- (1 - 0.3) / (2 - 0.3)
-
-p_y_less_than_y0 <- pbeta(pi_0, 8.700102, 163)
-
-# Calculate P(x < 0.3 | t) by substituting the calculated value of P(y < y0 | t)
-p_x_less_than_0.3 <- p_y_less_than_y0
-
-# Print the result
-p_x_less_than_0.3
-```
 
 
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
@@ -298,3 +270,18 @@ We conclude that $\widehat{\psi_0^{mle}} = 77/81$. Furthermore, our 95\% Wald co
 
 ```{r ref.label="bayesian", echo=TRUE, eval=F}
 ```
+
+
+## Challenge
+```{r}
+posterior_median_pi <- qbeta(0.5, 8.700102, 163)
+posterior_median_pi
+qbeta(p=c(0.025,0.975), 8.700102, 163)
+
+(1-0.04893234*2)/(1-0.04893234)
+
+```
+
+$P \left(\frac{1-\psi}{2-\psi} < 0.04893234|t \right) = 0.5$ which simplifies too $P(\psi>0.9485501|t)=0.5$
+
+Posterior median of $\psi$ is 0.9485501. We want to test the null hypothesis for $H_0:\psi_0 = 30\%$ and the alternative  $H_1:\psi_0 > 30\%$. We calculate the posterior probability that $P(\psi_0 \leq 0.3|t)$
