@@ -47,94 +47,95 @@ COVID-19, Vaccine, Efficacy, Immunization, Analysis
 <include> BNT162b2 mRNA covid-19 Vaccine, which we will refer to subsequently as simply
 "vaccine". In recent years, we have seen an upsurge in number of Covid cases which has led to many deaths. Thus coming with a suitable vaccine is the need of the hour. Therefore our aim in this paper is to test the efficacy of the BNT162b2 mRNA covid-19  vaccine. Checking the efficacy of the vaccine is essential for assessing its effectiveness, optimizing its formulation, maintaining public confidence and guiding policy decissions. We check the eficacy of the given vaccine using the dataset given in the problem statement and then compare our results with results publisheshed in the papers. In this paper we test the efficay of our vacccine using the Bayesian and Frequentist approach.
 
-```{r}
-### google "cache chunk option" to see what it does
+\pagebreak
+## Bootstrap Confidence Interval
 
-set.seed(188)
-x<-rep(c("MM","MF","FF"), times = c(10,15,15))
-B=10000
 
+We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
+
+Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine. Then $\sum_{i = 1}^n X_i \sim \mbox{Binom}(\pi_v)$ and $\sum_{i = 1}^m X_i \sim \mbox{Binom}(\pi_p)$ and we can approximate $\pi_p = \bar{X}$ and $\pi_v = \bar{Y}$, which we can find by dividing the sum (a binomial random variable) by $n$ or $m$, respectively.
+
+Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions, we will run a parametric bootstrap simulation with B = 100,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{\bar{X}}{\bar{Y}}$.
+
+```{r label ="bootstrap", include = FALSE, cache = TRUE}
+# Requirements
+library(ggplot2)
+library(dplyr)
+set.seed(342)
+
+# Data from study
+n <- 17411
+m <- 17511
+pi_v_hat <- 8/n
+pi_p_hat <- 162/m
+
+# Helper function to compute psi from bootstrapped data
+get_efficacy <- function(x_bar, y_bar) {
+  1 - (x_bar / y_bar)
+}
+
+# Number of trials, B
+B <- 100000
+# Vaccine efficacy psi for our dataset
+psi <- get_efficacy(pi_v_hat, pi_p_hat)
+
+# Run bootstrap
 boot_sim <- lapply(1:B, FUN = function(i){ 
-    # generate a re sample from x 
-    samples=sample(x,size=40,replace = TRUE) 
-    #count the number of MM,MF, FF
-    desired_order = c("MM","MF","FF")
-    my_factor = factor(samples, levels = desired_order)
-    counts=table(my_factor)
-    #calculate bootstrapped MLE of alpha and return value as dataframe
-    alpha_bootstrapped = max(((counts[1]+counts[3]-counts[2])/(40)),0)
-    data.frame(alpha_bootstrapped)
+    # generate a re-sample from known distribution
+    x_bar = rbinom(1, n, pi_v_hat) / n
+    y_bar = rbinom(1, m, pi_p_hat) / m
+    
+    #calculate bootstrapped efficacy and return value as dataframe
+    psi_bootstrapped = get_efficacy(x_bar, y_bar)
+    data.frame(psi_bootstrapped)
    })
 
-
-boot_sim_mle <- do.call(rbind, boot_sim)
-
+boot_sim_psi <- do.call(rbind, boot_sim)
 
 #write code to create a bootstrapped sampling distribution and save the #figure to an object called p1 and display it in part i. below by typing 
 #p1 in a code chunk that is not echoed
 
-library(ggplot2)
-p1 <- ggplot(data=boot_sim_mle, 
-       mapping = aes(alpha_bootstrapped))+
-  geom_histogram(binwidth =0.05)+
-  labs(title="Histogram of 1000 Bootstrapped Sample Variance Values",x="boot_mle",y="count")
+p1 <- ggplot(data=boot_sim_psi, 
+       mapping = aes(psi_bootstrapped))+
+  geom_histogram(binwidth =0.01)+
+  labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
+  xlim(0, 1)
 
 
-#write code to calculate center of bootstrapped sampling distribution.
-#save answer in variable and reference its value with inline code for 
-#part ii. below
+p2 <- ggplot(data=boot_sim_psi, 
+       mapping = aes(psi_bootstrapped))+
+  geom_histogram(binwidth =0.005)+
+  labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
+  xlim(0.8, 1)
 
-centre_boststrapped<-mean(boot_sim_mle$alpha_bootstrapped)
+p2
 
-#write code to calculate bootstrap confidence intervals and reference the end points using inline code for part iii. below
+# Center of bootstrapped confidence interval for psi
+bootstrapped_center <-mean(boot_sim_psi$psi_bootstrapped)
 
-# percentile method
-percentile_method<-boot_sim_mle %>% summarize(lower = quantile(alpha_bootstrapped,.025),
-                      upper = quantile(alpha_bootstrapped, .975))
+# Compute Bootstrap confidence interval
+# Percentile method
+percentile_method<-boot_sim_psi %>% summarize(lower = quantile(psi_bootstrapped,.025),
+                      upper = quantile(psi_bootstrapped, .975))
+percentile_method # See output
 
+# Standard bootstrap method
+standard_bootstrap<-boot_sim_psi %>% summarise(boot_mean=mean(psi_bootstrapped),
+                          boot_se = sd(psi_bootstrapped),
+                          bias = boot_mean-psi,
+                          lower = psi + qnorm(p=0.025) * boot_se,
+                          upper = psi - qnorm(p=0.025) * boot_se)
 
-#Standard bootstrap method
-standard_bootstrap<-boot_sim_mle%>% summarise(boot_mean=mean(alpha_bootstrapped),
-                          boot_se=sd(alpha_bootstrapped),
-                          bias=boot_mean-0.25,
-                          lower=0.25-qnorm(p=0.975)*boot_se,
-                          upper=0.25+qnorm(p=0.975)*boot_se)
+standard_bootstrap # See output
 
-
-
-smoke <- matrix(c(percentile_method$lower,percentile_method$upper,standard_bootstrap$lower,standard_bootstrap$upper),ncol=2,byrow=TRUE)
-colnames(smoke) <- c("Lower","Upper")
-rownames(smoke) <- c("Percentile Method","Standard Bootstrap")
-smoke <- as.table(smoke)
-smoke
+summary_table <- matrix(c(percentile_method$lower,percentile_method$upper,standard_bootstrap$lower,standard_bootstrap$upper),ncol=2,byrow=TRUE)
+colnames(summary_table) <- c("Lower","Upper")
+rownames(summary_table) <- c("Percentile Method","Standard Bootstrap")
+summary_table <- as.table(summary_table)
+summary_table
 ```
 
-\pagebreak
-## Large Sample T-Test
-
-We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
-
-Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine.
-
-Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data, we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval.
-
-```{r label ="bootstrap", include = FALSE, cache = TRUE}
-n <- 17411
-m <- 17511
-pi_v <- 8/n
-pi_p <- 162/m
-
-B <- 10
-lapply(c(1:B), sum())
-```
-
-The efficacy rate is defined as $1 - \frac{\pi_v}{\pi_p}$, so let's define the random variable Z to represent the estimated efficacy rate from our data, where $Z = 1 - \frac{\bar{Y}}{\bar{X}}$. We want to see whether or not the efficacy rate exceeds the 30\% as required by the FDA.
-
-We will define null hypothesis $H_0$: $Z = .3$, which represents the vaccine having 30\% efficacy.
-We will define the one-sided alternative hypothesis $H_a$: $Z > .3$ representing that the vaccine has an efficacy greater than 30\%.
-
-Fr
-
+If we are to assume that it is normal...
 
 
 \pagebreak
