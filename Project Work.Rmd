@@ -44,109 +44,38 @@ COVID-19, Vaccine, Efficacy, Immunization, Analysis
 
 ## Introducton
 
-<include> BNT162b2 mRNA covid-19 Vaccine, which we will refer to subsequently as simply
-"vaccine". In recent years, we have seen an upsurge in number of Covid cases which has led to many deaths. Thus coming with a suitable vaccine is the need of the hour. Therefore our aim in this paper is to test the efficacy of the BNT162b2 mRNA covid-19  vaccine. Checking the efficacy of the vaccine is essential for assessing its effectiveness, optimizing its formulation, maintaining public confidence and guiding policy decissions. We check the eficacy of the given vaccine using the dataset given in the problem statement and then compare our results with results publisheshed in the papers. In this paper we test the efficay of our vacccine using the Bayesian and Frequentist approach.
+<include> BNT162b2 mRNA Covid-19 Vaccine, which we will refer to subsequently as simply "vaccine"
 
 \pagebreak
-## Bootstrap Confidence Interval
-
+## Large Sample T-Test
 
 We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
 
-Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine. Then $\sum_{i = 1}^n X_i \sim \mbox{Binom}(\pi_v)$ and $\sum_{i = 1}^m X_i \sim \mbox{Binom}(\pi_p)$ and we can approximate $\pi_p = \bar{X}$ and $\pi_v = \bar{Y}$, which we can find by dividing the sum (a binomial random variable) by $n$ or $m$, respectively.
+Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine.
 
-Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions, we will run a parametric bootstrap simulation with B = 100,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{\bar{X}}{\bar{Y}}$.
+<TODO>?
+The efficacy rate is defined as $1 - \frac{\pi_v}{\pi_p}$, so let's define the random variable Z to represent the estimated efficacy rate from our data, where $Z = 1 - \frac{\bar{Y}}{\bar{X}}$. We want to see whether or not the efficacy rate exceeds the 30\% as required by the FDA.
 
-```{r label ="bootstrap", include = FALSE, cache = TRUE}
-# Requirements
-library(ggplot2)
-library(dplyr)
-library(gridExtra)
-set.seed(342)
+From our data, our estimated efficacy
+$\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}$
+$\hat\psi=0.950334$
+<TODO>?
 
-# Data from study
-n <- 17411
-m <- 17511
-pi_v_hat <- 8/n
-pi_p_hat <- 162/m
+We'll assume that the sample size is sufficiently large, since $n = 17511$ and $m = 17411$. Then the Central Limit Theorem should hold, so then $\bar{X} \sim \mbox{Norm}(\mu_x, \frac{\sigma_x}{\sqrt{n}})$ and $\bar{Y} \sim \mbox{Norm}(\mu_y, \frac{\sigma_y}{\sqrt{m}})$. The mean of a Bernoulli random variable with probability $\pi$ is $\pi$ and the variance is $\pi(1 - \pi)$.
 
-# Helper function to compute psi from bootstrapped data
-get_efficacy <- function(x_bar, y_bar) {
-  1 - (x_bar / y_bar)
-}
+Therefore, $\bar{X} \sim \mbox{Norm}(\pi_p, \sqrt{\frac{\pi_p(1 - \pi_p)}{n}})$ and $\bar{Y} \sim \mbox{Norm}(\pi_v, \sqrt{\frac{\pi_v(1 - \pi_v)}{m}})$.
 
-# Number of trials, B
-B <- 100000
-# Vaccine efficacy psi for our dataset
-psi <- get_efficacy(pi_v_hat, pi_p_hat)
+$xbar - ybar +- z_alpha/2 sqrt(sigma1^2/n + sigma2^2/m)$
 
-# Run bootstrap
-boot_sim <- lapply(1:B, FUN = function(i){ 
-    # generate a re-sample from known distribution
-    x_bar = rbinom(1, n, pi_v_hat) / n
-    y_bar = rbinom(1, m, pi_p_hat) / m
-    
-    #calculate bootstrapped efficacy and return value as dataframe
-    psi_bootstrapped = get_efficacy(x_bar, y_bar)
-    data.frame(psi_bootstrapped)
-   })
+$xbar Sim Norm (mu1, sigma1 / sqrt(n))$
 
-boot_sim_psi <- do.call(rbind, boot_sim)
+We will define null hypothesis $H_0$: $Z = .3$, which represents the vaccine having 30\% efficacy.
+We will define the one-sided alternative hypothesis $H_a$: $Z > .3$ representing that the vaccine has an efficacy greater than 30\%.
 
-# Large histogram
-p1 <- ggplot(data=boot_sim_psi, 
-       mapping = aes(psi_bootstrapped))+
-  geom_histogram(binwidth =0.01)+
-  labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
-  xlim(0, 1)
+We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
 
-# Detailed histogram with normality
-p2_1 <- ggplot(data=boot_sim_psi, 
-       mapping = aes(psi_bootstrapped))+
-  geom_histogram(binwidth =0.005)+
-  labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
-  xlim(0.8, 1)
+We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
 
-# Normal qq
-p2_2 <- ggplot(data = boot_sim_psi,
-             mapping = aes(sample = psi_bootstrapped)) +
-  stat_qq(distribution = qnorm) + 
-  stat_qq_line(distribution = qnorm) + 
-  labs(title = "Normal probability plot",
-       subtitle = "of bootstrapped distribution")
-
-# Center of bootstrapped confidence interval for psi
-bootstrapped_center <-mean(boot_sim_psi$psi_bootstrapped)
-
-# Compute Bootstrap confidence interval
-# Percentile method
-percentile_method<-boot_sim_psi %>% summarize(lower = quantile(psi_bootstrapped,.025),
-                      upper = quantile(psi_bootstrapped, .975))
-percentile_method # See output
-
-median <- quantile(boot_sim_psi$psi_bootstrapped, 0.5)
-
-# Bias adjusted Standard bootstrap method
-standard_bootstrap<-boot_sim_psi %>% summarise(boot_mean=mean(psi_bootstrapped),
-                          boot_se = sd(psi_bootstrapped),
-                          bias = boot_mean-psi,
-                          lower = psi + qnorm(p=0.025) * boot_se,
-                          upper = psi - qnorm(p=0.025) * boot_se)
-
-standard_bootstrap # See output
-
-summary_table <- matrix(c(percentile_method$lower,percentile_method$upper,standard_bootstrap$lower,standard_bootstrap$upper),ncol=2,byrow=TRUE)
-colnames(summary_table) <- c("Lower","Upper")
-rownames(summary_table) <- c("Percentile Method","Standard Bootstrap")
-summary_table <- as.table(summary_table)
-summary_table
-```
-
-```{r figure 3.1}
-grid.arrange(p2_1, p2_2)
-```
-
-Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is not nearly normal as the tail ends of the Q-Q plot differ from the expected values should our bootstrapped values of $\psi$ come from a normal distribution. Therefore, we should prefer the percentile method 95\% confidence interval for $\psi$ instead. In other words, we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138], with our median bootstrapped $\psi = 0.95145$. Our confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective <TODO Phrasing>
 
 \pagebreak
 ## Bayesian Inference
@@ -282,10 +211,9 @@ So our 95\% interval for $\psi$ is (0.9009794, 0.9750466).
 
 ### Poisson Prior?
 
+Suppose now we can construct a Poisson prior using the previous binomial distribution defined as $T \sim Binom(170, \pi)$. A good approximation for the binomial would be a poisson distribution with $\lambda = 170\pi$. We can denote $U \sim Poisson(\lambda = 170\pi)$, where $\lambda$ represents the rate of covid cases in the vaccine group over 170 positive cases.
 
-
-
-We can construct a Poisson prior using the previous binomial distribution defined as $T \sim Binom(170, \pi)$.
+A gamma distribution is convenient choice for the prior of the parameter $\lambda$. The prior would follow Gamma($170, \pi_0$), as the shape parameter would represent the total number of confirmed cases and the rate parameter would represent the rate of
 
 \pagebreak
 ## Max-Likelihood
