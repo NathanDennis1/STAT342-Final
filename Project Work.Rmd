@@ -154,7 +154,8 @@ $\psi=\frac{1-2\pi}{1-\pi}$\
 
 ### Prior from Polack et. al.
 
-We define $T \sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi) = Beta(0.700102,1)$ as Polack et. al. did.\
+We define $T \sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi) = Beta(0.700102,1)$ as Polack et. al. did. The 95% confidence interval for $\pi$ is (0.005, 0.964) and the corresponding 95% interval for $\psi$ is (-26.2, 0.995).\
+
 We know beta is a conjugate prior in the binomial model. In the other words, posterior distribution of $\pi$ is also a beta distribution.\
 
 $h(\pi_0|t)=Beta(0.700102+8,170-8+1)$\
