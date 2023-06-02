@@ -81,7 +81,6 @@ We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ repre
 =======
 
 ## Statistical Methods
->>>>>>> 6b7153f71523c911d86bd7213b4dcbe99a3a2d83
 ## Bayesian Inference
 
 ### Definitions
