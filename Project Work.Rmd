@@ -320,7 +320,7 @@ We'll assume the infection status of each patient is a Bernoulli Random Variable
 
 Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine. Then $\sum_{i = 1}^n X_i \sim \mbox{Binom}(\pi_v)$ and $\sum_{i = 1}^m X_i \sim \mbox{Binom}(\pi_p)$ and we can approximate $\pi_p = \bar{X}$ and $\pi_v = \bar{Y}$, which we can find by dividing the sum (a binomial random variable) by $n$ or $m$, respectively.
 
-Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions, we will run a parametric bootstrap simulation with B = 100,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{\bar{X}}{\bar{Y}}$.
+Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions, we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{\bar{X}}{\bar{Y}}$.
 
 ```{r label ="bootstrap", include = FALSE, cache = TRUE}
 # Requirements
@@ -341,7 +341,7 @@ get_efficacy <- function(x_bar, y_bar) {
 }
 
 # Number of trials, B
-B <- 100000
+B <- 10000
 # Vaccine efficacy psi for our dataset
 psi <- get_efficacy(pi_v_hat, pi_p_hat)
 
@@ -362,14 +362,14 @@ boot_sim_psi <- do.call(rbind, boot_sim)
 p1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.01)+
-  labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
+  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
   xlim(0, 1)
 
 # Detailed histogram with normality
 p2_1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.005)+
-  labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
+  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
   xlim(0.8, 1)
 
 # Normal qq
