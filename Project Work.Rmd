@@ -44,12 +44,44 @@ COVID-19, Vaccine, Efficacy, Immunization, Analysis
 
 ## Introducton
 
-<include> BNT162b2 mRNA covid-19 Vaccine, which we will refer to subsequently as simply
-"vaccine". In recent years, we have seen an upsurge in number of Covid cases which has led to many deaths. Thus coming with a suitable vaccine is the need of the hour. Therefore our aim in this paper is to test the efficacy of the BNT162b2 mRNA covid-19  vaccine. Checking the efficacy of the vaccine is essential for assessing its effectiveness, optimizing its formulation, maintaining public confidence and guiding policy decissions. We check the eficacy of the given vaccine using the dataset given in the problem statement and then compare our results with results publisheshed in the papers. In this paper we test the efficay of our vacccine using the Bayesian and Frequentist approach.
+<include> BNT162b2 mRNA Covid-19 Vaccine, which we will refer to subsequently as simply "vaccine"
 
 \pagebreak
+## Large Sample T-Test
+
+We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
+
+Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine.
+
+<TODO>?
+The efficacy rate is defined as $1 - \frac{\pi_v}{\pi_p}$, so let's define the random variable Z to represent the estimated efficacy rate from our data, where $Z = 1 - \frac{\bar{Y}}{\bar{X}}$. We want to see whether or not the efficacy rate exceeds the 30\% as required by the FDA.
+
+From our data, our estimated efficacy
+$\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}$
+$\hat\psi=0.950334$
+<TODO>?
+
+We'll assume that the sample size is sufficiently large, since $n = 17511$ and $m = 17411$. Then the Central Limit Theorem should hold, so then $\bar{X} \sim \mbox{Norm}(\mu_x, \frac{\sigma_x}{\sqrt{n}})$ and $\bar{Y} \sim \mbox{Norm}(\mu_y, \frac{\sigma_y}{\sqrt{m}})$. The mean of a Bernoulli random variable with probability $\pi$ is $\pi$ and the variance is $\pi(1 - \pi)$.
+
+Therefore, $\bar{X} \sim \mbox{Norm}(\pi_p, \sqrt{\frac{\pi_p(1 - \pi_p)}{n}})$ and $\bar{Y} \sim \mbox{Norm}(\pi_v, \sqrt{\frac{\pi_v(1 - \pi_v)}{m}})$.
+
+$xbar - ybar +- z_alpha/2 sqrt(sigma1^2/n + sigma2^2/m)$
+
+$xbar Sim Norm (mu1, sigma1 / sqrt(n))$
+
+We will define null hypothesis $H_0$: $Z = .3$, which represents the vaccine having 30\% efficacy.
+We will define the one-sided alternative hypothesis $H_a$: $Z > .3$ representing that the vaccine has an efficacy greater than 30\%.
+
+We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
+
+We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
+
+
+\pagebreak
+=======
 
 ## Statistical Methods
+>>>>>>> 6b7153f71523c911d86bd7213b4dcbe99a3a2d83
 ## Bayesian Inference
 
 ### Definitions
@@ -183,10 +215,9 @@ So our 95\% interval for $\psi$ is (0.9009794, 0.9750466).
 
 ### Poisson Prior?
 
+Suppose now we can construct a Poisson prior using the previous binomial distribution defined as $T \sim Binom(170, \pi)$. A good approximation for the binomial would be a poisson distribution with $\lambda = 170\pi$. We can denote $U \sim Poisson(\lambda = 170\pi)$, where $\lambda$ represents the rate of covid cases in the vaccine group over 170 positive cases.
 
-
-
-We can construct a Poisson prior using the previous binomial distribution defined as $T \sim Binom(170, \pi)$.
+A gamma distribution is convenient choice for the prior of the parameter $\lambda$. The prior would follow Gamma($170, \pi_0$), as the shape parameter would represent the total number of confirmed cases and the rate parameter would represent the rate
 
 \pagebreak
 ## Max-Likelihood
