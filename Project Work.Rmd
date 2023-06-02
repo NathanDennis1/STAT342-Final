@@ -45,7 +45,69 @@ COVID-19, Vaccine, Efficacy, Immunization, Analysis
 ## Introducton
 
 <include> BNT162b2 mRNA covid-19 Vaccine, which we will refer to subsequently as simply
-"vaccine". In recent years, we have seen an upsurge in number of Covid cases which has led to many deaths. Thus coming with a suitable vaccine is the need of the hour. Therefore our aim in this paper is to test the efficacy of the BNT162b2 mRNA covid-19  vaccine. Checking the efficacy of the vaccine is essential for assessing its effectiveness, optimizing its formulation, maintaining public confidence and guiding policy decissions. We check the eficacy of the given vaccine using the dataset given in the problem statement and 
+"vaccine". In recent years, we have seen an upsurge in number of Covid cases which has led to many deaths. Thus coming with a suitable vaccine is the need of the hour. Therefore our aim in this paper is to test the efficacy of the BNT162b2 mRNA covid-19  vaccine. Checking the efficacy of the vaccine is essential for assessing its effectiveness, optimizing its formulation, maintaining public confidence and guiding policy decissions. We check the eficacy of the given vaccine using the dataset given in the problem statement and then compare our results with results publisheshed in the papers. In this paper we test the efficay of our vacccine using the Bayesian and Frequentist approach.
+
+```{r}
+### google "cache chunk option" to see what it does
+
+set.seed(188)
+x<-rep(c("MM","MF","FF"), times = c(10,15,15))
+B=10000
+
+boot_sim <- lapply(1:B, FUN = function(i){ 
+    # generate a re sample from x 
+    samples=sample(x,size=40,replace = TRUE) 
+    #count the number of MM,MF, FF
+    desired_order = c("MM","MF","FF")
+    my_factor = factor(samples, levels = desired_order)
+    counts=table(my_factor)
+    #calculate bootstrapped MLE of alpha and return value as dataframe
+    alpha_bootstrapped = max(((counts[1]+counts[3]-counts[2])/(40)),0)
+    data.frame(alpha_bootstrapped)
+   })
+
+
+boot_sim_mle <- do.call(rbind, boot_sim)
+
+
+#write code to create a bootstrapped sampling distribution and save the #figure to an object called p1 and display it in part i. below by typing 
+#p1 in a code chunk that is not echoed
+
+library(ggplot2)
+p1 <- ggplot(data=boot_sim_mle, 
+       mapping = aes(alpha_bootstrapped))+
+  geom_histogram(binwidth =0.05)+
+  labs(title="Histogram of 1000 Bootstrapped Sample Variance Values",x="boot_mle",y="count")
+
+
+#write code to calculate center of bootstrapped sampling distribution.
+#save answer in variable and reference its value with inline code for 
+#part ii. below
+
+centre_boststrapped<-mean(boot_sim_mle$alpha_bootstrapped)
+
+#write code to calculate bootstrap confidence intervals and reference the end points using inline code for part iii. below
+
+# percentile method
+percentile_method<-boot_sim_mle %>% summarize(lower = quantile(alpha_bootstrapped,.025),
+                      upper = quantile(alpha_bootstrapped, .975))
+
+
+#Standard bootstrap method
+standard_bootstrap<-boot_sim_mle%>% summarise(boot_mean=mean(alpha_bootstrapped),
+                          boot_se=sd(alpha_bootstrapped),
+                          bias=boot_mean-0.25,
+                          lower=0.25-qnorm(p=0.975)*boot_se,
+                          upper=0.25+qnorm(p=0.975)*boot_se)
+
+
+
+smoke <- matrix(c(percentile_method$lower,percentile_method$upper,standard_bootstrap$lower,standard_bootstrap$upper),ncol=2,byrow=TRUE)
+colnames(smoke) <- c("Lower","Upper")
+rownames(smoke) <- c("Percentile Method","Standard Bootstrap")
+smoke <- as.table(smoke)
+smoke
+```
 
 \pagebreak
 ## Large Sample T-Test
