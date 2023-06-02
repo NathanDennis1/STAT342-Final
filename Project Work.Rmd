@@ -213,7 +213,7 @@ So our 95\% interval for $\psi$ is (0.9009794, 0.9750466).
 
 Suppose now we can construct a Poisson prior using the previous binomial distribution defined as $T \sim Binom(170, \pi)$. A good approximation for the binomial would be a poisson distribution with $\lambda = 170\pi$. We can denote $U \sim Poisson(\lambda = 170\pi)$, where $\lambda$ represents the rate of covid cases in the vaccine group over 170 positive cases.
 
-A gamma distribution is convenient choice for the prior of the parameter $\lambda$. The prior would follow Gamma($170, \pi_0$), as the shape parameter would represent the total number of confirmed cases and the rate parameter would represent the rate of
+A gamma distribution is convenient choice for the prior of the parameter $\lambda$. The prior would follow Gamma($170, \pi_0$), as the shape parameter would represent the total number of confirmed cases and the rate parameter would represent the rate
 
 \pagebreak
 ## Max-Likelihood
