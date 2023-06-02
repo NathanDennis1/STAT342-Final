@@ -61,6 +61,7 @@ Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our bi
 # Requirements
 library(ggplot2)
 library(dplyr)
+library(gridExtra)
 set.seed(342)
 
 # Data from study
@@ -92,23 +93,27 @@ boot_sim <- lapply(1:B, FUN = function(i){
 
 boot_sim_psi <- do.call(rbind, boot_sim)
 
-#write code to create a bootstrapped sampling distribution and save the #figure to an object called p1 and display it in part i. below by typing 
-#p1 in a code chunk that is not echoed
-
+# Large histogram
 p1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.01)+
   labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
   xlim(0, 1)
 
-
-p2 <- ggplot(data=boot_sim_psi, 
+# Detailed histogram with normality
+p2_1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.005)+
   labs(title="Histogram of 100,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
   xlim(0.8, 1)
 
-p2
+# Normal qq
+p2_2 <- ggplot(data = boot_sim_psi,
+             mapping = aes(sample = psi_bootstrapped)) +
+  stat_qq(distribution = qnorm) + 
+  stat_qq_line(distribution = qnorm) + 
+  labs(title = "Normal probability plot",
+       subtitle = "of bootstrapped distribution")
 
 # Center of bootstrapped confidence interval for psi
 bootstrapped_center <-mean(boot_sim_psi$psi_bootstrapped)
@@ -119,7 +124,9 @@ percentile_method<-boot_sim_psi %>% summarize(lower = quantile(psi_bootstrapped,
                       upper = quantile(psi_bootstrapped, .975))
 percentile_method # See output
 
-# Standard bootstrap method
+median <- quantile(boot_sim_psi$psi_bootstrapped, 0.5)
+
+# Bias adjusted Standard bootstrap method
 standard_bootstrap<-boot_sim_psi %>% summarise(boot_mean=mean(psi_bootstrapped),
                           boot_se = sd(psi_bootstrapped),
                           bias = boot_mean-psi,
@@ -135,8 +142,11 @@ summary_table <- as.table(summary_table)
 summary_table
 ```
 
-If we are to assume that it is normal...
+```{r figure 3.1}
+grid.arrange(p2_1, p2_2)
+```
 
+Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is not nearly normal as the tail ends of the Q-Q plot differ from the expected values should our bootstrapped values of $\psi$ come from a normal distribution. Therefore, we should prefer the percentile method 95\% confidence interval for $\psi$ instead. In other words, we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138], with our median bootstrapped $\psi = 0.95145$. Our confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective <TODO Phrasing>
 
 \pagebreak
 ## Bayesian Inference
