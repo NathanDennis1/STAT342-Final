@@ -180,8 +180,30 @@ We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%].
 
 Try $\pi = 0.5$. 
 
+Polack et. al. cites a prior distribution for $\pi$ of $\mbox{Beta}(0.700102, 1)$ which is intended to be centered at $\pi = 0.4118$ corresponding to a $\psi$ of 30\%. The authors cite this as a pessimistic estimate. However, we will try a more pessimistic prior, using a 0\% vaccine efficacy rate.
+```{r prior 1 uh}
+pi_ci_3 <- qbeta(p=c(0.025,0.975), 1, 1)
+pi_ci_3
+```
+Again we have enough room for uncertainty. Under the prior, the 95\% CI for $\pi$ is $[0.025, 0.975]$ which corresponds to a 95\% CI for $\psi$ being $[-38, 0.974359]$
+
+$\frac{1 - 2\pi}{1 - \pi}$ 
 
 
+When $\psi = 0$, $\pi = \frac{\psi - 1}{\psi - 2} = \frac{1}{2}$. This corresponds to the $\mbox{Beta}(1, 1)$ prior, which is uniform.
+
+We'll use the Beta conjugate, to find our posterior distribution $h(\pi_0 | t) = \mbox{Beta}(1 + 8, 170 - 8 + 1) = \mbox{Beta}(9, 163)$.
+
+```{r code prior2}
+pi_ci2 <- qbeta(p=c(0.025,0.975), 9, 163)
+
+upper_ci_prior2 <- (1-2*pi_ci2[1])/(1-pi_ci2[1])
+lower_ci_prior2 <- (1-2*pi_ci2[2])/(1-pi_ci2[2])
+upper_ci_prior2
+lower_ci_prior2
+```
+
+So our 95\% interval for $\psi$ is (0.9009794, 0.9750466). 
 
 
 ### Binomial Prior?
