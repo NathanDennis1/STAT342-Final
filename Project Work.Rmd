@@ -43,6 +43,7 @@ Total & 170 & 34,922 \\
 
 ## Abstract
 
+# Background
 
 
 ## Keywords
@@ -171,7 +172,17 @@ We know beta is a conjugate prior in the binomial model. In the other words, pos
 $h(\pi_0|t)=Beta(0.700102+8,170-8+1)$\
 $h(\pi_0|t)=Beta(8.700102,163)$\
 
+We can find the 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi$. We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$. For the lower bound,
 
+\begin{align*}
+\frac{1-2 \cdot 0.023194}{1-0.023194} &= 0.903520
+\end{align*}
+
+For the upper bound,
+
+\begin{align*}
+\frac{1-2 \cdot 0.08799}{1-0.08799} &= 0.976255
+\end{align*}
 
 
 ```{r label ="bayesian", include = FALSE, cache = TRUE}
@@ -183,15 +194,16 @@ upper_ci_prior1 <- (1-2*pi_ci[1])/(1-pi_ci[1])
 lower_ci_prior1 <- (1-2*pi_ci[2])/(1-pi_ci[2])
 ```
 
-We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%].
+
+We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%]. This interval does not contain the value 30% and is much larger than this, so we conclude the vaccine efficacy is larger than 30%.
 
 
 
-### Alternative Beta Prior
+### Alternative Beta Prior, Further Pessimistic Approach
 
-Try $\pi = 0.5$. 
+Polack et. al. cites a prior distribution for $\pi$ of $\mbox{Beta}(0.700102, 1)$ which is intended to be centered at $\pi = 0.4118$ corresponding to a $\psi$ of 30\%. The authors cite this as a pessimistic estimate. However, we will try a more pessimistic prior, using a 0\% vaccine efficacy rate. A "pessimistic" prior would represent a more skeptical approach in regards to vaccine efficacy, where we assume a vaccine efficacy of 0\%. In many cases it is argued that pessimistic priors are rarely necessary since researchers are motivated to conduct a trial with a belief that the vaccine will be beneficial, however this is a flawed argument since in many cases prior beliefs about some intervention could prove to be inaccurate, causing significantly more harm. (Zampieri, Fernando G, et al.) Due to this, using a prior implying the vaccine efficacy rate is 0\% is a safe option to eliminate the possiblity of substantial harm.
 
-Polack et. al. cites a prior distribution for $\pi$ of $\mbox{Beta}(0.700102, 1)$ which is intended to be centered at $\pi = 0.4118$ corresponding to a $\psi$ of 30\%. The authors cite this as a pessimistic estimate. However, we will try a more pessimistic prior, using a 0\% vaccine efficacy rate.
+When $\psi = 0$, $\pi = \frac{\psi - 1}{\psi - 2} = \frac{1}{2}$. This corresponds to the $\mbox{Beta}(1, 1)$ prior, which is uniform. The prior in this case can actually be thought of as a uniform distribution, Unif(0,1), which is also called the flat prior.
 ```{r prior 1 uh}
 pi_ci_3 <- qbeta(p=c(0.025,0.975), 1, 1)
 pi_ci_3
@@ -201,7 +213,6 @@ Again we have enough room for uncertainty. Under the prior, the 95\% CI for $\pi
 $\frac{1 - 2\pi}{1 - \pi}$ 
 
 
-When $\psi = 0$, $\pi = \frac{\psi - 1}{\psi - 2} = \frac{1}{2}$. This corresponds to the $\mbox{Beta}(1, 1)$ prior, which is uniform.
 
 
 
@@ -228,55 +239,49 @@ A gamma distribution is convenient choice for the prior of the parameter $\lambd
 \pagebreak
 ## Max-Likelihood
 
-We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have proved previously that $T\sim Binom(170,\pi)$, where the distribution would bd defined as: $f(t) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo one. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
-
+We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have shown previously that $T\sim Binom(170,\pi)$, where the distribution would be defined as: $f(t|\pi) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
 $\textbf{Lemma 1.}$
 \begin{align*}
 \psi &= \frac{1-2\pi}{1-\pi} \\
 (1-\pi)\psi &= 1-2\pi \\
 \psi - \pi \psi &= 1-2\pi \\
 2\pi - \pi \psi &= 1 - \psi \\
-\pi &= \frac{1 -\psi}{2-\psi} \\
+\pi &= \frac{1 -\psi}{2-\psi}
 \end{align*}
-
-We now have that $f(t) = {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t}$. So the likelihood function is as follows: 
-
+Plugging in this value for $\pi$, we now have that $f(t|\psi) = {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t}$. So the likelihood function is as follows: 
 \begin{align*}
 L(\psi) &= f(t | \psi) \\;
 &= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t} & \text{Lemma 1} \\
-&= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t}\\
+&= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t}
 \end{align*}
-
-Next, we compute the log-likelihood function:
-
+Next, we compute the log-likelihood function by taking the natural log of the likelihood function. We denote this log-likelihood as $\ell(\psi) = \ln(L(\psi)) = \ln(f(t | \psi))$.
 \begin{align*}
-\ell(\psi) &= \ln(L(\psi))\\
-&= \ln(f(t | \psi)) \\
+\ell(\psi) &= \ln(f(t | \psi)) \\
 &= \ln \left({170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \right) \\
 &= \ln{170\choose t} + \ln\left((\frac{1 -\psi}{2-\psi})^t \right) + \ln \left((\frac{1}{2-\psi})^{170-t} \right) \\
-&= \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \\
+&= \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) 
 \end{align*}
-
-To find the maximum of the likelihood function, take the derivative and set it to zero and solve:
-
+We have calculated the log-likelihood $\ell(\psi) = \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi})$. To find the maximum of the likelihood function, we now take derivative of the log-likelihood and set it to zero. First, take the derivative with respect to $\psi$.
 \begin{align*}
 \ell^\prime (\psi) &= \frac{d}{d\psi} \ell(\psi) \\
-&= \frac{d}{d\psi} \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \\
-&= t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot (\frac{1}{(2 -\psi)^2})\\
-0 &= -\frac{t}{(1-\psi)(2 -\psi)} + (170-t) \cdot \frac{1}{(2 -\psi)}\\
-\frac{t}{(1-\psi)(2 -\psi)} &= (170-t)\frac{1}{(2 -\psi)}\\
-\frac{8}{(1-\psi)(2 -\psi)} &= (170-8)\frac{1}{(2 -\psi)}\\
-\frac{8}{162} &= \frac{(1-\psi)(2 -\psi)}{(2 -\psi)}\\
-\frac{8}{162} &= 1-\psi\\
-\psi &= 1 - \frac{8}{162}
+&= \frac{d}{d\psi} \left(\ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \right) \\
+&= t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot \frac{1}{(2 -\psi)^2} \\
+&= -\frac{t}{(1-\psi)(2 -\psi)} + (170-t) \cdot \frac{1}{(2 -\psi)}
 \end{align*}
-
-To check whether our value of $\psi = 77/81$ is a global maximum, we will take the second derivative of our log-likelihood function.
+Given this derivative we can set it equal to 0. Also note that since T represents the number of covid cases in the vaccine group within the 170 cases, we have given in the dataset t=8 and can plug this value in to solve.
 
 \begin{align*}
+0 &= -\frac{t}{(1-\psi)(2 -\psi)} + (170-t) \cdot \frac{1}{(2 -\psi)}\\
+\frac{8}{(1-\psi)(2 -\psi)} &= (170-8)\frac{1}{(2 -\psi)}\ \ \text{Set t = 8, given} \\
+\frac{8}{162} &= \frac{(1-\psi)(2 -\psi)}{(2 -\psi)}\\
+\frac{8}{162} &= 1-\psi\\
+\psi &= 1 - \frac{8}{162} = \frac{77}{81}
+\end{align*}
+
+We have calculated the critical point for the maximum likelihood estimator to be $\psi = \frac{77}{81}$. To check whether our value of $\psi = \frac{77}{81}$ is a global maximum, we will take the second derivative of our log-likelihood function.
+\begin{align*}
 \ell^{\prime \prime}(\psi) &= \frac{d}{d\psi} \ell^\prime(\psi)\\
-&= \frac{d}{d\psi} [t \frac{2 -\psi}{1-\psi} \cdot (-\frac{1}{(2 -\psi)^2}) + (170-t)(2-\psi) \cdot (\frac{1}{(2 -\psi)^2})] \\
-&= \frac{d}{d\psi} [\frac{-t}{(1-\psi)(2 - \psi)} + \frac{(170-t)}{(2-\psi)}]\\
+&= \frac{d}{d\psi} \left[\frac{-t}{(1-\psi)(2 - \psi)} + \frac{(170-t)}{(2-\psi)} \right]\\
 &= \frac{d}{d\psi} [-t (2 - 3\psi + \psi^2)^{-1} + (170 - t)(2-\psi)^{-1}] \\
 &= -t\cdot-1\cdot(2-3\psi+\psi^2)^{-2}(-3 + 2\psi) + (170 - t) \cdot -1 \cdot (2-\psi)^{-2} \cdot -1 \\
 &= \frac{t(-3 + 2\psi)}{(2-3\psi+\psi^2)^2} + \frac{(170 - t)}{(2-\psi)^2}\\
@@ -288,7 +293,7 @@ psi <- 77/81
 second_deriv <- ((t * (-3 + 2 * psi))/((2 - 3 * psi + psi ** 2) ** 2)) + ((170 - t) / ((2 - psi) ** 2))
 ```
 
-From our data, $t = 8$ because $8$ out of $170$ total COVID cases came from the vaccinated group. So the second derivative at $\psi = 77/81$ is $\frac{t(-3 + 2\psi)}{(2-3\psi+\psi^2)^2} + \frac{(170 - t)}{(2-\psi)^2}$
+As mentioned previously, from our data, $t = 8$ because $8$ out of $170$ total COVID cases came from the vaccinated group. So, the second derivative at $\psi = 77/81$ is $\frac{t(-3 + 2\psi)}{(2-3\psi+\psi^2)^2} + \frac{(170 - t)}{(2-\psi)^2}$ =
 `r second_deriv`
 
 Since the second derivative is negative, that means we have a local maximum at $\psi = 77/81$. Because we only found one point where the first derivative is 0, we only need to check the likelihood at the other two critical points, which are the boundaries. Specifically, that would be $\psi = 0$ and $\psi = 1$. 
@@ -303,9 +308,13 @@ likelihood_fn(0)
 likelihood_fn(1)
 ```
 
-Since the likelihood function is the greatest at $\psi_0 = 77/81$, this confirms that $\widehat{\psi_0^{mle}} = 77/81$ is indeed the global maximizer for the likelihood function. Thus it is our maximum likelihood estimator for vaccine efficacy.
+Since the likelihood function is the greatest at $\psi_0 = \frac{77}{81}$, this confirms that $\widehat{\psi_0^{mle}} = \frac{77}{81}$ is indeed the global maximizer for the likelihood function. Thus it is our maximum likelihood estimator for vaccine efficacy.
 
-We can also construct a Wald confidence interval for $\psi_0$ at $\alpha = 0.05$. The formula is $\widehat{\psi_0^{mle}} \pm z_{\alpha / 2} \sqrt{\frac{1}{-\ell^{\prime \prime} (\widehat{\psi_0}^{mle})}}$. 
+We can also construct a Wald confidence interval for $\psi_0$ at $\alpha = 0.05$. The formula for this confidence interval is $\widehat{\psi_0^{mle}} \pm z_{\alpha / 2} \sqrt{\frac{1}{-\ell^{\prime \prime} (\widehat{\psi_0}^{mle})}}$. We have calculated all the values we need,
+
+\begin{align*}
+\widehat{\psi_0^{mle}} \pm z_{\alpha / 2} \sqrt{\frac{1}{-\ell^{\prime \prime} (\widehat{\psi_0}^{mle})}} &= \frac{77}{81} \pm z_{0.05 / 2} \sqrt{\frac{1}{3126.123529}}
+\end{align*}
 
 ```{r label="wald"}
 t <- 8
@@ -317,7 +326,7 @@ lo
 hi
 ```
 
-We conclude that $\widehat{\psi_0^{mle}} = 77/81$. Furthermore, our 95\% Wald confidence interval for $\psi_0$ is [`r lo`, `r hi`]. In other words, we are 95\% confident that the true vaccine efficacy rate lies between `r lo` and `r hi`. Since the entire confidence interval is well above the FDA's requirement of 30\%, we conclude that the vaccine is sufficiently effective.
+We conclude that $\widehat{\psi_0^{mle}} = \frac{77}{81}$. Furthermore, our 95\% Wald confidence interval for $\psi_0$ is [`r lo`, `r hi`]. In other words, we are 95\% confident that the true vaccine efficacy rate lies between `r lo` and `r hi`. Since the entire confidence interval is well above the FDA's requirement of 30\%, we conclude that the vaccine is sufficiently effective.
 
 
 \pagebreak
@@ -427,6 +436,8 @@ Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is 
 
 
 ## References
+
+Zampieri, Fernando G, et al. “Using Bayesian Methods to Augment the Interpretation of Critical Care Trials. an Overview of Theory and Example Reanalysis of the Alveolar Recruitment for Acute Respiratory Distress Syndrome Trial.” American Journal of Respiratory and Critical Care Medicine, 1 Mar. 2021, www.ncbi.nlm.nih.gov/pmc/articles/PMC7924582/. 
 
 \pagebreak
 ## Appendix
