@@ -23,23 +23,6 @@ library(gridExtra)
 ```
 
 
-\begin{table}[ht]
-\centering
-\caption{Sample Table}
-\begin{tabular}{|c|c|c|}
-\hline
-Groups & Cases & No. of Subjects \\
-\hline
-BNT162b2 & 8 & 17,411 \\
-\hline
-Placebo & 162 & 17,511 \\
-\hline
-Total & 170 & 34,922 \\
-
-\hline
-\end{tabular}
-\end{table}
-
 
 ## Abstract
 
@@ -111,7 +94,7 @@ Given these probabilities, we can now calculate $\pi$.
 
 \begin{align*}
 \pi &= \frac{\pi_v\frac{n_1}{n_1+n_2}}{\frac{\pi_v n_1 + \pi_p n_2}{n_1+n_2}} \\
-&= \frac{\pi_v n_1}{\pi_v n_1 + \pi_p n_2} \\
+&= \frac{\pi_v n_1}{\pi_v n_1 + \pi_p n_2}
 \end{align*}
 
 When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further:
@@ -131,41 +114,17 @@ Plug this into $\psi = \frac{\pi_p- \pi_v}{\pi_p} = 1-\frac{\pi_v}{\pi_p}$, we g
 
 We can proceed with the approaches to analyze the data, which will be split into subsections. First, we will use the Bayesian approach and test 3 different prior distributions. Second, we use the Frequentist approach and calculate the likelihood for our data. Lastly, we will use bootstrapping to (finish)
 
-\pagebreak
 ## Bayesian Approach
 ### (1) Prior from Polack et. al.
 
-Previously we defined $T \sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi) = Beta(0.700102,1)$ as reported by Polack et. al. In the article, it was also mentioned that the 95% confidence interval for $\pi$ is (0.005, 0.964) and the corresponding 95\% interval for $\psi$ is (-26.2, 0.995).\
+Previously we defined $T \sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi) = Beta(0.700102,1)$ as reported by Polack et. al. In the article, it was also mentioned that the 95% confidence interval for $\pi$ is (0.005, 0.964) and the corresponding 95\% interval for $\psi$ is (-26.2, 0.995). This implies we have enough room for uncertainty.
 
-We know beta is a conjugate prior in the binomial model. In the other words, posterior distribution of $\pi$ is also a beta distribution.\
+We know beta is a conjugate prior in the binomial model. In the other words, posterior distribution of $\pi$ is also a beta distribution.
 
 $h(\pi_0|t)=Beta(0.700102+8,170-8+1)$\
-$h(\pi_0|t)=Beta(8.700102,163)$\
+$h(\pi_0|t)=Beta(8.700102,163)$
 
-We can find the 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi$. We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$. For the lower bound,
-
-\begin{align*}
-\frac{1-2 \cdot 0.023194}{1-0.023194} &= 0.903520
-\end{align*}
-
-For the upper bound,
-
-\begin{align*}
-\frac{1-2 \cdot 0.08799}{1-0.08799} &= 0.976255
-\end{align*}
-
-
-```{r label ="bayesian", include = FALSE, cache = TRUE}
-
-pi_ci <- qbeta(p=c(0.025,0.975), 8.700102, 163)
-
-
-upper_ci_prior1 <- (1-2*pi_ci[1])/(1-pi_ci[1])
-lower_ci_prior1 <- (1-2*pi_ci[2])/(1-pi_ci[2])
-```
-
-
-We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%]. This interval does not contain the value 30% and is much larger than this, so we conclude the vaccine efficacy is larger than 30%.
+Using this posterior distribution we can find the 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi$. 
 
 
 
@@ -174,7 +133,7 @@ We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%]. This in
 Polack et. al. cites a prior distribution for $\pi$ of $\mbox{Beta}(0.700102, 1)$ which is intended to be centered at $\pi = 0.4118$ corresponding to a $\psi$ of 30\%. The authors cite this as a pessimistic estimate. However, we will try a more pessimistic prior, using a 0\% vaccine efficacy rate. A "pessimistic" prior would represent a more skeptical approach in regards to vaccine efficacy, where we assume a vaccine efficacy of 0\%. In many cases it is argued that pessimistic priors are rarely necessary since researchers are motivated to conduct a trial with a belief that the vaccine will be beneficial, however this is a flawed argument since in many cases prior beliefs about some intervention could prove to be inaccurate, causing significantly more harm. (Zampieri, Fernando G, et al.) Due to this, using a prior implying the vaccine efficacy rate is 0\% is a safe option to eliminate the possiblity of substantial harm.
 
 When $\psi = 0$, $\pi = \frac{\psi - 1}{\psi - 2} = \frac{1}{2}$. This corresponds to the $\mbox{Beta}(1, 1)$ prior, which is uniform. The prior in this case can actually be thought of as a uniform distribution, Unif(0,1). Under the prior, the 95\% CI for $\pi$ is $[0.025, 0.975]$ which corresponds to a 95\% CI for $\psi$ being $[-38, 0.974359]$. This implies that we have enough room for uncertainty again,
-```{r prior 1 uh}
+```{r prior 1 uh, include=F}
 pi_ci_3 <- qbeta(p=c(0.025,0.975), 1, 1)
 pi_ci_3
 ```
@@ -182,16 +141,6 @@ pi_ci_3
 Well use the Beta conjugate, to find our posterior distribution, where we define \
 $h(\pi_0 | t) = \mbox{Beta}(1 + 8, 170 - 8 + 1) = \mbox{Beta}(9, 163)$.
 
-Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.024346, 0.090099]. We again convert this to create an interval for $\psi$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi$ is (0.900979, 0.975047). This interval is above and does not contain the value of 0.3, so we conclude the vaccine efficacy rate is greater than 30\%.
-
-```{r code prior2}
-pi_ci2 <- qbeta(p=c(0.025,0.975), 9, 163)
-
-upper_ci_prior2 <- (1-2*pi_ci2[1])/(1-pi_ci2[1])
-lower_ci_prior2 <- (1-2*pi_ci2[2])/(1-pi_ci2[2])
-upper_ci_prior2
-lower_ci_prior2
-```
 
 
 ### (3) Poisson Distribution - Gamma Prior
@@ -200,24 +149,13 @@ So far we have constructed beta priors and posteriors from the Binomial distribu
 
 For a Poisson distribution, we utilize Jeffreys prior for the rate parameter $\lambda \geq 0$, which states that $p(\lambda) = \sqrt{\frac{1}{\lambda}}$. However, this can also be thought of as a $Gamma(\frac{1}{2},0)$ distribution, which implies the posterior takes the form $\lambda|u \sim Gamma(\frac{1}{2}+u,170)$.
 
-```{r}
-qgamma(0.025, 1/2+8, 170)
-qgamma(0.975, 1/2+8, 170)
-
-upper_ci_prior2 <- (1-2*0.02224761)/(1-0.02224761)
-lower_ci_prior2 <- (1-2*0.08879709)/(1-0.08879709)
-upper_ci_prior2
-lower_ci_prior2
-```
-
-Proof for Prior:
 
 
 
 \pagebreak
 ## Frequentist: Max-Likelihood
 
-We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have shown previously that $T\sim Binom(170,\pi)$, where the distribution would be defined as: $f(t|\pi) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
+We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have shown previously that $T\sim Binom(170,\pi)$, where the distribution would be defined as: $f(t|\pi) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$, where there are 170 total positive COVID-19 cases. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
 $\textbf{Lemma 1.}$
 \begin{align*}
 \psi &= \frac{1-2\pi}{1-\pi} \\
@@ -232,6 +170,19 @@ L(\psi) &= f(t | \psi) \\;
 &= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t} & \text{Lemma 1} \\
 &= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t}
 \end{align*}
+Next, we compute the log-likelihood function by taking the natural log of the likelihood function. We denote this log-likelihood as $\ell(\psi) = \ln(L(\psi)) = \ln(f(t | \psi))$.
+\begin{align*}
+\ell(\psi) &= \ln(f(t | \psi)) \\
+&= \ln \left({170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \right) \\
+&= \ln{170\choose t} + \ln\left((\frac{1 -\psi}{2-\psi})^t \right) + \ln \left((\frac{1}{2-\psi})^{170-t} \right) \\
+&= \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \\
+&= \ln{170\choose t} + t\ln(1 -\psi) - t\ln(2-\psi) + (170-t)\ln(1) - (170-t) \\
+\end{align*}
+
+
+
+
+## NEW COMPUTATION
 Next, we compute the log-likelihood function by taking the natural log of the likelihood function. We denote this log-likelihood as $\ell(\psi) = \ln(L(\psi)) = \ln(f(t | \psi))$.
 \begin{align*}
 \ell(\psi) &= \ln(f(t | \psi)) \\
@@ -409,13 +360,84 @@ Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is 
 \pagebreak
 ## Results
 
-From the data table, we see that:\
+First, we display the table, denoted Table 1, which corresponds to the data obtained in the BNT162b2 vaccines trials.
+
+\begin{table}[ht]
+\centering
+\caption{Table 1: Vaccine Efficacy against Covid-19 at least 7 days after second dose in pations without evidence of infection}
+\begin{tabular}{|c|c|c|}
+\hline
+Groups & Cases & No. of Subjects \\
+\hline
+BNT162b2 & 8 & 17,411 \\
+\hline
+Placebo & 162 & 17,511 \\
+\hline
+Total & 170 & 34,922 \\
+
+\hline
+\end{tabular}
+\end{table}
+
+First, we can calculate the vaccine efficacy stricted based on the given results in the table.
 $\hat \pi_v=\frac{8}{17411}$\
 $\hat \pi_p=\frac{162}{17511}$\
 $\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}$\
 $\hat\psi=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$\
 $\hat\psi=\frac{446749}{470097}$\
 $\hat\psi=0.950334$\
+
+
+## Prior 1
+We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$. For the lower bound,
+
+\begin{align*}
+\frac{1-2 \cdot 0.023194}{1-0.023194} &= 0.903520
+\end{align*}
+
+For the upper bound,
+
+\begin{align*}
+\frac{1-2 \cdot 0.08799}{1-0.08799} &= 0.976255
+\end{align*}
+
+
+```{r label ="bayesian", include = FALSE, cache = TRUE}
+
+pi_ci <- qbeta(p=c(0.025,0.975), 8.700102, 163)
+
+
+upper_ci_prior1 <- (1-2*pi_ci[1])/(1-pi_ci[1])
+lower_ci_prior1 <- (1-2*pi_ci[2])/(1-pi_ci[2])
+```
+
+
+We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%]. This interval does not contain the value 30% and is much larger than this, so we conclude the vaccine efficacy is larger than 30%.
+
+
+## Prior 2
+Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.024346, 0.090099]. We again convert this to create an interval for $\psi$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi$ is (0.900979, 0.975047). This interval is above and does not contain the value of 0.3, so we conclude the vaccine efficacy rate is greater than 30\%.
+
+```{r code prior2}
+pi_ci2 <- qbeta(p=c(0.025,0.975), 9, 163)
+
+upper_ci_prior2 <- (1-2*pi_ci2[1])/(1-pi_ci2[1])
+lower_ci_prior2 <- (1-2*pi_ci2[2])/(1-pi_ci2[2])
+upper_ci_prior2
+lower_ci_prior2
+```
+
+## Prior 3
+
+```{r}
+qgamma(0.025, 1/2+8, 170)
+qgamma(0.975, 1/2+8, 170)
+
+upper_ci_prior2 <- (1-2*0.02224761)/(1-0.02224761)
+lower_ci_prior2 <- (1-2*0.08879709)/(1-0.08879709)
+upper_ci_prior2
+lower_ci_prior2
+```
 
 ## Discussion/Conclusion
 
@@ -435,6 +457,15 @@ https://myweb.uiowa.edu/pbreheny/uk/teaching/701/notes/1-22.pdf
 
 ```{r ref.label="bayesian", echo=TRUE, eval=F}
 ```
+
+
+Suppose $X \sim Binom(n, \pi_0)$ and we assume $\pi$ follows a Beta distribution with shape parameters $\alpha_0$ and $\beta_0$, $g(\pi_0) = \frac{\Gamma{(\alpha_0+\beta_0)}}{\Gamma{(\alpha_0)}\Gamma{(\beta)}}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1}$. Since X is binomial, we have that $P(X=x|\pi=\pi_0) = {n \choose x}\pi_0^x (1-\pi_0)^{n-x}$. We show that the posterior distribution, $h(\pi_0|x) \sim Beta(x+\alpha_0, n-x+\beta_0)$. 
+\begin{align*}
+h(\pi_0|x) &= \frac{P(X=x|\pi=\pi_0)g(\pi_0)}{\int_0^1 P(X=x|\pi=\pi_0)g(\pi_0)} \\
+&= \frac{{n \choose x} \pi_0^x (1-\pi_0)^{n-x}\Gamma{(\alpha_0+\beta_0)}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1}}{\Gamma{(\alpha_0)}\Gamma{(\beta)} \int_0^1 {n \choose x} \pi_0^x (1-\pi_0)^{n-x}\frac{\Gamma{(\alpha_0+\beta_0)}}{\Gamma{(\alpha_0)}\Gamma{(\beta)}}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1}}
+&= \frac{{n \choose x} (1-\pi_0)^{n-x+\beta_0-1}\pi_0^{\alpha_0-1+x}}{\int_0^1 {n \choose x}(1-\pi_0)^{n-x+\beta_0-1}\pi_0^{\alpha_0-1+x}}
+\end{align*}
+By observing the terms in the numerator, this is recognizable as the PDF of a Beta distribution with parameter $\alpha = x+1$ and $\beta = n - x + 1$. So, $h(\pi_0|x) \sim Beta(x+\alpha_0, n-x+\beta_0)$.
 
 
 ## Challenge
