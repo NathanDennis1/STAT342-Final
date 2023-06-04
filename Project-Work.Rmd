@@ -168,7 +168,7 @@ Plugging in this value for $\pi$, we now have that $f(t|\psi) = {170\choose t} (
 \begin{align*}
 L(\psi) &= f(t | \psi) \\;
 &= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t} & \text{Lemma 1} \\
-&= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t}
+&= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \ \text{$\infty < \psi \leq 1$} \\
 \end{align*}
 Next, we compute the log-likelihood function by taking the natural log of the likelihood function. We denote this log-likelihood as $\ell(\psi) = \ln(L(\psi)) = \ln(f(t | \psi))$.
 \begin{align*}
@@ -177,10 +177,41 @@ Next, we compute the log-likelihood function by taking the natural log of the li
 &= \ln{170\choose t} + \ln\left((\frac{1 -\psi}{2-\psi})^t \right) + \ln \left((\frac{1}{2-\psi})^{170-t} \right) \\
 &= \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \\
 &= \ln{170\choose t} + t\ln(1 -\psi) - t\ln(2-\psi) + (170-t)\ln(1) - (170-t)\ln(2-\psi) \\
-&= \ln{170\choose t} + t\ln(1 -\psi) - 170\ln(2-\psi) \\
+&= \ln{170\choose t} + t\ln(1 -\psi) - 170\ln(2-\psi)
 \end{align*}
 
-We can now
+We have calculated the log-likelihood $\ell(\psi) = \ln{170\choose t} + t\ln(1 -\psi) - 170\ln(2-\psi)$. To find the maximum of the likelihood function, we now take derivative of the log-likelihood and set it to zero. First, take the derivative with respect to $\psi$.
+\begin{align*}
+\frac{d}{d\psi} \ell(\psi) &= \frac{d}{d\psi} \ell(\psi) \\
+&= \frac{d}{d\psi} \left(\ln{170\choose t} + t\ln(1 -\psi) - 170\ln(2-\psi) \right) \\
+&= 0 - \frac{t}{1-\psi} + \frac{170}{2-\psi}
+\end{align*}
+Using this derivative, we can set it equal to 0 to solve for the critical point $\psi$, MLE candidate:
+\begin{align*}
+0 &= - \frac{t}{1-\psi} + \frac{170}{2-\psi} \\
+\frac{t}{1-\psi} &=  \frac{170}{2-\psi} \\
+t(2-\psi) &=  170(1-\psi) \\
+2t-t\psi &=  170-170\psi \\
+2t-170 &=  t\psi-170\psi \\
+\psi &= \frac{2t-170}{t-170}
+\end{align*}
+So, $\hat{\psi_0}^{mle} = \frac{2t-170}{t-170}$. In our case, we have that t=8, since T represents the number of covid cases in the vaccine group within the 170 cases, we have given in the dataset (Table 1) t=8 and can plug this value in to solve for $\hat{\psi_0}^{mle}$ in the results. However, to prove that this critical point is a maximum we utilize the second derivative test.
+\begin{align*}
+\frac{d^2}{d\psi^2} \ell(\psi) &= \frac{d}{d\psi} \left(- \frac{t}{1-\psi} + \frac{170}{2-\psi} \right) \\
+&= -\frac{t}{(1-\psi)^2} + \frac{170}{(2-\psi)^2} \\
+\end{align*}
+From here we plug in the critical point, $\hat{\psi_0}^{mle}$, we found:
+\begin{align*}
+\frac{d^2}{d\psi^2} \ell(\psi) &= -\frac{t}{(1-\psi)^2} + \frac{170}{(2-\psi)^2} \\
+&= -\frac{t}{(1-\frac{2t-170}{t-170})^2} + \frac{170}{(2-\frac{2t-170}{t-170})^2} \\
+&= -\frac{t}{(\frac{-t}{t-170})^2} + \frac{170}{(\frac{170}{t-170})^2} \\
+&= -\frac{1}{t}(t-170)^2 + \frac{1}{170}(t-170)^2 \\
+&= \left(\frac{1}{170}-\frac{1}{t} \right)(t-170)^2 \\
+\end{align*}
+We know that t cannot be a negative number and that $t \leq 170$ since there are 170 positive cases, the number of individuals in the vaccine group in these 170 cases must be less than 170. So, the corresponding fractions $\frac{1}{170}-\frac{1}{t} \leq 0$ and $\frac{d^2}{d\psi^2} \ell(\hat{\psi_0}^{mle}) > 0$, so the critical point and hence MLE is a maximum.\
+We now compute the standard error which is defined to be $\hat{SE}(\hat{\psi_0}^{mle}) = \frac{1}{\sqrt{-\ell''(\hat{\psi_0}^{mle})}} = \frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{t} \right)(t-170)^2}}$
+
+
 
 
 
@@ -440,6 +471,10 @@ lower_ci_prior2 <- (1-2*0.08879709)/(1-0.08879709)
 upper_ci_prior2
 lower_ci_prior2
 ```
+
+## Frequentist
+
+$\hat{\psi_0}^{mle} = \frac{170-2t}{170-t}= \frac{170-2\cdot8}{170-8} = \frac{77}{81}$. We can take the second derivative to prove this point is a maxiumum.
 
 ## Discussion/Conclusion
 
