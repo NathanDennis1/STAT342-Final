@@ -52,37 +52,13 @@ COVID-19, Vaccine, Efficacy, Immunization, Analysis
 
 ## Introducton
 
-<include> BNT162b2 mRNA Covid-19 Vaccine, which we will refer to subsequently as simply "vaccine"
+<include> BNT162b2 mRNA Covid-19 Vaccine, which we will refer to subsequently as simply "vaccine" (We can probably rewrite this)
 
-\pagebreak
-## Large Sample T-Test
+This paper focuses on the global pandemic, declared a pandemic by the World Health Organization on March 11, 2020, caused by SARS-CoV-2, more commonly refered to as COVID-19, which has caused many challenges worldwide. There have been over 700 million confirmed cases of COVID-19 since the pandemic began in early 2020, where the symptoms range from mild flu-like symptoms to more severe symptoms such as trouble breathing and other respiratory issues. This pandemic has led to a dramatic loss of human life worldwide and has caused many challenges to public health, food systems, and the work force, to name a few. The effect on the economy has been equally as devastating, due to the pandemic nearly half the worlds 3.3 billion global workforce were at risk of losing their livelihoods. Due to all these difficulties, many individuals worldwide have urged and hoped for a solution to end this pandemic.
 
-We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
+As the virus continue to spread and cause disruption worldwide, scientists and medical professionals worked diligently to develop and test vaccines in hopes to counteract this virus. One of these vaccines was developed by Pfizer and BioNTech in December 2020 when they successfully obtained a US FDA Emergency Use Authorization, where they began to distribution their two-dose vaccine, BNT162b2, in hopes to end the COVID-19 pandemic. These vaccines must go through a testing trial, where randomly assigned persons will be assigned to a treatment group, where they receive the given vaccine, and the control group, where they receive a placebo vaccine. This process is common in vaccine trials such as other COVID-19 vaccines manufactured by different companies, like Sinovac Research & Development Co., Ltd, which used a similar randomized treatment and placebo group approach. (3) The point of these experiments are to test the vaccine efficacy, which in this case is based on how many people who got vaccinated with BNT162b2 developed COVID-19 compared with how many people who got the placebo developed COVID-19. (4)
 
-Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine.
-
-<TODO>?
-The efficacy rate is defined as $1 - \frac{\pi_v}{\pi_p}$, so let's define the random variable Z to represent the estimated efficacy rate from our data, where $Z = 1 - \frac{\bar{Y}}{\bar{X}}$. We want to see whether or not the efficacy rate exceeds the 30\% as required by the FDA.
-
-From our data, our estimated efficacy
-$\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}$
-$\hat\psi=0.950334$
-<TODO>?
-
-We'll assume that the sample size is sufficiently large, since $n = 17511$ and $m = 17411$. Then the Central Limit Theorem should hold, so then $\bar{X} \sim \mbox{Norm}(\mu_x, \frac{\sigma_x}{\sqrt{n}})$ and $\bar{Y} \sim \mbox{Norm}(\mu_y, \frac{\sigma_y}{\sqrt{m}})$. The mean of a Bernoulli random variable with probability $\pi$ is $\pi$ and the variance is $\pi(1 - \pi)$.
-
-Therefore, $\bar{X} \sim \mbox{Norm}(\pi_p, \sqrt{\frac{\pi_p(1 - \pi_p)}{n}})$ and $\bar{Y} \sim \mbox{Norm}(\pi_v, \sqrt{\frac{\pi_v(1 - \pi_v)}{m}})$.
-
-$xbar - ybar +- z_alpha/2 sqrt(sigma1^2/n + sigma2^2/m)$
-
-$xbar Sim Norm (mu1, sigma1 / sqrt(n))$
-
-We will define null hypothesis $H_0$: $Z = .3$, which represents the vaccine having 30\% efficacy.
-We will define the one-sided alternative hypothesis $H_a$: $Z > .3$ representing that the vaccine has an efficacy greater than 30\%.
-
-We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
-
-We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
+Now turning the focus to the BNT162b2 vaccine, a brief placebo-controlled, observer blinded, efficacy study was conducted where randomly assigned persons 16 years or older in a 1:1 ratio received two doses, 21 days apart, of either the placebo vaccine or BNT162b2 vaccine. As stated previously, the key outcome of interest is the efficacy of the BNT162b2 vaccine, where the goal is to test a vaccine efficacy greater than 30% with the given data from the study.
 
 
 \pagebreak
@@ -95,10 +71,6 @@ We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ repre
 
 We will use parameters $\pi_p$ to represent the likelihood of being infected with Covid-19 after taking the placebo, and $\pi_v$ to represent the likelihood of getting Covid-19 after receiving the vaccine.
 
-We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
-
-We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
-
 Let X denote the total number of laboratory confirmed Covid-19 cases among $n_1$(17411) subjects randomly assigned to the BNT162b2 group and let Y denote the total number of laboratory confirmed Covid-19 cases among $n_2$(17511) subjects randomly assigned to the placebo group.\
 
 $X \sim Binom(n_1,\pi_v)$\
@@ -108,64 +80,62 @@ $\psi=\frac{\pi_p- \pi_v}{\pi_p}$\
 
 Let $\pi_v=\mbox{probability of laboratory confirmed Covid-19 cases in vaccine}$\
 Let $\pi_p=\mbox{probability of laboratory confirmed Covid-19 cases in placebo}$\
-From the data table, we see that:\
-$\hat \pi_v=\frac{8}{17411}$\
-$\hat \pi_p=\frac{162}{17511}$\
-$\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}$\
-$\hat\psi=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$\
-$\hat\psi=\frac{446749}{470097}$\
-$\hat\psi=0.950334$\
+
+We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
+
+We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
+
 
 We see that vaccine reduces the rate of Covid 19 infection by 95\% compared to the placebo, which matches that of Polack et. al.\
 
-Specifically, assuming the trial will run until X+Y=s Covid cases observed, we consider the distribution of :\
-$T:\mbox{number of covid cases in BNT162b2 group from these s cases}$\
+Specifically, assuming the trial will run until X+Y=s Covid cases observed, we consider the distribution of :
+
+We can define the following variables for simplicity:\
+$T:\mbox{Number of covid cases in BNT162b2 group from these s cases}$\
+$V:\mbox{A randomly assigned persons is in the vaccine group}$\
+$C:\mbox{A randomly assigned persons is in the placebo group}$\
+$I:\mbox{A laboratory confirmed COVID-19 infection}$
+
 The distribution of T well approximated by binomial for the BNT162b2 group study. Therefore:\
-$T \sim Binom(s,\pi)$, where $\pi=P(\mbox{BNT162b2 group}|\mbox{laboratory confirmed Covid-19 cases})$\
+$T \sim Binom(s,\pi)$, where $\pi=P(\mbox{V}|\mbox{I})$
 
+Using Bayes Theorem, we can define $\pi$ as $\pi = \frac{P(I|V)P(V)}{P(I)} = \frac{P(I|V)P(V)}{P(I|V)P(V) + P(I|C)P(C)}$. Each of these probabilities can be solved for.
 
-$\pi=P(\mbox{BNT162b2 group}|\mbox{laboratory confirmed Covid-19 cases})$\
- Using Bayes Theorem to simplify:\
-$\pi=\frac{P(\mbox{laboratory confirmed Covid-19 cases}|\mbox{BNT162b2 group})P(\mbox{BNT162b2 group})}{P(\mbox{laboratory confirmed Covid-19 cases})}$\
+For $P(\mbox{V})$, we previously defined $n_1$ has the total number of individuals in the BNT162b2 vaccine group and $n_2$ has the total number of individuals in the placebo group, so dividing the total number of individuals in the vaccine group by the total in the study yields this result, $P(\mbox{V})=\frac{n_1}{n_1+n_2}$
 
-Finding $P(\mbox{laboratory confirmed Covid-19 cases})$:\
-$P(\mbox{laboratory confirmed Covid-19 cases})=\pi_v$\
+For $P(\mbox{I|V})$, previously $\pi_v$ was defined to be the probability of an infection in the vaccine group, so $P(\mbox{I|V})=\pi_v$
 
-Finding $P(\mbox{BNT162b2 group})$:\
-$P(\mbox{BNT162b2 group})=\frac{n_1}{n_1+n_2}$\
+For $P(\mbox{I})$, the probability of a confirmed COVID-19 infection is dependent on whether or not an individual comes from the placebo or vaccine group, in which case $P(\mbox{I}) = P(I \cap (V \cup C)) = P((I \cap V) \cup (I \cap C))$. Due to these events being disjoint, we can add the probabilities as $P((I \cap V) + P(I \cap C))$. Using the chain rule of probability, $P(I|V)P(V) + P(I|C)P(C)$. Since $P(I|V)$ and $P(V)$ were defined, only $P(I|C)$ and $P(C)$ need to be solved for, with a similar approach. $\pi_p$ was defined as the probability of an infection in the placebo group, so $P(I|C)=\pi_p$. Furthermore, $P(C)$ can be defined by $P(\mbox{V})=\frac{n_2}{n_1+n_2}$ where the number of individuals in the placebo group is divided by those in total. Plugging these values in: $P(\mbox{I}) = P(I|V)P(V) + P(I|C)P(C) = \pi_v\frac{n_1}{n_1+n_2} + \pi_p \frac{n_2}{n_1+n_2} = \frac{\pi_v n_1 + \pi_p n_2}{n_1+n_2}$ 
 
-Finding $P(\mbox{laboratory confirmed Covid-19 cases})$:\
-$P(\mbox{laboratory confirmed Covid-19 cases})$\
-$=\frac{\mbox{Total no. of confirmed Covid-19 cases in vaccine + Total no. of confirmed Covid-19 cases in placebo} }{\mbox{Total number of subjects in vaccine + Total number of subjects in plcebo }}$\
-$=\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}$\
-$P(\mbox{laboratory confirmed Covid-19 cases})=\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}$\
+Given these probabilities, we can now calculate $\pi$.
 
-Therefore:\
-$\pi=\frac{\pi_v\cdot \frac{n_1}{n_1+n_2}}{\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}}$\
-$=\frac{\frac{n_1\pi_v}{n_1+n_2}}{\frac{n_1\pi_v+n_2\pi_p}{n_1+n_2}}$\
-$=\frac{n_1\pi_v}{n_1+n_2}$\
-$\pi=\frac{n_1\pi_v}{n_1\pi_v+n_2\pi_p}$\
-When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further:\
-$\pi=\frac{\pi_v}{\pi_v+\pi_p}$\
+\begin{align*}
+\pi &= \frac{\pi_v\frac{n_1}{n_1+n_2}}{\frac{\pi_v n_1 + \pi_p n_2}{n_1+n_2}} \\
+&= \frac{\pi_v n_1}{\pi_v n_1 + \pi_p n_2} \\
+\end{align*}
 
-Thus $T \sim Binom(s,\pi=\frac{\pi_v}{\pi_v+\pi_p})$\
-Our parameter of interest is:\
-$\psi=\frac{\pi_p- \pi_v}{\pi_p}=1-\frac{\pi_v}{\pi_p}$\
-We know $\pi=\frac{\pi_v}{\pi_v+\pi_p}$\
-$\implies \pi(\pi_v+\pi_p)=\pi_v$\
-$\implies \pi\pi_v+\pi\pi_p=\pi_v$\
-$\implies \pi\pi_p=\pi_v(1-\pi)$\
-$\implies \pi_v=\frac{\pi\pi_p}{1-\pi}$\
+When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further:
+\begin{align*}
+\pi &= \frac{\pi_v}{\pi_v+\pi_p}
+\end{align*}
 
-$\psi=1-\frac{\pi_v}{\pi_p}$\
-$\implies 1-\frac{\pi\pi_p}{(1-\pi)\pi_p}$\
-$\implies 1-\frac{\pi}{1-\pi}$\
-$\implies \frac{1-2\pi}{1-\pi}$\
-$\psi=\frac{1-2\pi}{1-\pi}$\
+From here, recall our parameter of interest is the vaccine efficacy $\psi$, which is written as $\psi=\frac{\pi_p- \pi_v}{\pi_p}$. We can re-write this in terms of $\pi$ by first finding $\pi_v$
+\begin{align*}
+\pi &= \frac{\pi_v}{\pi_v+\pi_p} \\
+\pi(\pi_v+\pi_p) &= \pi_v \\
+\pi\pi_v+\pi\pi_p &= \pi_v \\
+\pi\pi_p=\pi_v(1-\pi) \\
+\pi_v &= \frac{\pi\pi_p}{1-\pi}
+\end{align*}
+Plug this into $\psi = \frac{\pi_p- \pi_v}{\pi_p} = 1-\frac{\pi_v}{\pi_p}$, we get that $\psi = 1-\frac{\pi_v}{\pi_p} = 1-\frac{\pi\pi_p}{(1-\pi)\pi_p}$. Dividing by $\pi_p$ on the right, $\psi = 1-\frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. So, $\psi = \frac{1-2\pi}{1-\pi}$
 
-### Prior from Polack et. al.
+We can proceed with the approaches to analyze the data, which will be split into subsections. First, we will use the Bayesian approach and test 3 different prior distributions. Second, we use the Frequentist approach and calculate the likelihood for our data. Lastly, we will use bootstrapping to (finish)
 
-We define $T \sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi) = Beta(0.700102,1)$ as Polack et. al. did. In the article, it was also mentioned that the 95% confidence interval for $\pi$ is (0.005, 0.964) and the corresponding 95\% interval for $\psi$ is (-26.2, 0.995).\
+\pagebreak
+## Bayesian Approach
+### (1) Prior from Polack et. al.
+
+Previously we defined $T \sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi) = Beta(0.700102,1)$ as reported by Polack et. al. In the article, it was also mentioned that the 95% confidence interval for $\pi$ is (0.005, 0.964) and the corresponding 95\% interval for $\psi$ is (-26.2, 0.995).\
 
 We know beta is a conjugate prior in the binomial model. In the other words, posterior distribution of $\pi$ is also a beta distribution.\
 
@@ -199,7 +169,7 @@ We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%]. This in
 
 
 
-### Alternative Beta Prior, Further Pessimistic Approach
+### (2) Alternative Beta Prior, Further Pessimistic Approach
 
 Polack et. al. cites a prior distribution for $\pi$ of $\mbox{Beta}(0.700102, 1)$ which is intended to be centered at $\pi = 0.4118$ corresponding to a $\psi$ of 30\%. The authors cite this as a pessimistic estimate. However, we will try a more pessimistic prior, using a 0\% vaccine efficacy rate. A "pessimistic" prior would represent a more skeptical approach in regards to vaccine efficacy, where we assume a vaccine efficacy of 0\%. In many cases it is argued that pessimistic priors are rarely necessary since researchers are motivated to conduct a trial with a belief that the vaccine will be beneficial, however this is a flawed argument since in many cases prior beliefs about some intervention could prove to be inaccurate, causing significantly more harm. (Zampieri, Fernando G, et al.) Due to this, using a prior implying the vaccine efficacy rate is 0\% is a safe option to eliminate the possiblity of substantial harm.
 
@@ -224,7 +194,7 @@ lower_ci_prior2
 ```
 
 
-### Poisson Prior?
+### (3) Poisson Distribution - Gamma Prior
 
 So far we have constructed beta priors and posteriors from the Binomial distribution. Suppose now we can construct a Poisson distribution using the previous binomial distribution defined as $T \sim Binom(170, \pi)$. A good approximation for the binomial when the number of samples is large would be a poisson distribution with $\lambda = 170\pi$. We can denote $U \sim Poisson(\lambda = 170\pi)$, where $\lambda$ represents the rate of covid cases in the vaccine group over 170 positive cases and U represents the number of covid cases in the vaccine group over the 170 positive cases.
 
@@ -245,7 +215,7 @@ Proof for Prior:
 
 
 \pagebreak
-## Max-Likelihood
+## Frequentist: Max-Likelihood
 
 We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have shown previously that $T\sim Binom(170,\pi)$, where the distribution would be defined as: $f(t|\pi) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we can rearrange terms:
 $\textbf{Lemma 1.}$
@@ -439,6 +409,13 @@ Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is 
 \pagebreak
 ## Results
 
+From the data table, we see that:\
+$\hat \pi_v=\frac{8}{17411}$\
+$\hat \pi_p=\frac{162}{17511}$\
+$\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}$\
+$\hat\psi=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$\
+$\hat\psi=\frac{446749}{470097}$\
+$\hat\psi=0.950334$\
 
 ## Discussion/Conclusion
 
@@ -449,8 +426,9 @@ Zampieri, Fernando G, et al. “Using Bayesian Methods to Augment the Interpreta
 
 https://myweb.uiowa.edu/pbreheny/uk/teaching/701/notes/1-22.pdf
 
-https://people.bath.ac.uk/masss/ma40189/homeworks/MA40189-solution5.html#:~:text=2%20%3D%20nθ.-,The%20Jeffreys%20prior%20is%20then%20f(θ)%20∝%20√n,nˉx%2Cn).
+“Impact of Covid-19 on People’s Livelihoods, Their Health and Our Food Systems.” World Health Organization, 13 Oct. 2020, www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people%27s-livelihoods-their-health-and-our-food-systems. 
 
+(3) https://www.who.int/news-room/feature-stories/detail/vaccine-efficacy-effectiveness-and-protection
 
 \pagebreak
 ## Appendix
@@ -471,3 +449,39 @@ posterior_median_pi
 $P \left(\frac{1-\psi}{2-\psi} < 0.04893234|t \right) = 0.5$ which simplifies too $P(\psi>0.9485501|t)=0.5$
 
 Posterior median of $\psi$ is 0.9485501. We want to test the null hypothesis for $H_0:\psi_0 = 30\%$ and the alternative  $H_1:\psi_0 > 30\%$. We calculate the posterior probability that $P(\psi_0 \leq 0.3|t)$
+
+## Large Sample T-Test
+
+We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
+
+Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine.
+
+<TODO>?
+The efficacy rate is defined as $1 - \frac{\pi_v}{\pi_p}$, so let's define the random variable Z to represent the estimated efficacy rate from our data, where $Z = 1 - \frac{\bar{Y}}{\bar{X}}$. We want to see whether or not the efficacy rate exceeds the 30\% as required by the FDA.
+
+From our data, our estimated efficacy
+$\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}$
+$\hat\psi=0.950334$
+<TODO>?
+
+We'll assume that the sample size is sufficiently large, since $n = 17511$ and $m = 17411$. Then the Central Limit Theorem should hold, so then $\bar{X} \sim \mbox{Norm}(\mu_x, \frac{\sigma_x}{\sqrt{n}})$ and $\bar{Y} \sim \mbox{Norm}(\mu_y, \frac{\sigma_y}{\sqrt{m}})$. The mean of a Bernoulli random variable with probability $\pi$ is $\pi$ and the variance is $\pi(1 - \pi)$.
+
+Therefore, $\bar{X} \sim \mbox{Norm}(\pi_p, \sqrt{\frac{\pi_p(1 - \pi_p)}{n}})$ and $\bar{Y} \sim \mbox{Norm}(\pi_v, \sqrt{\frac{\pi_v(1 - \pi_v)}{m}})$.
+
+$xbar - ybar +- z_alpha/2 sqrt(sigma1^2/n + sigma2^2/m)$
+
+$xbar Sim Norm (mu1, sigma1 / sqrt(n))$
+
+We will define null hypothesis $H_0$: $Z = .3$, which represents the vaccine having 30\% efficacy.
+We will define the one-sided alternative hypothesis $H_a$: $Z > .3$ representing that the vaccine has an efficacy greater than 30\%.
+
+We will define null hypothesis $H_0$: $\pi_p = \pi_v$, which represents the vaccine having no affect on getting infected with Covid-19 compared with the placebo.
+
+We will define the one-sided alternative hypothesis $H_a$: $\pi_v < \pi_p$ representing that vaccinated patients are less likely to get infected with Covid-19 than patients who received the placebo.
+
+\begin{align*}
+\psi &= 1-\frac{\pi_v}{\pi_p} \\
+&= 1-\frac{\pi\pi_p}{(1-\pi)\pi_p} \\
+&= 1-\frac{\pi}{1-\pi} \\
+\psi &= \frac{1-2\pi}{1-\pi}
+\end{align*}
