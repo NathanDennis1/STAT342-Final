@@ -3,7 +3,6 @@ title: "Unmasking the Numbers"
 subtitle: "An Analysis of the BNT162b2 mRNA Covid-19 Vaccine Efficacy Rate"
 graphics: yes
 author: "Nathan Dennis, Aarav Dewangan, Maxwell Wang"
-date: "2023-05-26"
 output: 
         pdf_document:
          toc: false
@@ -30,19 +29,17 @@ options(pillar.sigfig=6)
 
 # 1 Abstract
 
-COVID-19 (SARS-CoV-2), is an infection which resulted in a global pandemic that negatively affected millions worldwide. Due to it's widespread impact effective vaccines are necessary, which resulted in the creation of the BNT162b2 vaccine. A brief placebo-controlled experiment was conducted to determine the efficacy of the BNT162b2 vaccine candidate with 34,922 particpants were assigned to a vaccine and placebo group. The results from this study are analyzed using 3 approaches: bayesian, frequentist, and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval. Through using these approaches we created multiple measures to test the hypothesis such as credible intervals, where it was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy.
+The COVID-19 (SARS-CoV-2) global pandemic's widespread health, economic, and social impact has necessitated the creation of effective vaccines. Pfizer's BNT162b2 vaccine is the first of its kind: an mRNA vaccine determined to stop the pandemic. A placebo-controlled experiment with nearly 35,000 participants was conducted to determine the efficacy of the BNT162b2 vaccine candidate. The results from this study are analyzed using three approaches: Bayesian, Likelihood, and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval. Through using these approaches we created multiple measures to test the hypothesis such as credible intervals, where it was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy using all three approaches.
 
 ## Keywords
 COVID-19, Vaccine Efficacy, Posterior, Likelihood, Credible Interval
 
 # 2 Introducton
+This paper focuses on the COVID-19 pandemic. There have been over 700 million confirmed cases of COVID-19 since the pandemic was identified by the World Health Organization on March 11, 2020. The symptoms range from mild flu-like symptoms to more severe respiratory symptoms such as trouble breathing. This pandemic has led to the loss of 7 million human lives worldwide and has caused many challenges to public health, food systems, and the work force, to name a few (World Health Organization). The effect on the economy has been equally as devastating, with nearly half of the worlds' 3.3 billion global workforce at risk of losing their livelihoods (World Health Organization). 
 
-This paper focuses on the global pandemic, declared a pandemic by the World Health Organization on March 11, 2020, caused by SARS-CoV-2, more commonly refered to as COVID-19, which has caused many challenges worldwide. There have been over 700 million confirmed cases of COVID-19 since the pandemic began in early 2020, where the symptoms range from mild flu-like symptoms to more severe symptoms such as trouble breathing and other respiratory issues. This pandemic has led to a dramatic loss of human life worldwide and has caused many challenges to public health, food systems, and the work force, to name a few. (World Health Organization) The effect on the economy has been equally as devastating, due to the pandemic nearly half the worlds 3.3 billion global workforce were at risk of losing their livelihoods. (World Health Organization) Due to all these difficulties, many individuals worldwide have urged and hoped for a solution to end this pandemic.
+Scientists and medical professionals have been working diligently to develop and test vaccines in hopes to counteract this virus. One of these vaccines was developed by Pfizer and BioNTech in December 2020 when they successfully obtained a US FDA Emergency Use Authorization, where they began to distribution their two-dose vaccine, BNT162b2. These vaccines must go through a testing trial, where randomly assigned participants will be assigned to a treatment/vaccine group and a control/placebo group. Such analysis may be compared to Sinovac Research & Development Co., Ltd's own COVID-19 vaccination efficacy trial, which used a similar approach (Sinovac). The point of these experiments are to test the vaccine efficacy, which is based on how many people who got vaccinated developed COVID-19 compared with how many people who got the placebo developed COVID-19 (Centers for Disease Control).
 
-As the virus continue to spread and cause disruption worldwide, scientists and medical professionals worked diligently to develop and test vaccines in hopes to counteract this virus. One of these vaccines was developed by Pfizer and BioNTech in December 2020 when they successfully obtained a US FDA Emergency Use Authorization, where they began to distribution their two-dose vaccine, BNT162b2, in hopes to end the COVID-19 pandemic. These vaccines must go through a testing trial, where randomly assigned persons will be assigned to a treatment group, where they receive the given vaccine, and the control group, where they receive a placebo vaccine. This process is common in vaccine trials such as other COVID-19 vaccines manufactured by different companies, like Sinovac Research & Development Co., Ltd, which used a similar randomized treatment and placebo group approach. (Sinovac) The point of these experiments are to test the vaccine efficacy, which in this case is based on how many people who got vaccinated with BNT162b2 developed COVID-19 compared with how many people who got the placebo developed COVID-19. (Centers for Disease Control)
-
-Now turning the focus to the BNT162b2 vaccine, a brief placebo-controlled, observer blinded, efficacy study was conducted where randomly assigned persons 16 years or older in a 1:1 ratio received two doses, 21 days apart, of either the placebo vaccine or BNT162b2 vaccine. As stated previously, the key outcome of interest is the efficacy of the BNT162b2 vaccine, where the goal is to test a vaccine efficacy greater than 30% with the given data from the study.
-
+Now turning the focus to the BNT162b2 vaccine, a placebo-controlled, observer blinded efficacy study was conducted where randomly assigned persons 16 years or older in a 1:1 ratio received two doses, 21 days apart, of either the placebo or BNT162b2 vaccine. The key outcome of interest is the efficacy of the BNT162b2 vaccine. A vaccine efficacy greater than 30% is sufficient to obtain FDA approval.
 
 # 3 Statistical Methods
 ## 3.1 Definitions & Initial Calculations
@@ -192,7 +189,6 @@ Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our bi
 The bootstrap simulation will take 10,000 samples of $\bar{X}$ and $\bar{Y}$ from $\sum_{X} \sim \mbox{Binom}(17411, 8/17411)$, $\sum_{Y} \sim \mbox{Binom}(17511, 162/17511)$.
 
 
-\pagebreak
 # 4 Results
 
 First, we display the table, denoted Table 1, which corresponds to the data obtained in the BNT162b2 vaccines trials.
