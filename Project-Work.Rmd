@@ -17,13 +17,15 @@ fontsize: 11pt
 ---
 
 ```{r setup, include=F}
-library(ggplot2)
 library(dplyr)
-library(gridExtra)
-options(pillar.sigfig=6)
-library(maxLik)
 library(fastR2)
+library(ggplot2)
+library(gridExtra)
+library(gt)
 library(LearnBayes)
+library(maxLik)
+
+options(pillar.sigfig=6)
 ```
 
 # 1 Abstract
@@ -147,7 +149,7 @@ From here we plug in the critical point, $\hat{\psi_0}^{mle}$, we found:
 We know that t cannot be a negative number and that $t \leq 170$ since there are 170 positive cases. So, the corresponding fraction $\frac{1}{170}-\frac{1}{t} \leq 0$ and the square term must be positive, so $\frac{d^2}{d\psi^2} \ell(\hat{\psi_0}^{mle}) < 0$, implying the critical point and hence MLE is a maximum.\
 We now have our estimate for $\psi$, where we can assess regulatory conditions for the bounds of the data. Suppose we now have that $T_1,T_2, \dots T_{170} \sim Bernoulli(\pi)$, representing the 170 total infections within the study. Since the number of cases in large, under certain regulatory conditions $\hat{\psi_0}^{mle} \sim Norm \left(\psi, \frac{1}{\sqrt{-\ell''(\hat{\psi_0}^{mle})}} \right)$. We discuss the conditions as we observe a second order Taylor approximation of the log-likelihood function of $\psi$.
 
-```{r, echo=F, warning=F}
+```{r, echo=F, warning=F, out.width="70%"}
 
 t <- 8 #Observed 8 COVID-19 cases in vaccine group over total number of cases
 
@@ -300,7 +302,7 @@ loglik.psi <- function(psi){
 ```
 
 ## 4.6 Bootstrap Confidence Interval
-```{r label ="bootstrap", include=F, cache = TRUE}
+```{r label ="bootstrap", include=F, cache = TRUE, warning = FALSE}
 # Requirements
 set.seed(342)
 
@@ -381,20 +383,25 @@ rownames(summary_table) <- c("Percentile Method","Standard Bootstrap")
 summary_table <- as.table(summary_table)
 ```
 
-The Bootstrapped data was as follows:
-```{r figure 4.6.2, echo = F}
-p1
-```
-
-A more detailed view and checking for normality:
-```{r figure 4.6.1, echo = F}
+The bootstrapped data was as follows. We check for normality:
+```{r figure 4.6.1, echo = F, warning = FALSE, out.width="80%"}
 grid.arrange(p2_1, p2_2)
 ```
 
 From the code in our appendix, we calculated the following confidence intervals for vaccine efficacy $\psi$.
-```{r summary_table, echo = F}
-summary_table
-```
+\begin{table}[ht]
+\centering
+\caption{Bootstrapped Confidence Intervals for $\psi$}
+\begin{tabular}{|c|c|c|}
+\hline
+ & Lower & Upper \\
+\hline
+Percentile Method & 0.912194 & 0.982040 \\
+\hline
+Standard Bootstrap & 0.915071 & 0.985596 \\
+\hline
+\end{tabular}
+\end{table}
 
 Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is not nearly normal as the tail ends of the Q-Q plot differ from the expected values should our bootstrapped values of $\psi$ come from a normal distribution. Therefore, we should prefer the percentile method 95\% confidence interval for $\psi$ instead.
 
@@ -408,12 +415,13 @@ Moving on to the Frequentist approach, we calculated $\hat{\psi_0}^{mle} = \frac
 
 However, we also calculated the likelihood ratio and W statistic. The W statistic calculated was 121.6012, where large values of W are known to provide evidence in favor of the alternative, in this case $\psi_0 \neq 0.3$. The p-value also was extremely small and basically 0, where we can safely reject the null in favor of the alternative. Overall, this approach also concludes the vaccine efficacy is not 0.3, but is larger.
 
-Finally, our bootstrapped confidence interval using the quantile method for $\psi$ found that we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138], with our median bootstrapped $\psi = 0.95145$. Our entire confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective. Therefore, we can safely reject the null hypothesis.
+Finally, our bootstrapped confidence interval using the percentile method for $\psi$ found that we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138] (see Table 3), with our median bootstrapped $\psi = 0.95145$. Our entire confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective. Therefore, we can safely reject the null hypothesis.
 
 # 6 References
 Centers for Disease Control. “Vaccine Effectiveness Studies.” Centers for Disease Control and Prevention, www.cdc.gov/coronavirus/2019-ncov/vaccines/effectiveness/how-they-work.html. Accessed 4 June 2023. 
 
-Fan, Zhou. Lecture 20 | Bayesian Analysis - Stanford University, Nov. 2016, web.stanford.edu/class/stats200/Lecture20.pdf. 
+Fan, Zhou. Lecture 20 | Bayesian Analysis - Stanford University, Nov. 2016, \
+web.stanford.edu/class/stats200/Lecture20.pdf. 
 
 Sinovac. “Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - Full Text View.” Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - Full Text View - ClinicalTrials.Gov, July 2020, clinicaltrials.gov/ct2/show/NCT04456595. 
 
@@ -602,5 +610,11 @@ ts_plot <- plot(second_order) %>%
 ## Bootstrap Confidence Interval
 
 ```{r ref.label="bootstrap", echo=TRUE, eval=F}
+```
+
+
+Bootstrapped Data (Full Scale)
+```{r figure 4.6.2, echo = F}
+p1
 ```
 
