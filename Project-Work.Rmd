@@ -28,7 +28,7 @@ options(pillar.sigfig=6)
 
 # 1 Abstract
 
-The COVID-19 (SARS-CoV-2) global pandemic's widespread health, economic, and social impact has necessitated the creation of effective vaccines. Pfizer's BNT162b2 vaccine is the first of its kind: an mRNA vaccine determined to stop the pandemic. A placebo-controlled experiment with nearly 35,000 participants was conducted to determine the efficacy of the BNT162b2 vaccine candidate. The results from this study are analyzed using three approaches: Bayesian, Likelihood, and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval. Through using these approaches we created multiple measures to test the hypothesis such as credible intervals, where it was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy using all three approaches.
+The COVID-19 (SARS-CoV-2) global pandemic's widespread health, economic, and social impact has necessitated the creation of effective vaccines. Pfizer's BNT162b2 vaccine is the first of its kind: an mRNA vaccine determined to stop the pandemic. A placebo-controlled experiment with nearly 35,000 participants was conducted to determine the efficacy of the BNT162b2 vaccine candidate. The results from this study are analyzed using three approaches: Bayesian, Frequentist (likelihood), and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval. Through using these approaches we created multiple measures to test the hypothesis such as credible intervals, where it was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy using all three approaches.
 
 ## Keywords
 COVID-19, Vaccine Efficacy, Posterior, Likelihood, Credible Interval
@@ -54,25 +54,19 @@ C: A randomly assigned persons is in the placebo group. Let I: A laboratory conf
 
 Using Bayes Theorem, we can define $\pi$ as $\pi = \frac{P(I|V)P(V)}{P(I)} = \frac{P(I|V)P(V)}{P(I|V)P(V) + P(I|C)P(C)}$. Each of these probabilities can be solved for.
 
-For $P(\mbox{V})$, dividing the total number of individuals in the vaccine group by the total in the study yields this result, $P(\mbox{V})=\frac{n_1}{n_1+n_2}$
-
-For $P(\mbox{I|V})$, $\pi_v$ was defined to be the probability of an infection in the vaccine group, so $P(\mbox{I|V})=\pi_v$
-
-For $P(\mbox{I})$, the probability of a confirmed COVID-19 infection is dependent on whether or not an individual comes from the placebo or vaccine group, in which case $P(\mbox{I}) = P(I \cap (V \cup C)) = P((I \cap V) \cup (I \cap C))$. Due to these events being disjoint, we can add the probabilities as $P((I \cap V) + P(I \cap C))$. Using the chain rule of probability, $P(I) = P(I|V)P(V) + P(I|C)P(C)$. $\pi_p$ was defined as the probability of an infection in the placebo group, so $P(I|C)=\pi_p$. Furthermore, $P(C)$ can be defined by $P(\mbox{C})=\frac{n_2}{n_1+n_2}$ where the number of individuals in the placebo group is divided by those in total. Plugging these values in: $P(\mbox{I}) = \pi_v\frac{n_1}{n_1+n_2} + \pi_p \frac{n_2}{n_1+n_2} = \frac{\pi_v n_1 + \pi_p n_2}{n_1+n_2}$ 
-
 $\textbf{Calculation of } \pi:$ Given these probabilities, we can now calculate $\pi = \frac{\pi_v\frac{n_1}{n_1+n_2}}{\frac{\pi_v n_1 + \pi_p n_2}{n_1+n_2}} = \frac{\pi_v n_1}{\pi_v n_1 + \pi_p n_2}$.
 
 When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further: $\pi = \frac{\pi_v}{\pi_v+\pi_p}$
 
-From here, the parameter of interest is the vaccine efficacy $\psi$, which is written as $\psi=\frac{\pi_p- \pi_v}{\pi_p}$. We can re-write this in terms of $\pi$ by first finding $\pi_v$. Given $\pi = \frac{\pi_v}{\pi_v+\pi_p}$, rearranging yields $\pi\pi_v+\pi\pi_p = \pi_v$. Furthermore, by grouping $\pi_v$ the result is as follows: $\pi_v(1-\pi) = \pi\pi_p$, then $\pi_v = \frac{\pi\pi_p}{1-\pi}$.
+From here, the parameter of interest is the vaccine efficacy $\psi$, which is written as $\psi=\frac{\pi_p- \pi_v}{\pi_p}$. Given $\pi = \frac{\pi_v}{\pi_v+\pi_p}$, rearranging yields $\pi\pi_v+\pi\pi_p = \pi_v$. Furthermore, by grouping $\pi_v$ the result is as follows: $\pi_v(1-\pi) = \pi\pi_p$, then $\pi_v = \frac{\pi\pi_p}{1-\pi}$.
 
 $\textbf{Calculation of } \psi:$ Plug this into $\psi = \frac{\pi_p- \pi_v}{\pi_p} = 1-\frac{\pi_v}{\pi_p}$, we get that $\psi = 1-\frac{\pi_v}{\pi_p} = 1-\frac{\pi\pi_p}{(1-\pi)\pi_p}$. Dividing by $\pi_p$ on the right, $\psi = 1-\frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. So, $\psi = \frac{1-2\pi}{1-\pi}$.
 
-With this definition, we can construct the hypothesis of interest for $\psi$. The FDA requires at least 30% efficacy for a new therapy, in this case the BNT162b2 vaccine, to be approved. We can operate under the null hypothesis, $H_0: \psi \leq 0.3$, where the alternative is $H_1: \psi > 0.3$
+With this definition, we can construct the hypothesis of interest for $\psi$. The FDA requires at least 30% efficacy for a new therapy to be approved. The null hypothesis is $H_0: \psi \leq 0.3$, and the alternative is $H_1: \psi > 0.3$.
 
-Within this section the following rearrangement of terms is used, given $\psi = \frac{1-2\pi}{1-\pi}$, we rearranged to get $(1-\pi)\psi = 1-2\pi$. We separate in terms of $\pi$, $2\pi - \pi \psi = 1 - \psi$, then divide $\pi = \frac{1 -\psi}{2-\psi}$ 
+Within this section the following rearrangement of terms is used, given $\psi = \frac{1-2\pi}{1-\pi}$, we rearranged to get $\pi = \frac{1 -\psi}{2-\psi}$ 
 
-We can proceed with the approaches to analyze the data, which will be split into subsections. First, we will use the Bayesian approach and test 3 different prior distributions. Second, we use the Frequentist approach and calculate the likelihood for our data. Lastly, we will use bootstrapping to (finish)
+We can proceed with the three approaches to analyze the data.
 
 ## 3.2 Bayesian Approach
 ### (1) Prior from Polack et. al.
@@ -143,9 +137,9 @@ From here we plug in the critical point, $\hat{\psi_0}^{mle}$, we found:
 &= \left(\frac{1}{170}-\frac{1}{t} \right)(t-170)^2
 \end{align*}
 We know that t cannot be a negative number and that $t \leq 170$ since there are 170 positive cases. So, the corresponding fraction $\frac{1}{170}-\frac{1}{t} \leq 0$ and the square term must be positive, so $\frac{d^2}{d\psi^2} \ell(\hat{\psi_0}^{mle}) < 0$, implying the critical point and hence MLE is a maximum.\
-We now have our estimate for $\psi$, where we can assess regulatory conditions for the bounds of the data. Suppose we now have that $T_1,T_2, \dots T_{170} \sim Bernoulli(\pi)$, representing the 170 total infections within the study. Since the number of cases in large, under certain regulatory conditions $\hat{\psi_0}^{mle} \sim Norm \left(\psi, \frac{1}{\sqrt{-\ell''(\hat{\psi_0}^{mle})}} \right)$. We discuss the conditions as we observe a second order Taylor approximation of the log-likelihood function of $\psi$.
+We now have our estimate for $\psi$, where we can assess regulatory conditions. Suppose we now have that $T_1,T_2, \dots T_{170} \sim Bernoulli(\pi)$, representing the 170 total infections within the study. Since the number of cases in large, under certain regulatory conditions $\hat{\psi_0}^{mle} \sim Norm \left(\psi, \frac{1}{\sqrt{-\ell''(\hat{\psi_0}^{mle})}} \right)$. We discuss the conditions as we observe a second order Taylor approximation of the log-likelihood function of $\psi$.
 
-```{r, echo=F, warning=F, out.width="70%"}
+```{r, echo=F, warning=F, out.width="60%"}
 
 t <- 8 #Observed 8 COVID-19 cases in vaccine group over total number of cases
 
@@ -183,10 +177,9 @@ Where we observed t=8 in the data. We use this to create a p-value and test the 
 
 ## 3.4 Bootstrap Confidence Interval
 
-Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions X and Y (see section 3.1), we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{\bar{X}}{\bar{Y}}$.
+Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions X and Y (see section 3.1), we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{X/n}{Y/m}$.
 
-The bootstrap simulation will take 10,000 samples of $\bar{X}$ and $\bar{Y}$ from $\sum_{X} \sim \mbox{Binom}(17411, 8/17411)$, $\sum_{Y} \sim \mbox{Binom}(17511, 162/17511)$.
-
+The bootstrap simulation will take 10,000 samples of $X$ and $Y$ from $X \sim \mbox{Binom}(17411, 8/17411)$, $Y \sim \mbox{Binom}(17511, 162/17511)$.
 
 # 4 Results
 
@@ -271,7 +264,8 @@ lower_ci <- mle_psi - qnorm(0.975) * psi_se
 upper_ci <- mle_psi + qnorm(0.975) * psi_se
 
 # W statistic, likelihood ratio test
-w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 * (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
+w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 * 
+                (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
 
 
 #Likelihood Ratio test p-value
@@ -334,15 +328,15 @@ boot_sim_psi <- do.call(rbind, boot_sim)
 p1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.01)+
-  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
-  xlim(0, 1)
+  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",
+       y="Count")+xlim(0, 1)
 
 # Detailed histogram with normality
 p2_1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.005)+
-  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
-  xlim(0.8, 1)
+  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",
+       y="Count")+xlim(0.8, 1)
 
 # Normal qq
 p2_2 <- ggplot(data = boot_sim_psi,
@@ -357,8 +351,9 @@ bootstrapped_center <-mean(boot_sim_psi$psi_bootstrapped)
 
 # Compute Bootstrap confidence interval
 # Percentile method
-percentile_method<-boot_sim_psi %>% summarize(lower = quantile(psi_bootstrapped,.025),
-                      upper = quantile(psi_bootstrapped, .975))
+percentile_method<-boot_sim_psi %>% 
+  summarize(lower = quantile(psi_bootstrapped,.025),
+    upper = quantile(psi_bootstrapped, .975))
 percentile_method # See output
 
 median <- quantile(boot_sim_psi$psi_bootstrapped, 0.5)
@@ -372,7 +367,9 @@ standard_bootstrap<-boot_sim_psi %>% summarise(boot_mean=mean(psi_bootstrapped),
 
 standard_bootstrap # See output
 
-summary_table <- matrix(c(percentile_method$lower,percentile_method$upper,standard_bootstrap$lower,standard_bootstrap$upper),ncol=2,byrow=TRUE)
+summary_table <- matrix(c(percentile_method$lower,percentile_method$upper,
+                          standard_bootstrap$lower,standard_bootstrap$upper),
+                        ncol=2,byrow=TRUE)
 colnames(summary_table) <- c("Lower","Upper")
 rownames(summary_table) <- c("Percentile Method","Standard Bootstrap")
 summary_table <- as.table(summary_table)
@@ -575,7 +572,8 @@ upper_ci_wald <- mle_psi + qnorm(0.95) * psi_se
 
 # W statistic, likelihood ratio test
 w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 *
-                    (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
+                    (1/(2-mle_psi))^162)/
+                   (((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
 
 #Likelihood Ratio test p-value
 p_value <- pchisq(w_obs, df=1, lower.tail=F)
@@ -596,9 +594,8 @@ second_order <- maxLik2(loglik=loglik.psi,
                         method="NR")
 # Plot this taylor approximation
 ts_plot <- plot(second_order) %>%
-  gf_labs(title="Second Order Taylor Series Approximation of Log-Likelihood of Psi",
-          x=expression(psi),
-          y="Log-Likelihood")
+  gf_labs(title="Second Order Taylor Series Approximation of Log-Likelihood of
+          Psi", x=expression(psi), y="Log-Likelihood")
 ```
 
 
@@ -606,10 +603,3 @@ ts_plot <- plot(second_order) %>%
 
 ```{r ref.label="bootstrap", echo=TRUE, eval=F}
 ```
-
-
-Bootstrapped Data (Full Scale)
-```{r figure 4.6.2, echo = F}
-p1
-```
-
