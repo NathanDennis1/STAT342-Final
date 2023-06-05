@@ -20,7 +20,6 @@ library(dplyr)
 library(fastR2)
 library(ggplot2)
 library(gridExtra)
-library(gt)
 library(LearnBayes)
 library(maxLik)
 
