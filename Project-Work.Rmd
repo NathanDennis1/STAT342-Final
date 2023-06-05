@@ -170,6 +170,7 @@ plot <- plot(second_order) %>%
           y="Log-Likelihood")
 plot
 ```
+
 The conditions we assess are that the possible values of our parameter and bounds don't depend on $\psi$, and that the true value of $\psi$ does not fall on a boundary. We see in the plot that the second order taylor series approximation for $\psi$ is a very good fit and the estimated value for $\psi$ isn't too close to a boundary. Thus, we have that the normality of the MLE for $\psi$ holds.
 Next we want to construct a 95% Wald confidence interval for $\psi$, so we first compute the standard error which is defined to be $\hat{SE}(\hat{\psi_0}^{mle}) = \frac{1}{\sqrt{-\ell''(\hat{\psi_0}^{mle})}} = \frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{t} \right)(t-170)^2}}$, where again we know t=8 in the dataset from Table 1 and we can find this in the results. The Wald confidence interval is defined to take the form: ($z_{\alpha/2}$ is the 1 - $\frac{\alpha}{2}$th quantile of a standard normal)
 \begin{align*}
@@ -184,13 +185,122 @@ Where we observed t=8 in the data. We use this to create a p-value and test the 
 
 ## 3.4 Bootstrap Confidence Interval
 
-We'll assume the infection status of each patient is a Bernoulli Random Variable, where the success rate $\pi$ determines the probability that a patient contracted Covid-19 during the study.
+Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions X and Y (see section 3.1), we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{\bar{X}}{\bar{Y}}$.
 
-Let us define $X_1, X_2, \dots, X_n \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_p)$ and $Y_1, Y_2, \dots, Y_m \overset{i.i.d.}{\sim} \mbox{Bernoulli}(\pi_v)$. $X_i$'s represent the infection status of patients who received the placebo, and $Y_i$'s represent the infection status of patients who received the COVID-19 vaccine. Then $\sum_{i = 1}^n X_i \sim \mbox{Binom}(\pi_v)$ and $\sum_{i = 1}^m X_i \sim \mbox{Binom}(\pi_p)$ and we can approximate $\pi_p = \bar{X}$ and $\pi_v = \bar{Y}$, which we can find by dividing the sum (a binomial random variable) by $n$ or $m$, respectively.
+The bootstrap simulation will take 10,000 samples of $\bar{X}$ and $\bar{Y}$ from $\sum_{X} \sim \mbox{Binom}(17411, 8/17411)$, $\sum_{Y} \sim \mbox{Binom}(17511, 162/17511)$.
 
-Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions, we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{\bar{X}}{\bar{Y}}$.
 
-```{r label ="bootstrap", include = FALSE, cache = TRUE}
+\pagebreak
+# 4 Results
+
+First, we display the table, denoted Table 1, which corresponds to the data obtained in the BNT162b2 vaccines trials.
+
+\begin{table}[ht]
+\centering
+\caption{Vaccine Efficacy against Covid-19 at least 7 days after second dose in pations without evidence of infection}
+\begin{tabular}{|c|c|c|}
+\hline
+Groups & Cases & No. of Subjects \\
+\hline
+BNT162b2 & 8 & 17,411 \\
+\hline
+Placebo & 162 & 17,511 \\
+\hline
+Total & 170 & 34,922 \\
+
+\hline
+\end{tabular}
+\end{table}
+
+Using Table 1, we observe that there is nearly a 1:1 ratio for number of subjects in the vaccine and placebo group, which is expected from the study. We can calculate the vaccine efficacy strictly based on the given results in the table. First, we have that $\hat \pi_v=\frac{8}{17411}$ which represents the probability of infection for someone in the vaccine group and $\hat \pi_p=\frac{162}{17511}$ which represents the probability of infection for someone in the placebo group. So, we calculate $\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$ this simplifies too: $\hat\psi=\frac{446749}{470097} =0.950334$ as the observed vaccine efficacy.
+
+
+## 4.1 Prior 1: Beta(0.700102, 1)
+We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799], and the posterior median as $\pi_0 = 0.048932$. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.903512, 0.976255].
+
+We can also calculate a p-value for this to confirm our beliefs. As a reminder, $H_0: \psi_0 \leq 0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $1.960014 \times 10^{-28}$, which is nearly 0.
+
+Furthermore, we calculate the posterior median as $\pi_0 = 0.048932$. We the see that the posterior median for $\psi$ comes out to be 0.948551, which is extremely large.
+
+## 4.2 Prior 2: Beta(109.29, 109.29)
+Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.257257, 0.348361]. We again convert this to create an interval for $\psi$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi$ is [0.465409, 0.65364]. 
+
+Again we can also calculate a p-value under the hypothesis: $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $6.306123 \times 10^{-8}$, which is nearly 0.
+
+Furthermore, we calculate the posterior median as $\pi_0 = 0.274467$. We the see that the posterior median for $\psi$ comes out to be 0.621702, which is pretty large.
+
+## 4.3 Prior 3: Gamma(1/2, 0)
+Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.022248, 0.088797]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.90255, 0.977246]. 
+
+We can also calculate a p-value for this under $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $2.181923 \times 10^{-21}$, which is nearly 0.
+
+Furthermore, we calculate the posterior median as $\pi_0 = 0.048053$. We the see that the posterior median for $\psi$ comes out to be 0.949521, which is extremely large.
+
+## 4.4 Table for Overall Bayesian Inference
+
+\begin{table}[ht]
+\centering
+\caption{Bayesian Inference}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Prior & Median for $\psi$ & 95\% Credible Interval for $\psi$ & p-value\\
+\hline
+Beta(0.700102, 1) & 0.948551 & [0.903512, 0.976255] & $1.960014 \times 10^{-28}$ \\
+\hline
+Beta(109.29, 109.29) & 0.621702 & [0.465409, 0.65364]  & $6.306123 \times 10^{-8}$ \\
+\hline
+Gamma($\frac{1}{2}$, 0) & 0.949521 & [0.90255, 0.977246]  & $2.181923 \times 10^{-21}$ \\
+
+\hline
+\end{tabular}
+\end{table}
+
+## 4.5 Maximum-Likelihood
+
+### Likelihood Calculations
+
+```{r, eval=F,include=F}
+
+t <- 8 #Observed 8 COVID-19 cases in vaccine group over total number of cases
+
+# Calculate MLE Given equation
+mle_psi <- (2*t-170)/(t-170)
+
+# Calculate estimated standard error of Psi given equation
+psi_se <- 1/sqrt((1/t-1/170)*(t-170)^2)
+
+# 95% Wald Confidence Interval
+lower_ci <- mle_psi - qnorm(0.975) * psi_se
+upper_ci <- mle_psi + qnorm(0.975) * psi_se
+
+# W statistic, likelihood ratio test
+w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 * (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
+
+
+#Likelihood Ratio test p-value
+p_value <- pchisq(w_obs, df=1, lower.tail=F)
+
+```
+
+
+We use the derivation for the maximum likelihood for $\psi$, with t=8 from Table 1, to get: $\hat{\psi_0}^{mle} = \frac{170-2t}{170-t}= \frac{170-2\cdot8}{170-8} = \frac{77}{81}$. We showed that the second derivative yield a negative value, so this is a maximum. 
+
+We calculated the standard error for the MLE as $\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}} \approx 0.017885$. We then construct a 95% Wald Confidence interval around this estimator, which was [0.915563, 0.985672] using $\frac{77}{81} \pm 1.96\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}}$.
+
+Furthermore, we can calculate the w-statistic from the likelihood ratio test where the equation was defined previously, which came out to be 121.6012 with a corresponding p-value of $2.82294 \times 10^{-28}$.
+
+
+### Regulatory Conditions for Likelihood
+```{r, eval=F,include=F}
+# Log-likelihood function
+loglik.psi <- function(psi){
+  ifelse(psi > 1, NA,
+         log(choose(170,8))+8*log(1-psi)-170*log(2-psi))
+}
+```
+
+## 4.6 Bootstrap Confidence Interval
+```{r label ="bootstrap", include=F, cache = TRUE}
 # Requirements
 set.seed(342)
 
@@ -269,127 +379,24 @@ summary_table <- matrix(c(percentile_method$lower,percentile_method$upper,standa
 colnames(summary_table) <- c("Lower","Upper")
 rownames(summary_table) <- c("Percentile Method","Standard Bootstrap")
 summary_table <- as.table(summary_table)
-summary_table
 ```
 
-```{r figure 3.1}
+The Bootstrapped data was as follows:
+```{r figure 4.6.2, echo = F}
+p1
+```
+
+A more detailed view and checking for normality:
+```{r figure 4.6.1, echo = F}
 grid.arrange(p2_1, p2_2)
 ```
 
-Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is not nearly normal as the tail ends of the Q-Q plot differ from the expected values should our bootstrapped values of $\psi$ come from a normal distribution. Therefore, we should prefer the percentile method 95\% confidence interval for $\psi$ instead. In other words, we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138], with our median bootstrapped $\psi = 0.95145$. Our confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective <TODO Phrasing>
-
-
-
-\pagebreak
-# 4 Results
-
-First, we display the table, denoted Table 1, which corresponds to the data obtained in the BNT162b2 vaccines trials.
-
-\begin{table}[ht]
-\centering
-\caption{Vaccine Efficacy against Covid-19 at least 7 days after second dose in pations without evidence of infection}
-\begin{tabular}{|c|c|c|}
-\hline
-Groups & Cases & No. of Subjects \\
-\hline
-BNT162b2 & 8 & 17,411 \\
-\hline
-Placebo & 162 & 17,511 \\
-\hline
-Total & 170 & 34,922 \\
-
-\hline
-\end{tabular}
-\end{table}
-
-Using Table 1, we observe that there is nearly a 1:1 ratio for number of subjects in the vaccine and placebo group, which is expected from the study. We can calculate the vaccine efficacy strictly based on the given results in the table. First, we have that $\hat \pi_v=\frac{8}{17411}$ which represents the probability of infection for someone in the vaccine group and $\hat \pi_p=\frac{162}{17511}$ which represents the probability of infection for someone in the placebo group. So, we calculate $\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$ this simplifies too: $\hat\psi=\frac{446749}{470097} =0.950334$ as the observed vaccine efficacy.
-
-
-## Prior 1: Beta(0.700102, 1)
-We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799], and the posterior median as $\pi_0 = 0.048932$. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.903512, 0.976255].
-
-We can also calculate a p-value for this to confirm our beliefs. As a reminder, $H_0: \psi_0 \leq 0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $1.960014 \times 10^{-28}$, which is nearly 0.
-
-Furthermore, we calculate the posterior median as $\pi_0 = 0.048932$. We the see that the posterior median for $\psi$ comes out to be 0.948551, which is extremely large.
-
-## Prior 2: Beta(109.29, 109.29)
-Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.257257, 0.348361]. We again convert this to create an interval for $\psi$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi$ is [0.465409, 0.65364]. 
-
-Again we can also calculate a p-value under the hypothesis: $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $6.306123 \times 10^{-8}$, which is nearly 0.
-
-Furthermore, we calculate the posterior median as $\pi_0 = 0.274467$. We the see that the posterior median for $\psi$ comes out to be 0.621702, which is pretty large.
-
-## Prior 3: Gamma(1/2, 0)
-Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.022248, 0.088797]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.90255, 0.977246]. 
-
-We can also calculate a p-value for this under $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $2.181923 \times 10^{-21}$, which is nearly 0.
-
-Furthermore, we calculate the posterior median as $\pi_0 = 0.048053$. We the see that the posterior median for $\psi$ comes out to be 0.949521, which is extremely large.
-
-## Table for Overall Bayesian Inference
-
-\begin{table}[ht]
-\centering
-\caption{Bayesian Inference}
-\begin{tabular}{|c|c|c|c|}
-\hline
-Prior & Median for $\psi$ & 95\% Credible Interval for $\psi$ & p-value\\
-\hline
-Beta(0.700102, 1) & 0.948551 & [0.903512, 0.976255] & $1.960014 \times 10^{-28}$ \\
-\hline
-Beta(109.29, 109.29) & 0.621702 & [0.465409, 0.65364]  & $6.306123 \times 10^{-8}$ \\
-\hline
-Gamma($\frac{1}{2}$, 0) & 0.949521 & [0.90255, 0.977246]  & $2.181923 \times 10^{-21}$ \\
-
-\hline
-\end{tabular}
-\end{table}
-
-## Maximum-Likelihood
-
-### Likelihood Calculations
-
-```{r, eval=F,include=F}
-
-t <- 8 #Observed 8 COVID-19 cases in vaccine group over total number of cases
-
-# Calculate MLE Given equation
-mle_psi <- (2*t-170)/(t-170)
-
-# Calculate estimated standard error of Psi given equation
-psi_se <- 1/sqrt((1/t-1/170)*(t-170)^2)
-
-# 95% Wald Confidence Interval
-lower_ci <- mle_psi - qnorm(0.975) * psi_se
-upper_ci <- mle_psi + qnorm(0.975) * psi_se
-
-# W statistic, likelihood ratio test
-w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 * (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
-
-
-#Likelihood Ratio test p-value
-p_value <- pchisq(w_obs, df=1, lower.tail=F)
-
+From the code in our appendix, we calculated the following confidence intervals for vaccine efficacy $\psi$.
+```{r summary_table, echo = F}
+summary_table
 ```
 
-
-We use the derivation for the maximum likelihood for $\psi$, with t=8 from Table 1, to get: $\hat{\psi_0}^{mle} = \frac{170-2t}{170-t}= \frac{170-2\cdot8}{170-8} = \frac{77}{81}$. We showed that the second derivative yield a negative value, so this is a maximum. 
-
-We calculated the standard error for the MLE as $\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}} \approx 0.017885$. We then construct a 95% Wald Confidence interval around this estimator, which was [0.915563, 0.985672] using $\frac{77}{81} \pm 1.96\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}}$.
-
-Furthermore, we can calculate the w-statistic from the likelihood ratio test where the equation was defined previously, which came out to be 121.6012 with a corresponding p-value of $2.82294 \times 10^{-28}$.
-
-
-### Regulatory Conditions for Likelihood
-```{r, eval=F,include=F}
-# Log-likelihood function
-loglik.psi <- function(psi){
-  ifelse(psi > 1, NA,
-         log(choose(170,8))+8*log(1-psi)-170*log(2-psi))
-}
-```
-
-
+Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is not nearly normal as the tail ends of the Q-Q plot differ from the expected values should our bootstrapped values of $\psi$ come from a normal distribution. Therefore, we should prefer the percentile method 95\% confidence interval for $\psi$ instead.
 
 # 5 Discussion/Conclusion
 
@@ -401,6 +408,8 @@ Moving on to the Frequentist approach, we calculated $\hat{\psi_0}^{mle} = \frac
 
 However, we also calculated the likelihood ratio and W statistic. The W statistic calculated was 121.6012, where large values of W are known to provide evidence in favor of the alternative, in this case $\psi_0 \neq 0.3$. The p-value also was extremely small and basically 0, where we can safely reject the null in favor of the alternative. Overall, this approach also concludes the vaccine efficacy is not 0.3, but is larger.
 
+Finally, our bootstrapped confidence interval using the quantile method for $\psi$ found that we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138], with our median bootstrapped $\psi = 0.95145$. Our entire confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective. Therefore, we can safely reject the null hypothesis.
+
 # 6 References
 Centers for Disease Control. “Vaccine Effectiveness Studies.” Centers for Disease Control and Prevention, www.cdc.gov/coronavirus/2019-ncov/vaccines/effectiveness/how-they-work.html. Accessed 4 June 2023. 
 
@@ -411,7 +420,6 @@ Sinovac. “Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-
 World Health Organization. “Impact of Covid-19 on People’s Livelihoods, Their Health and Our Food Systems.” World Health Organization, 13 Oct. 2020, www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people%27s-livelihoods-their-health-and-our-food-systems. 
 
 Zampieri, Fernando G, et al. “Using Bayesian Methods to Augment the Interpretation of Critical Care Trials. an Overview of Theory and Example Reanalysis of the Alveolar Recruitment for Acute Respiratory Distress Syndrome Trial.” American Journal of Respiratory and Critical Care Medicine, 1 Mar. 2021, www.ncbi.nlm.nih.gov/pmc/articles/PMC7924582/.
-
 
 
 \pagebreak
@@ -525,12 +533,10 @@ postmedian2_psi <- (1-2*postmedian2)/(1-postmedian2)
 
 # Posterior p-value for psi
 postpval2 <- pbeta(0.7/1.7, 86.04+8, 86.04+162, lower.tail=F)
-
 ```
 
 
 ## Prior 3 Calculations
-
 
 ```{r code prior3, eval=F}
 # Upper and lower bounds for pi credible interval
@@ -573,7 +579,7 @@ p_value <- pchisq(w_obs, df=1, lower.tail=F)
 ```
 
 
-## Regulartory Conditions for Likelihood
+## Regulatory Conditions for Likelihood
 ```{r, eval=F}
 # Log-likelihood function
 loglik.psi <- function(psi){
@@ -591,3 +597,10 @@ ts_plot <- plot(second_order) %>%
           x=expression(psi),
           y="Log-Likelihood")
 ```
+
+
+## Bootstrap Confidence Interval
+
+```{r ref.label="bootstrap", echo=TRUE, eval=F}
+```
+
