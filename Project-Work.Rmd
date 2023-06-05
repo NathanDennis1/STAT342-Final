@@ -35,9 +35,9 @@ COVID-19, Vaccine Efficacy, Posterior, Likelihood, Credible Interval
 
 ## Introducton
 
-This paper focuses on the global pandemic, declared a pandemic by the World Health Organization on March 11, 2020, caused by SARS-CoV-2, more commonly refered to as COVID-19, which has caused many challenges worldwide. There have been over 700 million confirmed cases of COVID-19 since the pandemic began in early 2020, where the symptoms range from mild flu-like symptoms to more severe symptoms such as trouble breathing and other respiratory issues. This pandemic has led to a dramatic loss of human life worldwide and has caused many challenges to public health, food systems, and the work force, to name a few. The effect on the economy has been equally as devastating, due to the pandemic nearly half the worlds 3.3 billion global workforce were at risk of losing their livelihoods. Due to all these difficulties, many individuals worldwide have urged and hoped for a solution to end this pandemic.
+This paper focuses on the global pandemic, declared a pandemic by the World Health Organization on March 11, 2020, caused by SARS-CoV-2, more commonly refered to as COVID-19, which has caused many challenges worldwide. There have been over 700 million confirmed cases of COVID-19 since the pandemic began in early 2020, where the symptoms range from mild flu-like symptoms to more severe symptoms such as trouble breathing and other respiratory issues. This pandemic has led to a dramatic loss of human life worldwide and has caused many challenges to public health, food systems, and the work force, to name a few. (World Health Organization) The effect on the economy has been equally as devastating, due to the pandemic nearly half the worlds 3.3 billion global workforce were at risk of losing their livelihoods. (World Health Organization) Due to all these difficulties, many individuals worldwide have urged and hoped for a solution to end this pandemic.
 
-As the virus continue to spread and cause disruption worldwide, scientists and medical professionals worked diligently to develop and test vaccines in hopes to counteract this virus. One of these vaccines was developed by Pfizer and BioNTech in December 2020 when they successfully obtained a US FDA Emergency Use Authorization, where they began to distribution their two-dose vaccine, BNT162b2, in hopes to end the COVID-19 pandemic. These vaccines must go through a testing trial, where randomly assigned persons will be assigned to a treatment group, where they receive the given vaccine, and the control group, where they receive a placebo vaccine. This process is common in vaccine trials such as other COVID-19 vaccines manufactured by different companies, like Sinovac Research & Development Co., Ltd, which used a similar randomized treatment and placebo group approach. (3) The point of these experiments are to test the vaccine efficacy, which in this case is based on how many people who got vaccinated with BNT162b2 developed COVID-19 compared with how many people who got the placebo developed COVID-19. (4)
+As the virus continue to spread and cause disruption worldwide, scientists and medical professionals worked diligently to develop and test vaccines in hopes to counteract this virus. One of these vaccines was developed by Pfizer and BioNTech in December 2020 when they successfully obtained a US FDA Emergency Use Authorization, where they began to distribution their two-dose vaccine, BNT162b2, in hopes to end the COVID-19 pandemic. These vaccines must go through a testing trial, where randomly assigned persons will be assigned to a treatment group, where they receive the given vaccine, and the control group, where they receive a placebo vaccine. This process is common in vaccine trials such as other COVID-19 vaccines manufactured by different companies, like Sinovac Research & Development Co., Ltd, which used a similar randomized treatment and placebo group approach. (Sinovac) The point of these experiments are to test the vaccine efficacy, which in this case is based on how many people who got vaccinated with BNT162b2 developed COVID-19 compared with how many people who got the placebo developed COVID-19. (Centers for Disease Control)
 
 Now turning the focus to the BNT162b2 vaccine, a brief placebo-controlled, observer blinded, efficacy study was conducted where randomly assigned persons 16 years or older in a 1:1 ratio received two doses, 21 days apart, of either the placebo vaccine or BNT162b2 vaccine. As stated previously, the key outcome of interest is the efficacy of the BNT162b2 vaccine, where the goal is to test a vaccine efficacy greater than 30% with the given data from the study.
 
@@ -52,7 +52,7 @@ X \sim Binom(n_1,\pi_v) & & \ Y \sim Binom(n_2,\pi_p)
 We have a total of X + Y = s COVID-19 cases observed where now let T denote the number of individuals who were in the BNT162b2 vaccine group from the s = 170 patients who got COVID-19. T then follows the distribution: $T \sim Binom(s,\pi)$. We can now solve for $\pi$.
 
 First, define the following variables for simplicity: Let V: A randomly assigned persons is in the vaccine group. Let
-C: A randomly assigned persons is in the placebo group Let I: A laboratory confirmed COVID-19 infection. Also, recall the distribution of T well approximated by binomial for the BNT162b2 group study. Therefore: $T \sim Binom(s,\pi)$, where $\pi=P(\mbox{V}|\mbox{I})$
+C: A randomly assigned persons is in the placebo group. Let I: A laboratory confirmed COVID-19 infection. Also, recall the distribution of T well approximated by binomial for the BNT162b2 group study. Therefore: $T \sim Binom(s,\pi)$, where $\pi=P(\mbox{V}|\mbox{I})$
 
 Using Bayes Theorem, we can define $\pi$ as $\pi = \frac{P(I|V)P(V)}{P(I)} = \frac{P(I|V)P(V)}{P(I|V)P(V) + P(I|C)P(C)}$. Each of these probabilities can be solved for.
 
@@ -68,7 +68,7 @@ When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi
 
 From here, the parameter of interest is the vaccine efficacy $\psi$, which is written as $\psi=\frac{\pi_p- \pi_v}{\pi_p}$. We can re-write this in terms of $\pi$ by first finding $\pi_v$. Given $\pi = \frac{\pi_v}{\pi_v+\pi_p}$, rearranging yields $\pi\pi_v+\pi\pi_p = \pi_v$. Furthermore, by grouping $\pi_v$ the result is as follows: $\pi_v(1-\pi) = \pi\pi_p$, then $\pi_v = \frac{\pi\pi_p}{1-\pi}$.
 
-Plug this into $\psi = \frac{\pi_p- \pi_v}{\pi_p} = 1-\frac{\pi_v}{\pi_p}$, we get that $\psi = 1-\frac{\pi_v}{\pi_p} = 1-\frac{\pi\pi_p}{(1-\pi)\pi_p}$. Dividing by $\pi_p$ on the right, $\psi = 1-\frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. So, $\psi = \frac{1-2\pi}{1-\pi}$.
+$\textbf{Calculation of } \psi:$ Plug this into $\psi = \frac{\pi_p- \pi_v}{\pi_p} = 1-\frac{\pi_v}{\pi_p}$, we get that $\psi = 1-\frac{\pi_v}{\pi_p} = 1-\frac{\pi\pi_p}{(1-\pi)\pi_p}$. Dividing by $\pi_p$ on the right, $\psi = 1-\frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. So, $\psi = \frac{1-2\pi}{1-\pi}$.
 
 With this definition, we can construct the hypothesis of interest for $\psi$. The FDA requires at least 30% efficacy for a new therapy, in this case the BNT162b2 vaccine, to be approved. We can operate under the null hypothesis, $H_0: \psi \leq 0.3$, where the alternative is $H_1: \psi > 0.3$
 
@@ -305,35 +305,48 @@ Total & 170 & 34,922 \\
 Using Table 1, we observe that there is nearly a 1:1 ratio for number of subjects in the vaccine and placebo group, which is expected from the study. We can calculate the vaccine efficacy strictly based on the given results in the table. First, we have that $\hat \pi_v=\frac{8}{17411}$ which represents the probability of infection for someone in the vaccine group and $\hat \pi_p=\frac{162}{17511}$ which represents the probability of infection for someone in the placebo group. So, we calculate $\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$ this simplifies too: $\hat\psi=\frac{446749}{470097} =0.950334$ as the observed vaccine efficacy.
 
 
-## Prior 1
-We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799], and the posterior median as $\pi_0 = 0.048932$. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [90.3%, 97.6%].
+## Prior 1: Beta(0.700102, 1)
+We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799], and the posterior median as $\pi_0 = 0.048932$. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.903512, 0.976255].
 
-We can also calculate a p-value for this to confirm our beliefs. As a reminder, $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $1.960014 \times 10^{-28}$, which is nearly 0.
+We can also calculate a p-value for this to confirm our beliefs. As a reminder, $H_0: \psi_0 \leq 0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $1.960014 \times 10^{-28}$, which is nearly 0.
 
 Furthermore, we calculate the posterior median as $\pi_0 = 0.048932$. We the see that the posterior median for $\psi$ comes out to be 0.948551, which is extremely large.
 
 
 
-## Prior 2
+## Prior 2: Beta(109.29, 109.29)
+Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.257257, 0.348361]. We again convert this to create an interval for $\psi$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi$ is [0.465409, 0.65364]. 
 
-Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.257257, 0.348361]. We again convert this to create an interval for $\psi$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi$ is (0.465409, 0.65364). This interval is above and does not contain the value of 0.3, so we conclude the vaccine efficacy rate is greater than 30\%.
+Again we can also calculate a p-value under the hypothesis: $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $6.306123 \times 10^{-8}$, which is nearly 0.
 
-Again we can also calculate a p-value under the hypothesis: $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $6.306123 \times 10^{-8}$, which is nearly 0 and we safely reject the null in favor of the alternative.
-
-Furthermore, we calculate the posterior median as $\pi_0 = 0.274467$. We the see that the posterior median for $\psi$ comes out to be 0.621702, which is extremely large.
-
+Furthermore, we calculate the posterior median as $\pi_0 = 0.274467$. We the see that the posterior median for $\psi$ comes out to be 0.621702, which is pretty large.
 
 
+## Prior 3: Gamma(1/2, 0)
+Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.022248, 0.088797]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.90255, 0.977246]. 
 
-## Prior 3
-Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.022248, 0.088797]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.90255, 0.977246]. This interval does not contain the value 30% and is much larger than this, so we conclude the vaccine efficacy is larger than 30%.
-
-We can also calculate a p-value for this unswe $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $2.181923 \times 10^{-21}$, which is nearly 0 and we safely reject the null in favor of the alternative.
+We can also calculate a p-value for this under $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $2.181923 \times 10^{-21}$, which is nearly 0.
 
 Furthermore, we calculate the posterior median as $\pi_0 = 0.048053$. We the see that the posterior median for $\psi$ comes out to be 0.949521, which is extremely large.
 
+## Table for Overall Bayesian Inference
 
+\begin{table}[ht]
+\centering
+\caption{Bayesian Inference}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Prior & Median for $\psi$ & 95\% Credible Interval for $\psi$ & p-value\\
+\hline
+Beta(0.700102, 1) & 0.948551 & [0.903512, 0.976255] & $1.960014 \times 10^{-28}$ \\
+\hline
+Beta(109.29, 109.29) & 0.621702 & [0.465409, 0.65364]  & $6.306123 \times 10^{-8}$ \\
+\hline
+Gamma($\frac{1}{2}$, 0) & 0.949521 & [0.90255, 0.977246]  & $2.181923 \times 10^{-21}$ \\
 
+\hline
+\end{tabular}
+\end{table}
 
 ## Frequentist
 
@@ -354,63 +367,49 @@ lower_ci <- mle_psi - qnorm(0.975) * psi_se
 upper_ci <- mle_psi + qnorm(0.975) * psi_se
 
 # W statistic, likelihood ratio test
-w_obs <- 2*(8*log(1-mle_psi)/(2-mle_psi))+162*log(1/(2-mle_psi))-
-  8*log((1-0.3)/(2-0.3))*162*log(1/(2-0.3))
+w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 * (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
 
 
 #Likelihood Ratio test p-value
 p_value <- pchisq(w_obs, df=1, lower.tail=F)
+
 ```
 
 
-We use the derivation for the maximum likelihood for $\psi$, with t=8 from Table 1, to get: $\hat{\psi_0}^{mle} = \frac{170-2t}{170-t}= \frac{170-2\cdot8}{170-8} = \frac{77}{81}$. We showed that the second derivative yield a negative value, so this is a maximum. We see that this value is very large, as the estimated vaccine effiacy rate is around 0.950617. The MLE allows us to estimate the parameters of our model which maximimizes the likelihood function, we have a very large estimate.
-
-We then construct a 95% Wald Confidence interval around this estimator, which was [0.915563, 0.985672]. This helps provide an estimate for the range of our parameter, a range of values within the true parameter. We are 95% confident that the true parameter, $\psi$ falls in the range [0.9045477, 0.9966868].
-
-Furthermore, we can calculate the w-statistic from the likelihood ratio test. Large values of W are known to provide evidence in favor of the alternative, where we obtained a value of 
 
 
 
-### Regulartory Conditions for Likelihood
-```{r, eval=F,include=F}
-# Log-likelihood function
-loglik.psi <- function(psi){
-  ifelse(psi > 1, NA,
-         log(choose(170,8))+8*log(1-psi)-170*log(2-psi))
-}
+We use the derivation for the maximum likelihood for $\psi$, with t=8 from Table 1, to get: $\hat{\psi_0}^{mle} = \frac{170-2t}{170-t}= \frac{170-2\cdot8}{170-8} = \frac{77}{81}$. We showed that the second derivative yield a negative value, so this is a maximum. 
 
-# Second order taylor approximation of the log-likelihood
-second_order <- maxLik2(loglik=loglik.psi,
-                        start=mle_psi,
-                        method="NR")
-# Plot this taylor approximation
-plot <- plot(second_order) %>%
-  gf_labs(title="Second Order Taylor Series Approximation of Log-Likelihood of Psi",
-          x=expression(psi),
-          y="Log-Likelihood")
-```
+We calculated the standard error for the MLE as $\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}} \approx 0.017885$. We then construct a 95% Wald Confidence interval around this estimator, which was [0.915563, 0.985672] using $\frac{77}{81} \pm 1.96\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}}$.
+
+Furthermore, we can calculate the w-statistic from the likelihood ratio test where the equation was defined previously, which came out to be 121.6012 with a corresponding p-value of $2.82294 \times 10^{-28}$.
+
+
 
 
 ## Discussion/Conclusion
 
-Using the Bayesian methods and 3 priors examined, all 3 priors had 95% credible intervals which do not contain the value 0.3 and are completely above this value. The first prior, used from the study, and third prior, using the Gamma prior, were around the same and both above 90%. The second prior, using a very pessimistic approach, was smaller than these 2 credible intervals, but still above 0.3. We can conclude using these credible intervals that the vaccine efficacy is better than 30\%. We also calculated p-values for all 3 prior approaches, but all p-values were notably nearly 0 with the hypothesis $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$. So, since these p-value are below the significance level of 0.05 and are nearly 0 we have enough evidence to reject the null in favor of the alternative, concluding vaccine efficacy for the BNT162b2 vaccine is greater than 30\%.
+Using the Bayesian methods and 3 priors examined, all 3 priors had 95% credible intervals which do not contain the value 0.3 and are completely above this value. The intervals for the first prior, used from the study, and third prior, using the Gamma prior, were around the same and both above 90%. The second prior, using a very pessimistic approach, was smaller than these 2 credible intervals, but still above 0.3. We can conclude using these credible intervals that the vaccine efficacy is better than 30\%. We also calculated p-values for all 3 prior approaches, but all p-values were notably nearly 0 with the hypothesis $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$. So, since these p-value are below the significance level of 0.05 and are nearly 0 we have enough evidence to reject the null in favor of the alternative, concluding vaccine efficacy for the BNT162b2 vaccine is greater than 30\%.
 
-As stated, all 3 different methods produced the same conclusion. The extremely pessimistic prior produced results which were much more different than the other two, but it could be stronger since the assumption about the prior is much more biased towards the vaccine efficiacy rate smaller than 30\%. Concluding that the vaccine's efficacy rate is greater than 30\% using a prior which gives that an extremely low probability makes the argument very strong.
+As stated, all 3 different methods produced the same conclusion. The extremely pessimistic prior produced results which were much more different than the other two, but it could be stronger since the assumption about the prior is much more biased towards the vaccine efficacy rate smaller than 30\%. Concluding that the vaccine's efficacy rate is greater than 30\% using a prior which gives that an extremely low probability makes the argument very strong.
 
-Moving on to the Frequentist approach, 
+Moving on to the Frequentist approach, we calculated $\hat{\psi_0}^{mle} = \frac{77}{81}$. We see that this value is very large, as the estimated vaccine effiacy rate is around 0.950617. The MLE allows us to estimate the parameters of our model which maximimizes the likelihood function, we have a very large estimate. Furthermore, we calculated the wald confidence interval. This helps provide an estimate for the range of our parameter, a range of values within the true parameter, which we saw was [0.915563, 0.985672]. We are 95% confident that the true parameter, $\psi$ falls in the range [0.915563, 0.985672]. We can see this confidence interval is well above 0.3, so there is strong evidence the vaccine efficacy is greater than 0.3. 
 
+However, we also calculated the likelihood ratio and W statistic. The W statistic calculated was 121.6012, where large values of W are known to provide evidence in favor of the alternative, in this case $\psi_0 \neq 0.3$. The p-value also was extremely small and basically 0, where we can safely reject the null in favor of the alternative. Overall, this approach also concludes the vaccine efficacy is not 0.3, but is larger.
 
 ## References
-
-Zampieri, Fernando G, et al. “Using Bayesian Methods to Augment the Interpretation of Critical Care Trials. an Overview of Theory and Example Reanalysis of the Alveolar Recruitment for Acute Respiratory Distress Syndrome Trial.” American Journal of Respiratory and Critical Care Medicine, 1 Mar. 2021, www.ncbi.nlm.nih.gov/pmc/articles/PMC7924582/. 
-
-“Impact of Covid-19 on People’s Livelihoods, Their Health and Our Food Systems.” World Health Organization, 13 Oct. 2020, www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people%27s-livelihoods-their-health-and-our-food-systems. 
+Centers for Disease Control. “Vaccine Effectiveness Studies.” Centers for Disease Control and Prevention, www.cdc.gov/coronavirus/2019-ncov/vaccines/effectiveness/how-they-work.html. Accessed 4 June 2023. 
 
 Fan, Zhou. Lecture 20 | Bayesian Analysis - Stanford University, Nov. 2016, web.stanford.edu/class/stats200/Lecture20.pdf. 
 
-(3) https://www.who.int/news-room/feature-stories/detail/vaccine-efficacy-effectiveness-and-protection
+Sinovac. “Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - Full Text View.” Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - Full Text View - ClinicalTrials.Gov, July 2020, clinicaltrials.gov/ct2/show/NCT04456595. 
 
-https://myweb.uiowa.edu/pbreheny/uk/teaching/701/notes/1-22.pdf
+World Health Organization. “Impact of Covid-19 on People’s Livelihoods, Their Health and Our Food Systems.” World Health Organization, 13 Oct. 2020, www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people%27s-livelihoods-their-health-and-our-food-systems. 
+
+Zampieri, Fernando G, et al. “Using Bayesian Methods to Augment the Interpretation of Critical Care Trials. an Overview of Theory and Example Reanalysis of the Alveolar Recruitment for Acute Respiratory Distress Syndrome Trial.” American Journal of Respiratory and Critical Care Medicine, 1 Mar. 2021, www.ncbi.nlm.nih.gov/pmc/articles/PMC7924582/.
+
+
 
 \pagebreak
 ## Appendix
@@ -559,12 +558,12 @@ mle_psi <- (2*t-170)/(t-170)
 psi_se <- 1/sqrt((1/t-1/170)*(t-170)^2)
 
 # 99% Wald Confidence Interval
-lower_ci <- mle_psi - qnorm(0.995) * psi_se
-upper_ci <- mle_psi + qnorm(0.995) * psi_se
+lower_ci_wald <- mle_psi - qnorm(0.975) * psi_se
+upper_ci_wald <- mle_psi + qnorm(0.95) * psi_se
 
 # W statistic, likelihood ratio test
-w_obs <- 2*(8*log(1-mle_psi)/(2-mle_psi))+162*log(1/(2-mle_psi))-
-  8*log((1-0.3)/(2-0.3))*162*log(1/(2-0.3))
+w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 *
+                    (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
 
 #Likelihood Ratio test p-value
 p_value <- pchisq(w_obs, df=1, lower.tail=F)
