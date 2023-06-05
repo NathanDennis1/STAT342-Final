@@ -29,7 +29,7 @@ options(pillar.sigfig=6)
 
 # 1 Abstract
 
-The COVID-19 (SARS-CoV-2) global pandemic's widespread health, economic, and social impact has necessitated the creation of effective vaccines. Pfizer's BNT162b2 vaccine is the first of its kind: an mRNA vaccine determined to stop the pandemic. A placebo-controlled experiment with nearly 35,000 participants was conducted to determine the efficacy of the BNT162b2 vaccine candidate. The results from this study are analyzed using three approaches: Bayesian, Likelihood, and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval. Through using these approaches we created multiple measures to test the hypothesis such as credible intervals, where it was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy using all three approaches.
+The COVID-19 (SARS-CoV-2) global pandemic's widespread health, economic, and social impact has necessitated the creation of effective vaccines. Pfizer's BNT162b2 vaccine is the first of its kind: an mRNA vaccine determined to stop the pandemic. A placebo-controlled experiment with nearly 35,000 participants was conducted to determine the efficacy of the BNT162b2 vaccine candidate. The results from this study are analyzed using three approaches: Bayesian, Frequentist (likelihood), and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval. Through using these approaches we created multiple measures to test the hypothesis such as credible intervals, where it was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy using all three approaches.
 
 ## Keywords
 COVID-19, Vaccine Efficacy, Posterior, Likelihood, Credible Interval
@@ -265,7 +265,8 @@ lower_ci <- mle_psi - qnorm(0.975) * psi_se
 upper_ci <- mle_psi + qnorm(0.975) * psi_se
 
 # W statistic, likelihood ratio test
-w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 * (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
+w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 * 
+                (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
 
 
 #Likelihood Ratio test p-value
@@ -328,15 +329,15 @@ boot_sim_psi <- do.call(rbind, boot_sim)
 p1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.01)+
-  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
-  xlim(0, 1)
+  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",
+       y="Count")+xlim(0, 1)
 
 # Detailed histogram with normality
 p2_1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.005)+
-  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",y="Count")+
-  xlim(0.8, 1)
+  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",
+       y="Count")+xlim(0.8, 1)
 
 # Normal qq
 p2_2 <- ggplot(data = boot_sim_psi,
@@ -351,8 +352,9 @@ bootstrapped_center <-mean(boot_sim_psi$psi_bootstrapped)
 
 # Compute Bootstrap confidence interval
 # Percentile method
-percentile_method<-boot_sim_psi %>% summarize(lower = quantile(psi_bootstrapped,.025),
-                      upper = quantile(psi_bootstrapped, .975))
+percentile_method<-boot_sim_psi %>% 
+  summarize(lower = quantile(psi_bootstrapped,.025),
+    upper = quantile(psi_bootstrapped, .975))
 percentile_method # See output
 
 median <- quantile(boot_sim_psi$psi_bootstrapped, 0.5)
@@ -366,7 +368,9 @@ standard_bootstrap<-boot_sim_psi %>% summarise(boot_mean=mean(psi_bootstrapped),
 
 standard_bootstrap # See output
 
-summary_table <- matrix(c(percentile_method$lower,percentile_method$upper,standard_bootstrap$lower,standard_bootstrap$upper),ncol=2,byrow=TRUE)
+summary_table <- matrix(c(percentile_method$lower,percentile_method$upper,
+                          standard_bootstrap$lower,standard_bootstrap$upper),
+                        ncol=2,byrow=TRUE)
 colnames(summary_table) <- c("Lower","Upper")
 rownames(summary_table) <- c("Percentile Method","Standard Bootstrap")
 summary_table <- as.table(summary_table)
@@ -569,7 +573,8 @@ upper_ci_wald <- mle_psi + qnorm(0.95) * psi_se
 
 # W statistic, likelihood ratio test
 w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 *
-                    (1/(2-mle_psi))^162)/(((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
+                    (1/(2-mle_psi))^162)/
+                   (((1-0.3)/(2-0.3))^8 * (1/(2-0.3))^162))
 
 #Likelihood Ratio test p-value
 p_value <- pchisq(w_obs, df=1, lower.tail=F)
@@ -590,9 +595,8 @@ second_order <- maxLik2(loglik=loglik.psi,
                         method="NR")
 # Plot this taylor approximation
 ts_plot <- plot(second_order) %>%
-  gf_labs(title="Second Order Taylor Series Approximation of Log-Likelihood of Psi",
-          x=expression(psi),
-          y="Log-Likelihood")
+  gf_labs(title="Second Order Taylor Series Approximation of Log-Likelihood of
+          Psi", x=expression(psi), y="Log-Likelihood")
 ```
 
 
