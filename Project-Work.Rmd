@@ -1,13 +1,13 @@
 ---
 title: "Unmasking the Numbers"
-subtitle: "An Analysis of the BNT162b2 mRNA Covid-19 Vaccine Efficacy Rate"
+subtitle: "An Analysis of the BNT162b2 mRNA Covid-19 Vaccine Efficacy"
 graphics: yes
 author: "Nathan Dennis, Aarav Dewangan, Maxwell Wang"
 output: 
         pdf_document:
          toc: false
          number_sections: false
-urlcolor: blue+
+urlcolor: blue
 header-includes:
 - \usepackage{amsmath,amsfonts,amssymb}
 - \usepackage{multicol,graphicx,hyperref,xcolor}
@@ -28,90 +28,88 @@ options(pillar.sigfig=6)
 
 # 1 Abstract
 
-The COVID-19 (SARS-CoV-2) global pandemic's widespread health, economic, and social impact has necessitated the creation of effective vaccines. Pfizer's BNT162b2 vaccine is the first of its kind: an mRNA vaccine determined to stop the pandemic. A placebo-controlled experiment with nearly 35,000 participants was conducted to determine the efficacy of the BNT162b2 vaccine candidate. The results from this study are analyzed using three approaches: Bayesian, Frequentist (likelihood), and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval. Through using these approaches we created multiple measures to test the hypothesis such as credible intervals, where it was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy using all three approaches.
+The COVID-19 (SARS-CoV-2) global pandemic's widespread health, economic, and social impact has necessitated the creation of effective vaccines, such as Pfizer's BNT162b2 vaccine. A placebo-controlled experiment with nearly 35,000 participants was conducted to determine the efficacy of the BNT162b2 vaccine candidate. The results from this study are analyzed using three approaches: Bayesian, Frequentist (likelihood), and bootstrapping. We analyze whether or not the vaccines efficacy is greater than 30\%, required for FDA approval using statistics such as confidence intervals, point estimates, and hypothesis testing at a 5\% level. It was discovered the BNT162b2 vaccine successfully had greater than a 30\% vaccine efficacy using all three approaches, usually around 95\% efficacy. We also concluded Pfizer used a rather uninformative prior in their own analysis.
 
 ## Keywords
-COVID-19, Vaccine Efficacy, Posterior, Likelihood, Credible Interval
+COVID-19, Vaccine Efficacy, Posterior, Likelihood, Simulation
 
 # 2 Introducton
-This paper focuses on the COVID-19 pandemic. There have been over 700 million confirmed cases of COVID-19 since the pandemic was identified by the World Health Organization on March 11, 2020. The symptoms range from mild flu-like symptoms to more severe respiratory symptoms such as trouble breathing. This pandemic has led to the loss of 7 million human lives worldwide and has caused many challenges to public health, food systems, and the work force, to name a few (World Health Organization). The effect on the economy has been equally as devastating, with nearly half of the worlds' 3.3 billion global workforce at risk of losing their livelihoods (World Health Organization). 
+This paper focuses on the COVID-19 pandemic. There have been over 700 million confirmed cases of COVID-19 since the pandemic was identified by the World Health Organization on March 11, 2020. The symptoms range from mild flu-like symptoms to more severe respiratory issues. This pandemic has led to the loss of 7 million human lives worldwide and has caused many challenges to public health, food systems, and the work force, to name a few (World Health Organization). The effect on the economy has been equally as devastating, with nearly half of the worlds' 3.3 billion global workforce at risk of losing their livelihoods (World Health Organization). 
 
-Scientists and medical professionals have been working diligently to develop and test vaccines in hopes to counteract this virus. One of these vaccines was developed by Pfizer and BioNTech in December 2020 when they successfully obtained a US FDA Emergency Use Authorization, where they began to distribution their two-dose vaccine, BNT162b2. These vaccines must go through a testing trial, where randomly assigned participants will be assigned to a treatment/vaccine group and a control/placebo group. Such analysis may be compared to Sinovac Research & Development Co., Ltd's own COVID-19 vaccination efficacy trial, which used a similar approach (Sinovac). The point of these experiments are to test the vaccine efficacy, which is based on how many people who got vaccinated developed COVID-19 compared with how many people who got the placebo developed COVID-19 (Centers for Disease Control).
+Scientists and medical professionals have been working diligently to develop and test vaccines in hopes to counteract this virus. One of these vaccines was developed by Pfizer and BioNTech in December 2020 when they successfully obtained a US FDA Emergency Use Authorization, where they began to distribution their two-dose vaccine, BNT162b2. These vaccines must go through a testing trial, where randomly assigned participants are assigned to a treatment/vaccine group and a control/placebo group. Such analysis may be compared to Sinovac Research & Development Co., Ltd's own COVID-19 vaccination efficacy trial, which used a similar approach through randomization and outcome (Sinovac). The point of these experiments are to test the vaccine efficacy, which is based on how many people who got vaccinated developed COVID-19 compared with how many people who got the placebo developed COVID-19 to determine whether the drug's intervention created an impact on the patients outcome (Centers for Disease Control). These trials are important to make decisions about the effectiveness of medicine.
 
-Now turning the focus to the BNT162b2 vaccine, a placebo-controlled, observer blinded efficacy study was conducted where randomly assigned persons 16 years or older in a 1:1 ratio received two doses, 21 days apart, of either the placebo or BNT162b2 vaccine. The key outcome of interest is the efficacy of the BNT162b2 vaccine. A vaccine efficacy greater than 30% is sufficient to obtain FDA approval.
+Turning the focus to the BNT162b2 vaccine, the Clinical Trial Group ran a placebo-controlled, observer blinded efficacy study where randomly assigned persons 16 years or older in a 1:1 ratio received two doses, 21 days apart, of either the placebo or BNT162b2 vaccine. The key outcome of interest is the efficacy of the BNT162b2 vaccine, which we will test using a Bayesian, Frequentist, and Simulation approach. We are interested if the efficacy of the vaccine is greater than 30\%, required for FDA approval.
 
 # 3 Statistical Methods
 ## 3.1 Definitions & Initial Calculations
 
-In this section, we need to make some calculations to create our statistical model. Let X denote the total number of laboratory confirmed Covid-19 cases among $n_1$ = 17411 subjects randomly assigned to the BNT162b2 vaccine group and let Y denote the total number of laboratory confirmed Covid-19 cases among $n_2$ = 17511 subjects randomly assigned to the placebo group. Also, let parameters $\pi_p$ represent the probability of being infected with Covid-19 for an individual in the placebo group, and $\pi_v$ to represent the probability of being infected with Covid-19 for an individual in the vaccine group. It is noteworthy that X is independent of Y.
+In this section, we need to make some calculations to create our statistical model. Let X denote the total number of laboratory confirmed Covid-19 cases among $n_1$ = 17411 subjects randomly assigned to the BNT162b2 vaccine group and let Y denote the total number of laboratory confirmed Covid-19 cases among $n_2$ = 17511 subjects randomly assigned to the placebo group. Also, let parameters $\pi_p$ represent the probability of being infected with Covid-19 for an individual in the placebo group, and $\pi_v$ to represent the probability of being infected with Covid-19 for an individual in the vaccine group. It is noteworthy that X is independent of Y, and there are $n_1$ + $n_2$ total subjects
 \begin{align*}
 X \sim Binom(n_1,\pi_v) & & \ Y \sim Binom(n_2,\pi_p)
 \end{align*}
-We have a total of X + Y = s COVID-19 cases observed where now let T denote the number of individuals who were in the BNT162b2 vaccine group from the s = 170 patients who got COVID-19. T then follows the distribution: $T \sim Binom(s,\pi)$. We can now solve for $\pi$.
+We have a total of X + Y = s COVID-19 cases observed where now let T denote the number of individuals who were in the BNT162b2 vaccine group from the s = 170 patients who got COVID-19. T then follows the distribution: $T \sim Binom(s,\pi)$ (Lemma 1, Appendix) with success probability $\pi$, representing the probability of being in the vaccine group given an individual has COVID-19.
 
 First, define the following variables for simplicity: Let V: A randomly assigned persons is in the vaccine group. Let
 C: A randomly assigned persons is in the placebo group. Let I: A laboratory confirmed COVID-19 infection. Also, recall the distribution of T well approximated by binomial for the BNT162b2 group study. Therefore: $T \sim Binom(s,\pi)$, where $\pi=P(\mbox{V}|\mbox{I})$
 
-Using Bayes Theorem, we can define $\pi$ as $\pi = \frac{P(I|V)P(V)}{P(I)} = \frac{P(I|V)P(V)}{P(I|V)P(V) + P(I|C)P(C)}$. Each of these probabilities can be solved for.
+Using Bayes Theorem, we can define $\pi$ as $\pi = \frac{P(I|V)P(V)}{P(I)} = \frac{P(I|V)P(V)}{P(I|V)P(V) + P(I|C)P(C)}$. Each of these probabilities can be solved for using results defined previously, proved in Lemma 2 in the Appendix.
 
-$\textbf{Calculation of } \pi:$ Given these probabilities, we can now calculate $\pi = \frac{\pi_v\frac{n_1}{n_1+n_2}}{\frac{\pi_v n_1 + \pi_p n_2}{n_1+n_2}} = \frac{\pi_v n_1}{\pi_v n_1 + \pi_p n_2}$.
+$\textbf{Calculation of } \pi:$ Given these probabilities, we can now calculate $\pi = \frac{\pi_v\frac{n_1}{n_1+n_2}}{\frac{\pi_v n_1}{n_1+n_2} + \frac{\pi_p n_2}{n_1+n_2}} = \frac{\pi_v n_1}{\pi_v n_1 + \pi_p n_2}$.
 
 When $n_1\approx n_2$, we say randomization is 1:1 and are able to simplify $\pi$ further: $\pi = \frac{\pi_v}{\pi_v+\pi_p}$
 
-From here, the parameter of interest is the vaccine efficacy $\psi$, which is written as $\psi=\frac{\pi_p- \pi_v}{\pi_p}$. Given $\pi = \frac{\pi_v}{\pi_v+\pi_p}$, rearranging yields $\pi\pi_v+\pi\pi_p = \pi_v$. Furthermore, by grouping $\pi_v$ the result is as follows: $\pi_v(1-\pi) = \pi\pi_p$, then $\pi_v = \frac{\pi\pi_p}{1-\pi}$.
+From here, the parameter of interest is the vaccine efficacy $\psi$, which is written as $\psi=\frac{\pi_p- \pi_v}{\pi_p}$, estimated by $\hat{\psi} = \frac{\bar{Y}-\bar{X}}{\bar{Y}}$. Given $\pi = \frac{\pi_v}{\pi_v+\pi_p}$, rearranging yields $\pi\pi_v+\pi\pi_p = \pi_v$. Furthermore, by grouping $\pi_v$ the result is as follows: $\pi_v(1-\pi) = \pi\pi_p$, then $\pi_v = \frac{\pi\pi_p}{1-\pi}$.
 
 $\textbf{Calculation of } \psi:$ Plug this into $\psi = \frac{\pi_p- \pi_v}{\pi_p} = 1-\frac{\pi_v}{\pi_p}$, we get that $\psi = 1-\frac{\pi_v}{\pi_p} = 1-\frac{\pi\pi_p}{(1-\pi)\pi_p}$. Dividing by $\pi_p$ on the right, $\psi = 1-\frac{\pi}{1-\pi} = \frac{1-2\pi}{1-\pi}$. So, $\psi = \frac{1-2\pi}{1-\pi}$.
 
-With this definition, we can construct the hypothesis of interest for $\psi$. The FDA requires at least 30% efficacy for a new therapy to be approved. The null hypothesis is $H_0: \psi \leq 0.3$, and the alternative is $H_1: \psi > 0.3$.
+We now can construct the hypothesis of interest for $\psi$. The FDA requires at least 30% efficacy for a new therapy to be approved. The null hypothesis is $H_0: \psi \leq 0.3$, and the alternative is $H_1: \psi > 0.3$. Under these conditions $H_0: \psi = 0.3$ implies $H_0: \psi \leq 0.3$. We use a significance level of 0.05, 5\%.
 
-Within this section the following rearrangement of terms is used, given $\psi = \frac{1-2\pi}{1-\pi}$, we rearranged to get $\pi = \frac{1 -\psi}{2-\psi}$ 
-
-We can proceed with the three approaches to analyze the data.
+Within this section the following rearrangement of terms is used, given $\psi = \frac{1-2\pi}{1-\pi}$, we rearranged to get $\pi = \frac{1 -\psi}{2-\psi}$. We can proceed with the three approaches to analyze the data.
 
 ## 3.2 Bayesian Approach
 ### (1) Prior from Polack et. al.
 
-Previously we defined $T \sim Binom(170,\pi)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi) = Beta(0.700102,1)$ as reported by Polack et. al. In the article, it was also mentioned that the 95% confidence interval for $\pi$ is (0.005148, 0.964483) and the corresponding 95\% interval for $\psi$ is (-26.2, 0.995). This implies we have enough room for uncertainty.
+Using results we previously defined, we have $T \sim Binom(170,\pi_0)$ where $\pi=\frac{\pi_v}{\pi_v+\pi_p}$. We will also use the prior distribution for $\pi$, $g(\pi_0) = Beta(0.700102,1)$ as reported by Polack et. al. In the article, it was also mentioned that the 95% confidence interval for $\pi$ is (0.005148, 0.964483) and the corresponding 95\% interval for $\psi$ is (-26.2, 0.995). This implies we have enough room for uncertainty.
 
 We know beta is a conjugate prior in the binomial model. In the other words, posterior distribution of $\pi$ is also a beta distribution, namely $h(\pi_0|x) = Beta(t+\alpha_0, 170 - t + \beta_0)$ given $g(\pi_0) = Beta(\alpha_0, \beta_0)$ in the binomial model, where t=8 in the dataset where there were 8 individuals in the vaccine group over all 170 cases. (Theorem 1) Using this fact to calculate the posterior:
 
 $h(\pi_0|t)=Beta(0.700102+8,170-8+1)$ = $h(\pi_0|t)=Beta(8.700102,163)$
 
-Using this posterior distribution we can find the 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi = \frac{1-2\pi}{1-\pi}$, and calculate a p-value to test the null hypothesis. We use a 95% interval similar to that used in the previous study. Building off the credible interval we can also calculate the posterior median for $\pi$ in order to obtain the posterior median for $\psi$, finding the 0.5 percentile for the posterior distribution for $\pi$ to do so.
+Using this posterior distribution we can find the 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi_0 = \frac{1-2\pi_0}{1-\pi_0}$, and calculate a p-value to test the null hypothesis, $P(\psi_0 < 0.3)=P(\pi > \frac{0.7}{1.7})$. We use a 95% interval similar to that used in the previous study. Building off the credible interval we can also calculate the posterior median for $\pi$ in order to obtain the posterior median for $\psi$, finding the 0.5 percentile for the posterior distribution for $\pi$ to do so.
 
 
 
 
 ### (2) Alternative Beta Prior, Further Pessimistic Approach
 
-Polack et. al. cites a prior distribution for $\pi$ of $\mbox{Beta}(0.700102, 1)$ which is intended to be centered at $\pi = 0.4118$ corresponding to a $\psi$ of 30\%. The authors cite this as a pessimistic estimate. However, we will try a more pessimistic prior, where the median percentile of vaccine efficacy rate is 0\% and 95th percentile is 0.2. A "pessimistic" prior would represent a more skeptical approach in regards to vaccine efficacy. In many cases it is argued that pessimistic priors are rarely necessary since researchers are motivated to conduct a trial with a belief that the vaccine will be beneficial, however this is a flawed argument since in many cases prior beliefs about some intervention could prove to be inaccurate, causing significantly more harm. (Zampieri, Fernando G, et al.) Due to this, using this prior is a safe option to eliminate the possibility of substantial harm and would be useful to compare with the first prior calculation.
+Polack et. al. cites a prior distribution for $\pi$ of $\mbox{Beta}(0.700102, 1)$ which is intended to be centered at $\pi = 0.4118$ corresponding to a $\psi$ of 30\%. The authors cite this as a pessimistic estimate. However, we will try a more pessimistic prior, where the median percentile of vaccine efficacy rate is 0\% and 95th percentile is 0.2. A "pessimistic" prior would represent a more skeptical approach in regards to vaccine efficacy. It is argued that pessimistic priors are rarely necessary since researchers are motivated to conduct a trial with belief that the vaccine will be beneficial, however this is a flawed argument since in many cases prior beliefs about some intervention could prove to be inaccurate, causing more harm. (Zampieri, Fernando G, et al.) Due to this, using this prior is a safe option to eliminate the possibility of substantial harm and would be useful for comparison
 
-Using software one can observe the quantiles which correspond to this value within a beta distributon are $\alpha=\beta=109.29$. This corresponds to a prior of $g(\pi_0) = Beta(109.29, 109.29)$. Using Theorem 1, we see that the posterior takes the form: $h(\pi_0|t)=Beta(109.29+8,170-8+109.29) = Beta(117.29, 271.29)$.
+We calculate $P(\psi < 0)=0.5 \implies P(\frac{1-2\pi}{1-\pi}<0)=0.5 \implies P(\pi > \frac{1}{2}) = 0.5$ and $P(\psi < 0.3)=0.95 \implies P(\frac{1-2\pi}{1-\pi}<0.2)=0.95 \implies P(\pi > \frac{0.8}{1.8}) = 0.95$. Using software one can observe the quantiles which correspond to this value within a beta distribution are $\alpha_0=\beta_0=109.29$. This corresponds to a prior of $g(\pi_0) = Beta(109.29, 109.29)$. Using Theorem 1, we see that the posterior takes the form: $h(\pi_0|t)=Beta(109.29+8,170-8+109.29) = Beta(117.29, 271.29)$.
 
-Using this posterior distribution we can find the 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi = \frac{1-2\pi}{1-\pi}$ and calculate a p-value to test the null hypothesis. We use a 95% interval similar to that used in the previous study. Building off the credible interval we can also calculate the posterior median for $\pi$ in order to obtain the posterior median for $\psi$.
-
-
-
-### (3) Poisson Distribution - Gamma Prior
-
-So far we have constructed beta priors and posteriors from the Binomial distribution. Suppose now we can construct a Poisson distribution using the previous binomial distribution defined as $T \sim Binom(170, \pi)$. A good approximation for the binomial when the number of samples is large would be a poisson distribution with $\lambda = 170\pi$. We can denote $U \sim Poisson(\lambda = 170\pi)$, where $\lambda$ represents the rate of covid cases in the vaccine group over 170 positive cases and U represents the number of covid cases in the vaccine group over the 170 positive cases.
-
-For a Poisson distribution, we utilize Jeffreys prior for the rate parameter $\lambda \geq 0$, which states that $p(\lambda) = \sqrt{\frac{1}{\lambda}}$. (Fan & Theorem 2) However, this can also be thought of as a $Gamma(\frac{1}{2},0)$ distribution, which implies the posterior takes the form $\lambda|u \sim Gamma(\frac{1}{2}+u,170)$. (Fan & Theorem 2) Using this posterior we again create a 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi = \frac{1-2\pi}{1-\pi}$ and calculate a p-value to test the null hypothesis.
+Using this posterior distribution we can find the 95% Bayesian credible interval for $\pi_0$, where we transform this for the vaccine efficacy, $\psi_0 = \frac{1-2\pi_0}{1-\pi_0}$ and calculate a p-value to test the null hypothesis. We use a 95% interval similar to that used in the previous study. Building off the credible interval we can also calculate the posterior median for $\pi$ in order to obtain the posterior median for $\psi$.
 
 
-## 3.3 Maximum-Likelihood Estimation
 
-We want to make a maximum-likelihood estimator for $\psi$, $\widehat{\psi^{mle}}$, given the observed data. Let us start by writing the likelihood function. We have shown previously that $T\sim Binom(170,\pi)$, where the distribution would be defined as: $f(t|\pi) = {170\choose t} \pi^t \cdot (1 - \pi)^{170-t}$, where there are 170 total positive COVID-19 cases. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo. We use the fact that $\psi = \frac{1-2\pi}{1-\pi}$, where we previously rearranged terms and found $\pi = \frac{1 -\psi}{2-\psi}$.
+### (3) Poisson Distribution - Gamma Prior (Jeffery's Prior - Non Informative Prior)
+
+So far we have constructed beta priors and posteriors from the Binomial distribution. Suppose now we can construct a Poisson distribution using the previous binomial distribution defined as $T \sim Binom(170, \pi_0)$. A good approximation for the binomial when the number of samples is large and $\pi$ is small would be a poisson distribution with $\lambda = 170\pi_0$. We can denote $U \sim Poisson(\lambda = 170\pi_0)$, where $\lambda$ represents the rate of covid cases in the vaccine group over 170 positive cases and U represents the number of covid cases in the vaccine group over the 170 positive cases.
+
+For a Poisson distribution, we use Jeffreys prior for the rate parameter $\lambda \geq 0$, which states that $p(\lambda) = \sqrt{\frac{1}{\lambda}}$. (Fan, Theorem 2). This can also be thought of as a $Gamma(\frac{1}{2},0)$ distribution, which implies the posterior takes the form $h(\lambda_0|u) \sim Gamma(\frac{1}{2}+u,170)$ for the 170 individual cases. (Fan, Theorem 2) Using this posterior we create a 95% Bayesian credible interval for $\pi_0$, then transform this for the vaccine efficacy, $\psi_0 = \frac{1-2\pi_0}{1-\pi_0}$, calculate the median and p-value to test the hypothesis.
+
+
+## 3.3 Frequentist: Maximum-Likelihood Estimation
+
+We want to make a maximum-likelihood estimator (MLE) for $\psi$, $\widehat{\psi^{mle}_0}$, given the observed data. Let us start by writing the likelihood function. We have shown previously that $T\sim Binom(170,\pi_0)$, where the distribution would be defined as: $f(t|\pi_0) = {170\choose t} \pi_0^t \cdot (1 - \pi_0)^{170-t}$, where there are 170 total positive COVID-19 cases. We need to reparamaterize this with $\psi$, which represents the number of patients who contracted COVID who had initially been in the vaccinated group rather than the placebo. We use the fact that $\pi = \frac{1 -\psi}{2-\psi}$, so $f(t) = {170\choose t} (\frac{1 -\psi_0}{2-\psi_0})^t \cdot (1 - \frac{1 -\psi_0}{2-\psi_0})^{170-t}$, t = 0, 1, ... s
 
 Plugging in this value for $\pi$, we now have that $L(\psi) = f(t|\psi) = {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t}$. So the likelihood function is as follows: 
 \begin{align*}
-L(\psi) &= {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (1 - \frac{1 -\psi}{2-\psi})^{170-t} = {170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \ \text{$\infty < \psi \leq 1$}
+L(\psi) &= {170\choose t} \left(\frac{1 -\psi}{2-\psi} \right)^t \cdot \left(1 - \frac{1 -\psi}{2-\psi} \right)^{170-t} = {170\choose t} \left(\frac{1 -\psi}{2-\psi} \right)^t \cdot \left(\frac{1}{2-\psi} \right)^{170-t} \ \text{$-\infty < \psi \leq 1$}
 \end{align*}
 Next, we compute the log-likelihood function by taking the natural log of the likelihood function. We denote this log-likelihood as $\ell(\psi) = \ln(L(\psi)) = \ln(f(t | \psi)) = \ln \left({170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \right)$.
 \begin{align*}
 \ell(\psi) &= \ln \left({170\choose t} (\frac{1 -\psi}{2-\psi})^t \cdot (\frac{1}{2-\psi})^{170-t} \right) \\
 &= \ln{170\choose t} + \ln\left((\frac{1 -\psi}{2-\psi})^t \right) + \ln \left((\frac{1}{2-\psi})^{170-t} \right) \\
-&= \ln{170\choose t} + t\ln(\frac{1 -\psi}{2-\psi}) + (170-t)\ln(\frac{1}{2-\psi}) \\
+&= \ln{170\choose t} + t\ln \left(\frac{1 -\psi}{2-\psi} \right) + (170-t)\ln \left(\frac{1}{2-\psi} \right) \\
 &= \ln{170\choose t} + t\ln(1 -\psi) - t\ln(2-\psi) + (170-t)\ln(1) - (170-t)\ln(2-\psi) \\
 &= \ln{170\choose t} + t\ln(1 -\psi) - 170\ln(2-\psi)
 \end{align*}
@@ -137,7 +135,7 @@ From here we plug in the critical point, $\hat{\psi_0}^{mle}$, we found:
 &= \left(\frac{1}{170}-\frac{1}{t} \right)(t-170)^2
 \end{align*}
 We know that t cannot be a negative number and that $t \leq 170$ since there are 170 positive cases. So, the corresponding fraction $\frac{1}{170}-\frac{1}{t} \leq 0$ and the square term must be positive, so $\frac{d^2}{d\psi^2} \ell(\hat{\psi_0}^{mle}) < 0$, implying the critical point and hence MLE is a maximum.\
-We now have our estimate for $\psi$, where we can assess regulatory conditions. Suppose we now have that $T_1,T_2, \dots T_{170} \sim Bernoulli(\pi)$, representing the 170 total infections within the study. Since the number of cases in large, under certain regulatory conditions $\hat{\psi_0}^{mle} \sim Norm \left(\psi, \frac{1}{\sqrt{-\ell''(\hat{\psi_0}^{mle})}} \right)$. We discuss the conditions as we observe a second order Taylor approximation of the log-likelihood function of $\psi$.
+We now have our estimate for $\psi$, where we can assess regulatory conditions. Suppose we now have that $T_1,T_2, \dots T_{170} \sim Bernoulli(\pi)$, representing the 170 total infections within the study. Since the number of cases in large, under certain regulatory conditions $\hat{\psi_0}^{mle} \sim Norm \left(\psi, \frac{1}{\sqrt{-\ell''(\hat{\psi_0}^{mle})}} \right)$. We discuss the conditions as we observe a second order Taylor approximation of the log-likelihood function of $\psi$, where we know the first of which is passed.
 
 ```{r, echo=F, warning=F, out.width="60%"}
 
@@ -172,18 +170,18 @@ Finally, we utilize the likelihood ratio test for the hypothesis: $H_0: \psi_0=0
 \begin{align*}
 W = 2\ln \left[\frac{{170\choose t}\left(\frac{1-\hat{\psi_0}^{mle}}{2-\hat{\psi_0}^{mle}} \right)^t \left(\frac{1}{2-\hat{\psi_0}^{mle}} \right)^{170-t}}{{170\choose t}\left(\frac{1-\psi_0^{null}}{2-\psi_0^{null}} \right)^t \left(\frac{1}{2-\psi_0^{null}} \right)^{170-t}} \right]
 \end{align*}
-Where we observed t=8 in the data. We use this to create a p-value and test the hypotheses
+Large values of W provide evidence in the direction of the null, so we observe the right-tail probability.
 
 
 ## 3.4 Bootstrap Confidence Interval
 
-Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions X and Y (see section 3.1), we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{X/n}{Y/m}$.
+Using $\hat{\pi_p}$ and $\hat{\pi_v}$ from the data as the parameters for our binomial distributions X and Y (see section 3.1), we will run a parametric bootstrap simulation with B = 10,000 trials and construct a corresponding bootstrap confidence interval. Recall vaccine efficacy $\psi$ is defined as $\frac{\pi_p - \pi_v}{\pi_p} = 1 - \frac{\pi_v}{\pi_p}$. So in terms of our bootstrap, $\psi \approx 1 - \frac{X/n}{Y/m}$ to estimate the effiacy of the vaccine.
 
-The bootstrap simulation will take 10,000 samples of $X$ and $Y$ from $X \sim \mbox{Binom}(17411, 8/17411)$, $Y \sim \mbox{Binom}(17511, 162/17511)$.
+The bootstrap simulation will take 10,000 samples of $X$ and $Y$ from $X \sim \mbox{Binom}(17411, \frac{8}{17411})$, $Y \sim \mbox{Binom}(17511, \frac{162}{17511})$, from the data in Table 1. This uses parametric bootstrapping from the assumed binomial distribution, with two defined outcomes, being infected with COVID-19 or not. We create re-samples to make inference for the parameter, $\psi$, using a confidence interval.
 
 # 4 Results
 
-First, we display the table, denoted Table 1, which corresponds to the data obtained in the BNT162b2 vaccines trials.
+First, we display the table, denoted Table 1, which corresponds to the data obtained in the BNT162b2 vaccines trials (Polack et al.).
 
 \begin{table}[ht]
 \centering
@@ -202,29 +200,29 @@ Total & 170 & 34,922 \\
 \end{tabular}
 \end{table}
 
-Using Table 1, we observe that there is nearly a 1:1 ratio for number of subjects in the vaccine and placebo group, which is expected from the study. We can calculate the vaccine efficacy strictly based on the given results in the table. First, we have that $\hat \pi_v=\frac{8}{17411}$ which represents the probability of infection for someone in the vaccine group and $\hat \pi_p=\frac{162}{17511}$ which represents the probability of infection for someone in the placebo group. So, we calculate $\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$ this simplifies too: $\hat\psi=\frac{446749}{470097} =0.950334$ as the observed vaccine efficacy.
+Using Table 1, we observe that there is nearly a 1:1 ratio for number of subjects in the vaccine (17,411) and placebo group (17,511), which is expected. We can calculate the vaccine efficacy strictly based on the given results in the table. First, we have that $\hat \pi_v=\frac{8}{17411}$ which represents the probability of infection for someone in the vaccine group and $\hat \pi_p=\frac{162}{17511}$ which represents the probability of infection for someone in the placebo group. So, we calculate $\hat\psi=\frac{\hat \pi_p-\hat \pi_v}{\hat \pi_p}=\frac{\frac{162}{17511}-\frac{8}{17411}}{\frac{162}{17511}}$ this simplifies too: $\hat\psi=\frac{446749}{470097} =0.950334$ as the observed vaccine efficacy, much larger than 0.3.
 
 
 ## 4.1 Prior 1: Beta(0.700102, 1)
-We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799], and the posterior median as $\pi_0 = 0.048932$. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.903512, 0.976255].
+We calculate the 95% credible interval for $\pi_0$, [0.023194, 0.08799], and the posterior median as $\pi_0 = 0.048932$. We can convert this to create an interval for $\psi_0$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.903512, 0.976255].
 
 We can also calculate a p-value for this to confirm our beliefs. As a reminder, $H_0: \psi_0 \leq 0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $1.960014 \times 10^{-28}$, which is nearly 0.
 
 Furthermore, we calculate the posterior median as $\pi_0 = 0.048932$. We the see that the posterior median for $\psi$ comes out to be 0.948551, which is extremely large.
 
 ## 4.2 Prior 2: Beta(109.29, 109.29)
-Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.257257, 0.348361]. We again convert this to create an interval for $\psi$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi$ is [0.465409, 0.65364]. 
+We calculate the 95% credible interval for $\pi_0$ to be [0.257257, 0.348361]. We again convert this to create an interval for $\psi_0$ using the equality $\psi = \frac{1-2\pi}{1-\pi}$. So our 95\% interval for $\psi_0$ is [0.465409, 0.65364]. 
 
-Again we can also calculate a p-value under the hypothesis: $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $6.306123 \times 10^{-8}$, which is nearly 0.
+Again we can also calculate a p-value under the hypothesis: $H_0: \psi_0\leq0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $6.306123 \times 10^{-8}$, which is nearly 0.
 
-Furthermore, we calculate the posterior median as $\pi_0 = 0.274467$. We the see that the posterior median for $\psi$ comes out to be 0.621702, which is pretty large.
+We calculate the posterior median as $\pi_0 = 0.274467$. We the see that the posterior median for $\psi_0$ equals 0.621702, which is relatively large.
 
-## 4.3 Prior 3: Gamma(1/2, 0)
-Using R software we calculate the 95% credible interval for $\pi_0$ to be [0.022248, 0.088797]. We can convert this to create an interval for $\psi$ using the fact that $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.90255, 0.977246]. 
+## 4.3 Prior 3 (Jeffery's Prior): Gamma(1/2, 0)
+We calculate the 95% credible interval for $\pi_0$ to be [0.022248, 0.088797]. We can convert this to create an interval for $\psi_0$ again using $\psi = \frac{1-2\pi}{1-\pi}$, plugging in the credible interval values. We obtained a 95% Bayesian credible interval reported as [0.902549, 0.977246]. 
 
-We can also calculate a p-value for this under $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $2.181923 \times 10^{-21}$, which is nearly 0.
+We can again calculate a p-value for this under $H_0: \psi_0 \leq 0.3$ and $H_1: \psi_0>0.3$, where the p-value was calculated to be $2.181923 \times 10^{-21}$, which is nearly 0.
 
-Furthermore, we calculate the posterior median as $\pi_0 = 0.048053$. We the see that the posterior median for $\psi$ comes out to be 0.949521, which is extremely large.
+We calculate the posterior median as $\pi_0 = 0.048053$. We the see that the posterior median for $\psi_0$ is then 0.949521, which is extremely large.
 
 ## 4.4 Table for Overall Bayesian Inference
 
@@ -233,13 +231,13 @@ Furthermore, we calculate the posterior median as $\pi_0 = 0.048053$. We the see
 \caption{Bayesian Inference}
 \begin{tabular}{|c|c|c|c|}
 \hline
-Prior & Median for $\psi$ & 95\% Credible Interval for $\psi$ & p-value\\
+Prior & Median for $\psi_0$ & 95\% Credible Interval for $\psi_0$ & p-value\\
 \hline
 Beta(0.700102, 1) & 0.948551 & [0.903512, 0.976255] & $1.960014 \times 10^{-28}$ \\
 \hline
 Beta(109.29, 109.29) & 0.621702 & [0.465409, 0.65364]  & $6.306123 \times 10^{-8}$ \\
 \hline
-Gamma($\frac{1}{2}$, 0) & 0.949521 & [0.90255, 0.977246]  & $2.181923 \times 10^{-21}$ \\
+Gamma($\frac{1}{2}$, 0) & 0.949521 & [0.902549, 0.977246]  & $2.181923 \times 10^{-21}$ \\
 
 \hline
 \end{tabular}
@@ -274,14 +272,13 @@ p_value <- pchisq(w_obs, df=1, lower.tail=F)
 ```
 
 
+
 We use the derivation for the maximum likelihood for $\psi$, with t=8 from Table 1, to get: $\hat{\psi_0}^{mle} = \frac{170-2t}{170-t}= \frac{170-2\cdot8}{170-8} = \frac{77}{81}$. We showed that the second derivative yield a negative value, so this is a maximum. 
 
-We calculated the standard error for the MLE as $\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}} \approx 0.017885$. We then construct a 95% Wald Confidence interval around this estimator, which was [0.915563, 0.985672] using $\frac{77}{81} \pm 1.96\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}}$.
+We calculated the standard error for the MLE as $\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}} \approx 0.017885$. We then construct a 95% Wald Confidence interval, which was [0.915563, 0.985672] using $\frac{77}{81} \pm 1.96\frac{1}{\sqrt{\left(\frac{1}{170}-\frac{1}{8} \right)(8-170)^2}}$.
 
-Furthermore, we can calculate the w-statistic from the likelihood ratio test where the equation was defined previously, which came out to be 121.6012 with a corresponding p-value of $2.82294 \times 10^{-28}$.
+Furthermore, we can calculate the w-statistic from the likelihood ratio test where the equation was defined previously, which came out to be 121.6012 with a corresponding p-value of $2.82294 \times 10^{-28}$
 
-
-### Regulatory Conditions for Likelihood
 ```{r, eval=F,include=F}
 # Log-likelihood function
 loglik.psi <- function(psi){
@@ -335,7 +332,7 @@ p1 <- ggplot(data=boot_sim_psi,
 p2_1 <- ggplot(data=boot_sim_psi, 
        mapping = aes(psi_bootstrapped))+
   geom_histogram(binwidth =0.005)+
-  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x="VE",
+  labs(title="Histogram of 10,000 Bootstrapped Vaccine Efficacy Rates",x=expression(psi),
        y="Count")+xlim(0.8, 1)
 
 # Normal qq
@@ -344,7 +341,9 @@ p2_2 <- ggplot(data = boot_sim_psi,
   stat_qq(distribution = qnorm) + 
   stat_qq_line(distribution = qnorm) + 
   labs(title = "Normal probability plot",
-       subtitle = "of bootstrapped distribution")
+       subtitle = "of bootstrapped distribution",
+       x="Standard Normal Quantiles",
+       y="Sample Quantiles")
 
 # Center of bootstrapped confidence interval for psi
 bootstrapped_center <-mean(boot_sim_psi$psi_bootstrapped)
@@ -375,6 +374,7 @@ rownames(summary_table) <- c("Percentile Method","Standard Bootstrap")
 summary_table <- as.table(summary_table)
 ```
 
+
 The bootstrapped data was as follows. We check for normality:
 ```{r figure 4.6.1, echo = F, warning = FALSE, out.width="80%"}
 grid.arrange(p2_1, p2_2)
@@ -383,7 +383,7 @@ grid.arrange(p2_1, p2_2)
 From the code in our appendix, we calculated the following confidence intervals for vaccine efficacy $\psi$.
 \begin{table}[ht]
 \centering
-\caption{Bootstrapped Confidence Intervals for $\psi$}
+\caption{Bootstrapped Confidence Intervals for $\psi_0$}
 \begin{tabular}{|c|c|c|}
 \hline
  & Lower & Upper \\
@@ -395,51 +395,68 @@ Standard Bootstrap & 0.915071 & 0.985596 \\
 \end{tabular}
 \end{table}
 
-Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is not nearly normal as the tail ends of the Q-Q plot differ from the expected values should our bootstrapped values of $\psi$ come from a normal distribution. Therefore, we should prefer the percentile method 95\% confidence interval for $\psi$ instead.
+Based on the Normal Q-Q plot, we conclude that the bootstrapped distribution is not nearly normal as the tail ends of the Q-Q plot differ from the expected values should our bootstrapped values of $\psi_0$ come from a normal distribution. Therefore, we should prefer the percentile method 95\% confidence interval for $\psi_0$ instead.
 
 # 5 Discussion/Conclusion
 
-Using the Bayesian methods and 3 priors examined, all 3 priors had 95% credible intervals which do not contain the value 0.3 and are completely above this value. The intervals for the first prior, used from the study, and third prior, using the Gamma prior, were around the same and both above 90%. The second prior, using a very pessimistic approach, was smaller than these 2 credible intervals, but still above 0.3. We can conclude using these credible intervals that the vaccine efficacy is better than 30\%. We also calculated p-values for all 3 prior approaches, but all p-values were notably nearly 0 with the hypothesis $H_0: \psi_0<=0.3$ and $H_1: \psi_0>0.3$. So, since these p-value are below the significance level of 0.05 and are nearly 0 we have enough evidence to reject the null in favor of the alternative, concluding vaccine efficacy for the BNT162b2 vaccine is greater than 30\%.
+Using the Bayesian methods and 3 priors examined in Table 2, all 3 priors had 95% credible intervals for $\psi$ which do not contain the value 0.3 and are completely above this value. The intervals for the first prior, used from the Pfizer study, and third prior, using the Gamma prior, were around the same, both above 90%. The second prior, using a very pessimistic approach, was smaller than these 2 credible intervals, but still above 0.3. We can conclude using these credible intervals that the vaccine efficacy is better than 30\%. We also calculated p-values for all 3 prior approaches, but all p-values were nearly 0 with the hypothesis $H_0: \psi_0 \leq 0.3$ and $H_1: \psi_0>0.3$. So, since these p-value are below the significance level of 0.05 we have enough evidence to reject the null in favor of the alternative, concluding vaccine efficacy for the BNT162b2 vaccine is greater than 30\%. Also observe that for each prior the median for $\psi$ is significantly higher than 0.3, further evidence that $\psi>0.3$
 
-As stated, all 3 different methods produced the same conclusion. The extremely pessimistic prior produced results which were much more different than the other two, but it could be stronger since the assumption about the prior is much more biased towards the vaccine efficacy rate smaller than 30\%. Concluding that the vaccine's efficacy rate is greater than 30\% using a prior which gives that an extremely low probability makes the argument very strong.
+As stated, all 3 different methods produced the same conclusion. The extremely pessimistic prior produced results which were slightly different than the other two, but it could be stronger since the assumption about the prior is much more biased towards the vaccine efficacy rate smaller than 30\%. It is noteworthy that Pfizers prior and Jeffery's prior, known to be non-informative, were very similar. If the Pfizer prior was overly optimistic, it would skew results towards higher efficacies.
 
-Moving on to the Frequentist approach, we calculated $\hat{\psi_0}^{mle} = \frac{77}{81}$. We see that this value is very large, as the estimated vaccine effiacy rate is around 0.950617. The MLE allows us to estimate the parameters of our model which maximimizes the likelihood function, we have a very large estimate. Furthermore, we calculated the wald confidence interval. This helps provide an estimate for the range of our parameter, a range of values within the true parameter, which we saw was [0.915563, 0.985672]. We are 95% confident that the true parameter, $\psi$ falls in the range [0.915563, 0.985672]. We can see this confidence interval is well above 0.3, so there is strong evidence the vaccine efficacy is greater than 0.3. 
+Moving on to the Frequentist approach, we calculated $\hat{\psi_0}^{mle} = \frac{77}{81}$. We see that this value is very large, as the estimated vaccine effiacy rate is around 0.950617. The MLE allows us to estimate the parameters of our model which maximimizes the likelihood function, we have a very large estimate. Furthermore, we calculated the 95% wald confidence interval. This helps provide an estimate for the range of our parameter, a range of values for the true parameter, which we saw was [0.915563, 0.985672] which is well above 0.3, so there is strong evidence the vaccine efficacy is greater than 0.3. We are 95% confident that the true parameter, $\psi$ falls in the range [0.915563, 0.985672].
 
-However, we also calculated the likelihood ratio and W statistic. The W statistic calculated was 121.6012, where large values of W are known to provide evidence in favor of the alternative, in this case $\psi_0 \neq 0.3$. The p-value also was extremely small and basically 0, where we can safely reject the null in favor of the alternative. Overall, this approach also concludes the vaccine efficacy is not 0.3, but is larger.
+Furthermore, the W statistic calculated was 121.6012, where large values of W are known to provide evidence in favor of the alternative, in this case $\psi_0 \neq 0.3$. The p-value also was extremely small and basically 0, where we can safely reject the null in favor of the alternative.
 
-Finally, our bootstrapped confidence interval using the percentile method for $\psi$ found that we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138] (see Table 3), with our median bootstrapped $\psi = 0.95145$. Our entire confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective. Therefore, we can safely reject the null hypothesis.
+Finally, our bootstrapped confidence interval using the percentile method for $\psi$ found that we are 95\% confident that the true vaccine efficacy is between [0.9110567, 0.9817138] (see Table 3), with our median bootstrapped $\psi = 0.95145$. Our entire confidence interval lies above 30\% so there is sufficient statistical evidence to conclude that the vaccine is sufficiently effective and safely reject the null hypothesis. However, since we used a parametric bootstrap, it could be harmful if the distribution is not binomial prompting further analysis, possibly non-parametric bootstrapping.
+
+All three methods created similar conclusions and allows us to interpret the results from multiple views, potentially limiting bias. We also observed that Pfizers prior performed very closely to a known non-informative prior, prompting the conclusion that likewise, it was non-informative.
 
 # 6 References
-Centers for Disease Control. “Vaccine Effectiveness Studies.” Centers for Disease Control and Prevention, www.cdc.gov/coronavirus/2019-ncov/vaccines/effectiveness/how-they-work.html. Accessed 4 June 2023. 
+
+Centers for Disease Control. “Vaccine Effectiveness Studies.” Centers for Disease Control and Prevention, [https://www.cdc.gov/coronavirus/2019-ncov/vaccines/effectiveness/how-they-work.html](https://www.cdc.gov/coronavirus/2019-ncov/vaccines/effectiveness/how-they-work.html) 
+
+Polack et al. Safety and Efficacy of the BNT162B2 Mrna Covid-19 Vaccine | Nejm, Dec. 2020, [https://www.nejm.org/doi/full/10.1056/nejmoa2034577](https://www.nejm.org/doi/full/10.1056/nejmoa2034577) 
 
 Fan, Zhou. Lecture 20 | Bayesian Analysis - Stanford University, Nov. 2016, \
-web.stanford.edu/class/stats200/Lecture20.pdf. 
+[https://web.stanford.edu/class/stats200/Lecture20.pdf](https://web.stanford.edu/class/stats200/Lecture20.pdf) 
 
-Sinovac. “Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - Full Text View.” Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - Full Text View - ClinicalTrials.Gov, July 2020, clinicaltrials.gov/ct2/show/NCT04456595. 
+Sinovac. “Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - Full Text View.” Clinical Trial of Efficacy and Safety of Sinovac’s Adsorbed COVID-19 (Inactivated) Vaccine in Healthcare Professionals - ClinicalTrials.Gov, July 2020, [https://clinicaltrials.gov/ct2/show/NCT04456595.](https://clinicaltrials.gov/ct2/show/NCT04456595.) 
 
-World Health Organization. “Impact of Covid-19 on People’s Livelihoods, Their Health and Our Food Systems.” World Health Organization, 13 Oct. 2020, www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people%27s-livelihoods-their-health-and-our-food-systems. 
+World Health Organization. “Impact of Covid-19 on People’s Livelihoods, Their Health and Our Food Systems.” World Health Organization, 13 Oct. 2020, [https://www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people%27s-livelihoods-their-health-and-our-food-systems](https://www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people%27s-livelihoods-their-health-and-our-food-systems) 
 
-Zampieri, Fernando G, et al. “Using Bayesian Methods to Augment the Interpretation of Critical Care Trials. an Overview of Theory and Example Reanalysis of the Alveolar Recruitment for Acute Respiratory Distress Syndrome Trial.” American Journal of Respiratory and Critical Care Medicine, 1 Mar. 2021, www.ncbi.nlm.nih.gov/pmc/articles/PMC7924582/.
+Zampieri, Fernando G, et al. “Using Bayesian Methods to Augment the Interpretation of Critical Care Trials. an Overview of Theory and Example Reanalysis of the Alveolar Recruitment for Acute Respiratory Distress Syndrome Trial.” American Journal of Respiratory and Critical Care Medicine, 1 Mar. 2021, [https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7924582/](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7924582/.)
 
 
 \pagebreak
 # 7 Appendix
+
+## Lemma 1: Distribution of T
+
+If we let T denote the number of infected indivduals from the 170 patients who got infected with COVID-19, then we use the fact that the sample sizes for the vaccine group, $n_1 = 17,411$ and placebo group, $n_2 = 17,511$ is large and the rates $\pi_v$ and $\pi_p$ are small, we can say that $X \approx Pois(17,411)$ and $Y \approx Pois(17,511)$. If follows $P(T=t)=P(X=t|X+Y=s) = {s \choose t}\pi^t(1-\pi)^{s-t}$
+
+## Lemma 2:
+
+For $P(\mbox{V})$, dividing the total number of individuals in the vaccine group by the total in the study yields this result, $P(\mbox{V})=\frac{n_1}{n_1+n_2}$
+
+For $P(\mbox{I|V})$, $\pi_v$ was defined to be the probability of an infection in the vaccine group, so $P(\mbox{I|V})=\pi_v$
+
+For $P(\mbox{I})$, the probability of a confirmed COVID-19 infection is dependent on whether or not an individual comes from the placebo or vaccine group, in which case $P(\mbox{I}) = P(I \cap (V \cup C)) = P((I \cap V) \cup (I \cap C))$. Due to these events being disjoint, we can add the probabilities as $P((I \cap V) + P(I \cap C))$. Using the chain rule of probability, $P(I) = P(I|V)P(V) + P(I|C)P(C)$. $\pi_p$ was defined as the probability of an infection in the placebo group, so $P(I|C)=\pi_p$. Furthermore, $P(C)$ can be defined by $P(\mbox{C})=\frac{n_2}{n_1+n_2}$ where the number of individuals in the placebo group is divided by those in total. Plugging these values in: $P(\mbox{I}) = \pi_v\frac{n_1}{n_1+n_2} + \pi_p \frac{n_2}{n_1+n_2} = \frac{\pi_v n_1 + \pi_p n_2}{n_1+n_2}$ 
 
 ## Theorem 1: Posterior of a Beta Proof
 
 Suppose $X \sim Binom(n, \pi_0)$ and we assume $\pi$ follows a Beta distribution with shape parameters $\alpha_0$ and $\beta_0$, $g(\pi_0) = \frac{\Gamma{(\alpha_0+\beta_0)}}{\Gamma{(\alpha_0)}\Gamma{(\beta)}}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1}$. Since X is binomial, we have that $P(X=x|\pi=\pi_0) = {n \choose x}\pi_0^x (1-\pi_0)^{n-x}$. We show that the posterior distribution, $h(\pi_0|x) \sim Beta(x+\alpha_0, n-x+\beta_0)$. 
 \begin{align*}
 h(\pi_0|x) &= \frac{P(X=x|\pi=\pi_0)g(\pi_0)}{\int_0^1 P(X=x|\pi=\pi_0)g(\pi_0)} \\
-&= \frac{{n \choose x} \pi_0^x (1-\pi_0)^{n-x}\Gamma{(\alpha_0+\beta_0)}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1}}{\Gamma{(\alpha_0)}\Gamma{(\beta)} \int_0^1 {n \choose x} \pi_0^x (1-\pi_0)^{n-x}\frac{\Gamma{(\alpha_0+\beta_0)}}{\Gamma{(\alpha_0)}\Gamma{(\beta)}}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1}}
-&= \frac{{n \choose x} (1-\pi_0)^{n-x+\beta_0-1}\pi_0^{\alpha_0-1+x}}{\int_0^1 {n \choose x}(1-\pi_0)^{n-x+\beta_0-1}\pi_0^{\alpha_0-1+x}}
+&= \frac{{n \choose x} \pi_0^x (1-\pi_0)^{n-x}\Gamma{(\alpha_0+\beta_0)}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1}}{\Gamma{(\alpha_0)}\Gamma{(\beta)} \int_0^1 {n \choose x} \pi_0^x (1-\pi_0)^{n-x}\frac{\Gamma{(\alpha_0+\beta_0)}}{\Gamma{(\alpha_0)}\Gamma{(\beta)}}\pi_0^{\alpha_0-1}(1-\pi_0)^{\beta_0-1} d\pi_0}
+&= \frac{{n \choose x} (1-\pi_0)^{n-x+\beta_0-1}\pi_0^{\alpha_0-1+x}}{\int_0^1 {n \choose x}(1-\pi_0)^{n-x+\beta_0-1}\pi_0^{\alpha_0-1+x}d\pi_0}
 \end{align*}
-By observing the terms in the numerator, this is recognizable as the PDF of a Beta distribution with parameter $\alpha = x+1$ and $\beta = n - x + 1$. So, $h(\pi_0|x) \sim Beta(x+\alpha_0, n-x+\beta_0)$. $\blacksquare$
+By observing the terms in the numerator, this is recognizable as the PDF of a Beta distribution with parameter $\alpha = x+1$ and $\beta = n - x + 1$. So, $h(\pi_0|x) \sim Beta(x+\alpha_0, n-x+\beta_0)$. We know this since $\int_0^1 u^{r-1}(1-u)^{s-1}du = \frac{\Gamma(r)\Gamma(s)}{\Gamma(r+s)}$, implying $\frac{\Gamma(\alpha_0+\beta_0+n)}{\Gamma(\alpha_0+x)\Gamma(\beta+n-x)}(1-\pi_0)^{n-x+\beta_0-1}\pi_0^{\alpha_0-1+x}$. $\blacksquare$
 
-## Theorem 2: Jefferies Prior
+## Theorem 2: Jefferies Prior (Fan)
 
 Given $T \sim Binom(170,\pi)$, we know that when s is large (170) and $\pi$ is small the binomial distribution is well approximated by a poisson distribution, $U \sim Pois(170\pi)$. 
 
-Jefferies Prior is defined to be $g(\lambda) \propto \sqrt{I(\lambda)}$ with $I(\lambda)$ being the Fishers Information matrix, where this can be evaluated as: $g(\lambda) \propto \sqrt{-E \left[\frac{d^2}{d\lambda^2}ln(f(u|\lambda)) \right]}$
+Jefferies Prior is defined to be $g(\lambda) \propto \sqrt{I(\lambda)}$ with $I(\lambda)$ being the Fishers Information matrix, where this can be evaluated as: $g(\lambda) \propto \sqrt{-E \left[\frac{d^2}{d\lambda^2}ln(f(u|\lambda)) \right]}$ (Fan)
 
 For the poisson distribution we calculate the likelihood give we observe n infections, we can write: $f(u|\lambda)= \frac{\lambda^ue^{-\lambda}}{u!}$. Taking the log-likelihood: $ln(L(\lambda)) = \frac{\lambda^ux^{-u}}{u!}$
 \begin{align*}
@@ -454,7 +471,7 @@ E \left[\frac{d^2}{d\lambda^2}ln(f(u|\lambda)) \right] &= E[-\frac{u}{\lambda^2}
 &= -\frac{1}{\lambda}
 \end{align*}
 
-Since we have that $g(\lambda) \propto \sqrt{-E \left[\frac{d^2}{d\lambda^2}ln(f(u|\lambda)) \right]}$, we plug in the value calculated and see that $g(\lambda) \propto \sqrt{\frac{1}{\lambda}}$, which is often expressed as the improper $Gamma(\frac{1}{2},0)$ distribution.
+Since we have that $g(\lambda) \propto \sqrt{-E \left[\frac{d^2}{d\lambda^2}ln(f(u|\lambda)) \right]}$, we plug in the value calculated and see that $g(\lambda) \propto \sqrt{\frac{1}{\lambda}}$, which is often expressed as the improper $Gamma(\frac{1}{2},0)$ distribution. (Fan)
 
 For find the general form of the posterior that is applicable in any context, we will define a poisson distribution with rate parameter $\lambda$, $X_i \sim Pois(\lambda)$ with n, iid, $X_i$'s. We also define $g(\lambda) = Gamma(\alpha, \beta)$
 
@@ -466,7 +483,7 @@ After canceling constants we are left with $h(\lambda|x) \propto e^{-n\lambda}\l
 
 ## Prior & Posterior Medians
 
-Let $\phi$ represent the posterior median for pi, then all posterior medians for $\psi_0$ will be found by:
+Let $\phi$ represent the posterior median for $\pi$, then all posterior medians for $\psi_0$ will be found by:
 \begin{align*}
 P(\pi < \phi) &= 0.5 \\
 P(\frac{1-\psi}{2-\psi} < \phi) &= 0.5 \\
@@ -492,27 +509,19 @@ pi_ci <- qbeta(p=c(0.025,0.975), 8.700102, 163)
 upper_ci_prior1 <- (1-2*pi_ci[1])/(1-pi_ci[1])
 lower_ci_prior1 <- (1-2*pi_ci[2])/(1-pi_ci[2])
 
-# Posterior Median for pi
+# Posterior Median for pi & psi
 postmedian1 <- qbeta(0.5, 8.700102, 163)
-
-# Posterior Median for psi
 postmedian1_psi <- (1-2*postmedian1)/(1-postmedian1)
 
 # Posterior p-value for psi
 postpval1 <- pbeta(0.7/1.7, 8.700102, 163, lower.tail=F)
+
 ```
 
 
 
+
 ## Prior 2 Calculations
-
-\begin{align*}
-P(\psi_0 < 0.2) &= P(\frac{1-2\pi_0}{1-\pi_0} < 0.2) \\
-&= P(1-2\pi_0 < 0.2(1-\pi_0)) \\
-&= P(1-0.2 < 2\pi_0-0.2\pi_0) \\
-&= P(\frac{0.8}{1.8} < \pi_0)
-\end{align*}
-
 
 ```{r}
 quantile1 = list(p = 0.5, x = 0.50)
@@ -525,15 +534,14 @@ pi_ci2 <- qbeta(p=c(0.025,0.975), 109.29+8, 109.29+162)
 upper_ci_prior2 <- (1-2*pi_ci2[1])/(1-pi_ci2[1])
 lower_ci_prior2 <- (1-2*pi_ci2[2])/(1-pi_ci2[2])
 
-# Posterior Median for pi
+# Posterior Median for pi & psi
 postmedian2 <- qbeta(0.5, 86.04+8, 86.04+162)
-
-# Posterior Median for psi
 postmedian2_psi <- (1-2*postmedian2)/(1-postmedian2)
 
 # Posterior p-value for psi
 postpval2 <- pbeta(0.7/1.7, 86.04+8, 86.04+162, lower.tail=F)
 ```
+
 
 
 ## Prior 3 Calculations
@@ -545,13 +553,15 @@ upper_gamma <- qgamma(0.975, 1/2+8, 170)
 # 95% Credible Interval for psi
 upper_ci_prior3 <- (1-2*lower_gamma)/(1-lower_gamma)
 lower_ci_prior3 <- (1-2*upper_gamma)/(1-upper_gamma)
-# Posterior Median for pi
+# Posterior Median for pi & psi
 postmedian1 <- qgamma(0.5, 1/2+8, 170)
-# Posterior Median for psi
 postmedian1_psi <- (1-2*postmedian1)/(1-postmedian1)
 # Posterior p-value for psi
 postpval1 <- pgamma(0.7/1.7,1/2+8, 170, lower.tail=F)
 ```
+
+
+
 
 
 ## Likelihood Calculations
@@ -566,7 +576,7 @@ mle_psi <- (2*t-170)/(t-170)
 # Calculate estimated standard error of Psi given equation
 psi_se <- 1/sqrt((1/t-1/170)*(t-170)^2)
 
-# 99% Wald Confidence Interval
+# 95% Wald Confidence Interval
 lower_ci_wald <- mle_psi - qnorm(0.975) * psi_se
 upper_ci_wald <- mle_psi + qnorm(0.95) * psi_se
 
@@ -578,6 +588,8 @@ w_obs <- 2 * log((((1-mle_psi)/(2-mle_psi))^8 *
 #Likelihood Ratio test p-value
 p_value <- pchisq(w_obs, df=1, lower.tail=F)
 ```
+
+
 
 
 ## Regulatory Conditions for Likelihood
